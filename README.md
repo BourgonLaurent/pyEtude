@@ -17,8 +17,8 @@ Programme `Python3` qui permet de créer un document `Microsoft Word` pré-confi
 |--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | OS:                | N'importe lequel |                                                                                                 |                                                            |
 | Python:            | `Python 3`       | Développé sous Python 3.7.4, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
-| Extensions Python: | `os`             | Fait parti des paquets par défaut, à installer seulement si votre installation est personalisée | `pip install os`                                           |
-|                    | `zipfile`        | Fait parti des paquets par défaut, à installer seulement si votre installation est personalisée | `pip install zipfile`                                      |
+| Extensions Python: | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer ||
+|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer ||
 
 ## Installation
 
