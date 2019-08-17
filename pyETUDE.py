@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-/
 intro = """
                  ███████╗████████╗██╗   ██╗██████╗ ███████╗
                  ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝
@@ -21,14 +22,19 @@ class front_end():
 
     def main(self):
         self.intro()
+        self.printConfig(self.takeJSON())
+        self.questions()
 
     def intro(self):
         print(intro)
 
-    def questions(self):
-        pass
-
-    def takeJSON(self):
+    def takeJSON(self) -> dict:
+        """## Lance le configurateur si le fichier .json n'existe pas et enregistre le fichier dans la mémoire
+        
+        
+        ### Returns:\n
+            \tdict -- Dictionnaire contenant les valeurs
+        """
         if os.path.isfile("pyEtude.json"):
             json_d = self.readJSON()
         else:
@@ -36,7 +42,7 @@ class front_end():
             json_d = self.readJSON()
         return json_d
 
-    def createJSON(self):
+    def createJSON(self) -> None:
         """## Crée le fichier .json qui sera utilisé par la suite
         
         ### Returns:\n
@@ -51,15 +57,38 @@ class front_end():
             json.dump(json_d, json_f)
         return None
 
-    def readJSON(self):
-        """Lit le fichier .json et le transforme en dictionnaire
+    def readJSON(self) -> dict:
+        """## Lit le fichier .json et le transforme en dictionnaire
         
-        Returns:
-            dict -- Dictionnaire qui contient toutes les valeurs avec les clés
+        ### Returns:\n
+            \tdict -- Dictionnaire qui contient toutes les valeurs avec les clés
         """
         with open("pyEtude.json","r") as json_f:
             json_data = json.load(json_f)
         return json_data
+
+    def printConfig(self, dictionnary:dict):
+        """## Le dictionnaire .json converti en attribut de classe
+        
+        ### Arguments:\n
+            \tdictionnary {dict} -- Le dictionnaire .json
+        """
+        self.auteur = dictionnary["auteur"]
+        self.secondaire = dictionnary["secondaire"]
+        self.model = dictionnary["model"]
+
+        print("Voici les informations pré-configurées:")
+        print(f"\tAuteur: {self.auteur}\n\tSecondaire: {self.secondaire}\n\tModèle chargé:{self.model}")
+    
+    def questions(self):
+        print("\nChargement des entrées personnalisées...\n")
+        # .replace("&","") will remove & that causes problems with Word
+        self.titre = input("Titre (ex. Chapitre 5): ").replace("&","")
+        self.soustitre = input("Sous-Titre (ex. Les lois de Newton): ").replace("&","")
+        self.matiere = input("Matière, courte (ex. PHY): ").replace("&","")
+        self.numero = input("Numéro/Chapitre, court (ex. 1607 ou CHP5): ").replace("&","")
+        self.section = input("Nom du premier titre (ex. La Première Loi): ").replace("&","")
+    
 
 class Document():
     """## Modifie le modèle selon les arguments fournis
@@ -77,6 +106,7 @@ class Document():
     ### Returns:\n
         \t[type] -- [description]
     """
+
     def __init__(self, titre, soustitre, auteur, secondaire, matiere, numero, section, model):
         self.titre = titre
         self.soustitre = soustitre
@@ -87,14 +117,26 @@ class Document():
         self.section = section
         self.model = model
 
+        self.options = {"pyETUDE_Titre": titre,
+                    "pyETUDE_SousTitre": soustitre,
+                    "pyETUDE_Matiere": matiere,
+                    "pyETUDE_Auteur": auteur,
+                    "pyETUDE_Sec": secondaire,
+                    "pyETUDE_Num": numero}
+        self.sections = {"sectionpy": section}
+
         self.base = matiere + "-" + numero
         self.folder = self.base + "_tmpyEtude"
-        self.filename = self.folder + ".docx"
+        self.filename = self.base + ".docx"
 
         self.main()
 
     def main(self):
         self.exportWord(self.model, self.folder)
+
+        self.modifyOptions(self.folder + "\\docProps\\core.xml", self.options)
+        self.modifyOptions(self.folder + "\\word\\document.xml", self.sections)
+
         self.packWord(self.folder, self.filename)
         self.cleanTemp(self.folder)
 
@@ -102,7 +144,7 @@ class Document():
         """## Extract the specified `.zip` file
 
         ### Arguments:\n
-            \tmodel {str} -- file that will be extracted (Do not forget the .docx!)\n
+            \tmodel {str} -- file that will be extracted (Do not forget the .docx!)
             \tfolder {str} -- folder that will receive the extracted file
 
         ### Returns:\n
@@ -114,18 +156,47 @@ class Document():
             model_file.close()
         return folder
 
-    def modifyOptions(self):
-        pass
+    def modifyOptions(self, path:str, info:dict) -> str:
+        """## Send command to {self.searchAndReplace} for all values in a dictionnary
+        
+        ### Arguments:\n
+            \tpath {str} -- The path of the file to be modified
+            \tinfo {dict} -- A dictionnary in this format {"to search":"to replace"}
+        
+        ### Returns:\n
+            \tstr -- Returns the name of the file modified
+        """
+        for search, replace in info.items():
+            self.searchAndReplace(path, search, replace)
+        return path
 
-    def modifySection(self):
-        pass
+    def searchAndReplace(self, infile:str, search:str, replace:str) -> str:
+        """## Search the specified file with the keyword given and replaces it with the third argument
+        
+        ### Arguments:\n
+            \tinfile {str} -- The file to change
+            \tsearch {str} -- The word to replace
+            \treplace {str} -- The word that will be replaced by {search}
+
+        ### Returns:\n
+            \tstr -- Returns the name of the file modified
+        """
+        if os.path.isfile(infile):
+            with open(infile, "r", encoding="utf8") as in_f:
+                data_f = in_f.read()
+                with open(infile, "w", encoding='utf8') as out_f:
+                    out_f.write(data_f.replace(search, replace))
+        else:
+            raise FileNotFoundError
+        return infile
+
 
     def packWord(self, folder:str, final:str) -> str:
         """## Zip the folder specified
         This will only zip the contents of the folder, not the base folder
 
         ### Arguments:\n
-            \tfolder {str} -- the folder that will be zipped\n
+            \tfolder {str} -- the folder that will be zipped
             \tfinal {str} -- the name of the archive (Do not forget the .docx!)
 
         ### Returns:\n
@@ -140,6 +211,7 @@ class Document():
                     filePath = os.path.join(root, File)
                     inZipPath = filePath.replace(folder, "", 1).lstrip("\\/")
                     zip_file.write(filePath, inZipPath)
+        print(f"\nLe document {final} a été créé dans {os.getcwd()}")
         return final
 
     def cleanTemp(self, folder:str) -> str:
@@ -161,19 +233,12 @@ class Document():
                     os.remove(os.path.join(root, File))
                 for Dir in dirs:
                     os.rmdir(os.path.join(root, Dir))
+            os.rmdir(folder)
         else:
             raise NotADirectoryError
         
         return folder
 
 if __name__ == "__main__":
-    titre = ""
-    sous_titre = ""
-    auteur = ""
-    secondaire = ""
-    matiere = ""
-    numero = ""
-    p_section = ""
-
     fe = front_end()
-    document = Document(fe.titre, fe.sous_titre, fe.auteur, fe.secondaire, fe.matiere, fe.numero, fe.p_section, fe.model)
+    doc = Document(fe.titre, fe.soustitre, fe.auteur, fe.secondaire, fe.matiere, fe.numero, fe.section, fe.model)
