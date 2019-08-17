@@ -18,13 +18,13 @@ class front_end():
     def __init__(self):
         self.main()
 
-    def main():
+    def main(self):
         self.intro()
 
-    def intro():
+    def intro(self):
         print(intro)
 
-    def questions():
+    def questions(self):
         pass
 
 class Document():
@@ -38,11 +38,12 @@ class Document():
         \tmatiere {str} -- Pied de page, centre
         \tnumero {str} -- Pied de page, centre
         \tsection {str} -- Premier titre
+        \tmodel {str} -- Nom du fichier modèle (Il faut que ce soit un .docx!)
     
     ### Returns:\n
         \t[type] -- [description]
     """
-    def __init__(self, titre, soustitre, auteur, secondaire, matiere, numero, section):
+    def __init__(self, titre, soustitre, auteur, secondaire, matiere, numero, section, model):
         self.titre = titre
         self.soustitre = soustitre
         self.auteur = auteur
@@ -50,14 +51,18 @@ class Document():
         self.matiere = matiere
         self.numero = numero
         self.section = section
+        self.model = model
 
-        self.filename = matiere + numero
+        self.base = matiere + "-" + numero
+        self.folder = self.base + "_tmpyEtude"
+        self.filename = self.folder + ".docx"
 
         self.main()
 
     def main(self):
-        self.exportWord("model.docx", "tmp")
-        self.packWord("tmp", self.filename)
+        self.exportWord(self.model, self.folder)
+        self.packWord(self.folder, self.filename)
+        self.cleanTemp(self.folder)
 
     def exportWord(self, model:str, folder:str) -> str:
         """## Extract the specified `.zip` file
@@ -92,16 +97,40 @@ class Document():
         ### Returns:\n
             \tstr -- the name of the zip file that was created
         """
-        
+
         with zipfile.ZipFile(final, "w") as zip_file:
             for root, dirs, files in os.walk(folder):
                 zip_file.write(os.path.join(root, "."))
 
-                for file in files:
-                    filePath = os.path.join(root, file)
+                for File in files:
+                    filePath = os.path.join(root, File)
                     inZipPath = filePath.replace(folder, "", 1).lstrip("\\/")
                     zip_file.write(filePath, inZipPath)
         return final
+
+    def cleanTemp(self, folder:str) -> str:
+        """## Clean the temporary folder
+        DANGEROUS: THIS WILL DELETE ALL THE FILES IN THE SPECIFIED FOLDER!!
+        
+        ### Arguments:\n
+            \tfolder {str} -- The folder that will be deleted
+        
+        ### Raises:\n
+            \tNotADirectoryError: The specified folder is not a folder
+        
+        ### Returns:\n
+            \tstr -- Returns the name of the folder deleted
+        """
+        if os.path.isdir(folder):
+            for root, dirs, files in os.walk(folder, topdown=False):
+                for File in files:
+                    os.remove(os.path.join(root, File))
+                for Dir in dirs:
+                    os.rmdir(os.path.join(root, Dir))
+        else:
+            raise NotADirectoryError
+        
+        return folder
 
 if __name__ == "__main__":
     titre = ""
@@ -113,4 +142,4 @@ if __name__ == "__main__":
     p_section = ""
 
     fe = front_end()
-    document = Document(fe.titre, fe.sous_titre, fe.auteur, fe.secondaire, fe.matiere, fe.numero, fe.p_section)
+    document = Document(fe.titre, fe.sous_titre, fe.auteur, fe.secondaire, fe.matiere, fe.numero, fe.p_section, fe.model)
