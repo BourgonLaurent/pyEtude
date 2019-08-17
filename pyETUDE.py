@@ -11,6 +11,7 @@ intro = """
 
 import os
 import zipfile
+import json
 
 class front_end():
     """## Interface qui pose des questions et qui l'envoie à la classe {Document}
@@ -26,6 +27,39 @@ class front_end():
 
     def questions(self):
         pass
+
+    def takeJSON(self):
+        if os.path.isfile("pyEtude.json"):
+            json_d = self.readJSON()
+        else:
+            self.createJSON()
+            json_d = self.readJSON()
+        return json_d
+
+    def createJSON(self):
+        """## Crée le fichier .json qui sera utilisé par la suite
+        
+        ### Returns:\n
+            \tNone -- Ne retourne rien
+        """
+        print("Ceci est la première fois que vous exécutez ce programme, vous allez devoir passer par le configurateur")
+        json_d = dict()
+        json_d["auteur"] = input("Quel est votre nom? (ex. Laurent Bourgon) (Sera affiché sur la page de garde et l'en-tête)")
+        json_d["secondaire"] = input("Quel est votre année? (ex. Secondaire 5 - 2019-2020) (Sera affiché dans le pied de page)")
+        json_d["model"] = "model.docx" # Ceci changera lorsque plusieurs modèles seront disponibles
+        with open("pyEtude.json", "w") as json_f:
+            json.dump(json_d, json_f)
+        return None
+
+    def readJSON(self):
+        """Lit le fichier .json et le transforme en dictionnaire
+        
+        Returns:
+            dict -- Dictionnaire qui contient toutes les valeurs avec les clés
+        """
+        with open("pyEtude.json","r") as json_f:
+            json_data = json.load(json_f)
+        return json_data
 
 class Document():
     """## Modifie le modèle selon les arguments fournis

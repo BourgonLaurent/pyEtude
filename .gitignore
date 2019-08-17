@@ -107,6 +107,7 @@ venv.bak/
 DEBUG/*
 releases/*
 tmp/*
+pyEtude.json
 
 # Vscode
 .vscode/*
