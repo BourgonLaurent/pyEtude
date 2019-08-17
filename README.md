@@ -102,7 +102,7 @@ $ python pyEtude.py
 ## ⛏️ Créé avec <a name = "créé"></a>
 
 - [Visual Studio Code](https://code.visualstudio.com/) pour écrire, modifier et effectuer le déboggage du programme
-- [\(\lambda\) cmder Console Emulator](https://cmder.net/) pour le développement et pour l'invite de commande
+- [λ cmder Console Emulator](https://cmder.net/) pour le développement et pour l'invite de commande
 - [Microsoft Word 365](https://products.office.com/fr-ca/word) pour créer le modèle utilisé
 - [GitHub](https://github.com/) pour organiser, publier et sauvegarder ce projet
 
