@@ -48,10 +48,11 @@ class front_end():
         ### Returns:\n
             \tNone -- Ne retourne rien
         """
-        print("Ceci est la première fois que vous exécutez ce programme, vous allez devoir passer par le configurateur")
+        print("Ceci est la première fois que vous exécutez ce programme, vous allez devoir passer par le configurateur\n")
         json_d = dict()
-        json_d["auteur"] = input("Quel est votre nom? (ex. Laurent Bourgon) (Sera affiché sur la page de garde et l'en-tête)")
-        json_d["secondaire"] = input("Quel est votre année? (ex. Secondaire 5 - 2019-2020) (Sera affiché dans le pied de page)")
+        json_d["auteur"] = input("Quel est votre nom? (ex. Laurent Bourgon) (Sera affiché sur la page de garde et l'en-tête): ")
+        json_d["secondaire"] = input("Quel est votre année? (ex. Secondaire 5 - 2019-2020) (Sera affiché dans le pied de page): ")
+        print("\n")
         json_d["model"] = "model.docx" # Ceci changera lorsque plusieurs modèles seront disponibles
         with open("pyEtude.json", "w") as json_f:
             json.dump(json_d, json_f)
@@ -78,7 +79,7 @@ class front_end():
         self.model = dictionnary["model"]
 
         print("Voici les informations pré-configurées:")
-        print(f"\tAuteur: {self.auteur}\n\tSecondaire: {self.secondaire}\n\tModèle chargé:{self.model}")
+        print(f"\tAuteur: {self.auteur}\n\tSecondaire: {self.secondaire}\n\tModèle chargé: {self.model}")
     
     def questions(self):
         print("\nChargement des entrées personnalisées...\n")

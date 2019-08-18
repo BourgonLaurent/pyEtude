@@ -30,10 +30,15 @@ Programme `Python3` qui permet de créer un document `Microsoft Word` pré-confi
   - [Configuration requise](#configuration)
   - [Installation](#installation)
 - [Utilisation](#utilisation)
+- [Captures d'écran](#screenshots)
+  - [pyÉtude](#pyEtude)
+  - [Résultats](#resultats)
+  - [Exemple Réel](#exemple_reel)
+- [Foire Aux Questions](#faq)
 - [Créé avec](#créé)
 - [Contributeurs](#contrib)
-<!--- [Reconnaissances](#recon) -->
 - [Licence](#licence)
+<!--- [Reconnaissances](#recon) --> 
 
 ## 🧐 Problème encontré <a name = "probleme"></a>
 
@@ -48,7 +53,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 1. Extraire le fichier modèle dans un dossier temporaire
 2. Remplacer les informations par ce qui a été demandé au niveau du GUI
     - Le programme remplacera des valeurs dans les fichiers `.xml` du document `Word`.
-3. Zipper le dossier temporaire
+3. Zipper le dossier temporaire et le supprimer
 4. Renommer l'extension du fichier créé pour qu'il soit reconnu par `Microsoft Word`
 
 ## ⛓️ Ce qu'il faut et les limites du projet <a name = "limites"></a>
@@ -59,6 +64,8 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 
 ## 🚀 Avenir <a name = "avenir"></a>
 
+- [ ] Télécharger le modèle à distance afin de ne faire qu'un seul fichier à télécharger manuellement
+- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
 - [ ] Avoir plusieurs modèles qui peuvent être choisis.
 - [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [ ] Transformer ce programme en interface web pour faciliter la tâche
@@ -73,8 +80,9 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 |--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | OS:                | N'importe lequel |                                                                                                 |                                                            |
 | Python:            | `Python 3`       | Développé sous Python 3.7.4, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
-| Extensions Python: | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer ||
-|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer ||
+| Extensions Python: | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 
 ### Installation <a name = "installation"></a>
 
@@ -97,7 +105,69 @@ $ cd Users/Laurent/Documents/GitHub/pyEtude
 $ python pyEtude.py
 ```
 
-[À FAIRE]
+- Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_ 
+
+## 🖼 Captures d'écran<a name = "screenshots"></a>
+
+### pyÉtude<a name = "pyEtude"></a>
+
+- Configurateur (premier lancement):
+[![Configurateur](assets_readme/configurator.png)](/assets_readme/configurator.png)
+- Création:
+[![Création](assets_readme/pyetude.png)](/assets_readme/pyetude.png)
+
+### Résultats <a name = "resultats"></a>
+
+| Réglage       | Valeur                   |
+|---------------|--------------------------|
+| Titre         | Chapitre 5               |
+| Sous-Titre    | Les Lois de Newton       |
+| Matière       | PHY                      |
+| Numéro        | 1607                     |
+| Premier titre | La Première Loi          |
+| Auteur        | Laurent Bourgon          |
+| Secondaire    | Secondaire 4 - 2018-2019 |
+| Nom du fichier| `PHY-1607.docx`          |
+
+<p align="center">
+  <a href="assets_readme/page_de_garde.png"><img src="assets_readme/page_de_garde.png" width="256"></a>
+  <a href="assets_readme/table_des_matieres.png"><img src="assets_readme/table_des_matieres.png" width="256"></a>
+  <a href="assets_readme/document.png"><img src="assets_readme/document.png" width="256"></a>
+</p>
+
+### Exemple réel <a name = "exemple_reel"></a>
+
+| Réglage       | Valeur                                  |
+|---------------|-----------------------------------------|
+| Titre         | Chapitre 1                              |
+| Sous-Titre    | La Structure de la Matière              |
+| Matière       | STE                                     |
+| Numéro        | CHP1                                    |
+| Premier titre | La nature de la structure de la matière |
+| Auteur        | Laurent Bourgon                         |
+| Secondaire    | Secondaire 5 - 2019-2020                |
+| Nom du fichier| `STE-CHP1.docx`                         |
+
+<p align="center">
+  <a href="assets_readme/e_page_de_garde.png"><img src="assets_readme/e_page_de_garde.png" width="256"></a>
+  <a href="assets_readme/e_table_des_matieres.png"><img src="assets_readme/e_table_des_matieres.png" width="256"></a>
+  <a href="assets_readme/e_doc_1.png"><img src="assets_readme/e_doc_1.png" width="256"></a>
+  <a href="assets_readme/e_doc_2.png"><img src="assets_readme/e_doc_2.png" width="256"></a>
+</p>
+
+## ⁉️ Foire Aux Questions <a name = "faq"></a>
+
+- `OSError: [WinError 123] La syntaxe du nom de fichier, de répertoire ou de volume est incorrecte`:
+    Le nom de matière et le numéro/chapitre ne peut pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
+- `Word a rencontré une erreur lors de l'ouverture du fichier`:
+    Cela est surement dû aux valeurs qui contiennent des caractères spéciaux. Si ce n'est pas le cas, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+&nbsp;
+- Mon problème n'est pas ici!:
+    Veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+- Serait-ce possible d'ajouter `X`?:
+    Veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues)
+- Puis-je ajouter moi-même les fonctionnalités/résolution de problèmes?:
+    Veuillez faire un `fork` de ce projet, faire les modifications et faire [une demande de fusion](https://github.com/BourgonLaurent/pyEtude/pulls)
 
 ## ⛏️ Créé avec <a name = "créé"></a>
 
