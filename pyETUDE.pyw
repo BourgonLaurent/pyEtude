@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-/
-intro = """
+"""
                  ███████╗████████╗██╗   ██╗██████╗ ███████╗
                  ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝
 ██████╗ ██╗   ██╗█████╗     ██║   ██║   ██║██║  ██║█████╗  
@@ -13,12 +13,8 @@ intro = """
 import os, sys, zipfile, json, tkinter.filedialog, webbrowser
 from tkinter import *
 
-
 TITLE = r"pyÉtude"
 VERSION = r"v2.0.0~b1"
-
-WIDTH = 500
-HEIGHT = 490
 
 class Configurator:
     def __init__(self):
@@ -54,8 +50,8 @@ class Configurator:
         self.configurator.mainloop()
 
     def getEntries(self):
-        self.auteur = self.configurator_auteur_entry.get()
-        self.secondaire = self.configurator_secondaire_entry.get()
+        self.auteur = self.configurator_auteur_entry.get().replace("&","")
+        self.secondaire = self.configurator_secondaire_entry.get().replace("&","")
         self.configurator.destroy()
         self.json_data = dict()
         self.json_data["auteur"] = self.auteur
@@ -90,25 +86,21 @@ class frontEnd:
     def main(self):
         self.root = Tk()
         self.root.title(TITLE + " - " + VERSION)
-        self.root.geometry(f"{WIDTH}x{HEIGHT}")
-
-        # self.top_frame = Frame(self.root)
-        # self.top_frame.grid(row=0, column=0)
 
         self.frame = Frame(self.root)
-        self.frame.grid(row=1, column=0)
+        self.frame.grid(row=0, column=0, pady=3)
 
         self.input = LabelFrame(self.frame, text="Information")
-        self.input.grid(row=0, column=0, sticky=NW, padx=10)
-
-        self.options = Frame(self.frame)
-        self.options.grid(row=1, column=0, sticky=SW, padx=10)
+        self.input.grid(row=0, column=0, sticky=NW, padx=5)
 
         self.generate = Frame(self.frame)
-        self.generate.grid(row=0, column=1, sticky=N)
+        self.generate.grid(row=1, column=0, sticky=NW, padx=5)
+
+        self.options = Frame(self.frame)
+        self.options.grid(row=0, column=1, sticky=SE, padx=5)
 
         self.settings = Frame(self.frame)
-        self.settings.grid(row=1, column=1, sticky=SE)
+        self.settings.grid(row=1, column=1, sticky=SE, padx=5)
 
         self.showInput()
         self.showOptions()
@@ -116,17 +108,51 @@ class frontEnd:
         self.showSettings()
 
     def showInput(self):
+        
+        def callbackEntry(name="", index="", mode=""):
+            if name == "titre":
+                self.titre = self.frame_titre_entry.get()
+            elif name == "soustitre":
+                self.soustitre = self.frame_soustitre_entry.get()
+            elif name == "matiere":
+                self.matiere = self.frame_matiere_entry.get()
+            elif name == "numero":
+                self.numero = self.frame_numero_entry.get()
+            elif name == "section":
+                self.section = self.frame_section_entry.get()
+            else:
+                validateButton()
+                return
+            self.refreshValues()
+        
+        self.frame_titre_entry_sv = StringVar(name="titre")
+        self.frame_titre_entry_sv.trace_add("write", callbackEntry)
+
+        self.frame_soustitre_entry_sv = StringVar(name="soustitre")
+        self.frame_soustitre_entry_sv.trace_add("write", callbackEntry)
+
+        self.frame_matiere_entry_sv = StringVar(name="matiere")
+        self.frame_matiere_entry_sv.trace_add("write", callbackEntry)
+
+        self.frame_numero_entry_sv = StringVar(name="numero")
+        self.frame_numero_entry_sv.trace_add("write", callbackEntry)
+        
+        self.frame_section_entry_sv = StringVar(name="section")
+        self.frame_section_entry_sv.trace_add("write", callbackEntry)
+
+        
+
         self.frame_title = LabelFrame(self.input, text="")
         self.frame_title.grid(row=0, column=0, padx=5, pady=5)
 
         self.frame_titre = LabelFrame(self.frame_title, text="Titre")
         self.frame_titre.grid(row=0, column=0, padx=5, pady=3)
-        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond 12", justify=CENTER)
+        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond 12", justify=CENTER, textvariable=self.frame_titre_entry_sv)
         self.frame_titre_entry.grid(row=0,column=0,padx=5,pady=5)
 
         self.frame_soustitre = LabelFrame(self.frame_title, text="Sous-Titre")
         self.frame_soustitre.grid(row=1, column=0, padx=5, pady=1.5)
-        self.frame_soustitre_entry = Entry(self.frame_soustitre, font="Garamond 12", justify=CENTER)
+        self.frame_soustitre_entry = Entry(self.frame_soustitre, font="Garamond 12", justify=CENTER, textvariable=self.frame_soustitre_entry_sv)
         self.frame_soustitre_entry.grid(row=0,column=0,padx=5,pady=5)
 
         self.frame_cours = LabelFrame(self.input, text="")
@@ -134,17 +160,17 @@ class frontEnd:
 
         self.frame_matiere = LabelFrame(self.frame_cours, text="Matière")
         self.frame_matiere.grid(row=1, column=0, padx=5, pady=3)
-        self.frame_matiere_entry = Entry(self.frame_matiere, font="Garamond 12", justify=CENTER)
+        self.frame_matiere_entry = Entry(self.frame_matiere, font="Garamond 12", justify=CENTER, textvariable=self.frame_matiere_entry_sv)
         self.frame_matiere_entry.grid(row=0,column=0,padx=5,pady=5)
 
         self.frame_numero = LabelFrame(self.frame_cours, text="Numéro")
         self.frame_numero.grid(row=2, column=0, padx=5, pady=1.5)
-        self.frame_numero_entry = Entry(self.frame_numero, font="Garamond 12", justify=CENTER)
+        self.frame_numero_entry = Entry(self.frame_numero, font="Garamond 12", justify=CENTER, textvariable=self.frame_numero_entry_sv)
         self.frame_numero_entry.grid(row=0,column=0,padx=5,pady=5)
 
         self.frame_section = LabelFrame(self.input, text="Première Section")
         self.frame_section.grid(row=3, column=0, padx=5, pady=3)
-        self.frame_section_entry = Entry(self.frame_section, font="Garamond 12", justify=CENTER)
+        self.frame_section_entry = Entry(self.frame_section, font="Garamond 12", justify=CENTER, textvariable=self.frame_section_entry_sv)
         self.frame_section_entry.grid(row=0,column=0,padx=5,pady=5)
 
         def validateButton():
@@ -154,7 +180,7 @@ class frontEnd:
             self.numero = self.frame_numero_entry.get()
             self.section = self.frame_section_entry.get()
             self.refreshValues()
-        self.input_button = Button(self.input, text="Valider", font=("", 10, "bold"), command=lambda:validateButton()).grid(row=4, column=0,padx=5,pady=8)
+        #self.input_button = Button(self.input, text="Valider", font=("", 10, "bold"), command=lambda:validateButton()).grid(row=4, column=0,padx=5,pady=8)
 
     def showOptions(self):
         self.frame_options = LabelFrame(self.options, text="Options")
@@ -167,6 +193,9 @@ class frontEnd:
         self.frame_options_secondaire = LabelFrame(self.frame_options, text="Secondaire")
         self.frame_options_secondaire.grid(row=1,column=0,padx=5, pady=2)
         self.options_secondaire_label = Label(self.frame_options_secondaire, text=self.secondaire, font="Garamond 13 italic").grid(row=0,column=0)
+
+        self.frame_values = LabelFrame(self.options, text="Valeurs")
+        self.frame_values.grid(row=1,column=0,sticky=NW)
 
     def refreshValues(self):
         try:
@@ -181,6 +210,7 @@ class frontEnd:
             self.filepath = os.path.join(os.getcwd(), f"{self.matiere}-{self.numero}.docx")
         self.values_text = Message(self.frame_values, width=250, text=f"Titre: {self.titre}\nSous-Titre: {self.soustitre}\nMatière: {self.matiere}\nNuméro: {self.numero}\nSection: {self.section}\n\nAuteur: {self.auteur}\nSecondaire: {self.secondaire}\n\n{self.filepath}")
         self.values_text.grid(row=0,column=0)
+    
     def showGenerate(self):
         def browserButton():
             self.directory_name = tkinter.filedialog.askdirectory()
@@ -193,14 +223,13 @@ class frontEnd:
         def generateButton():
             pass
         
-        self.frame_values = LabelFrame(self.generate, text="Valeurs")
-        self.frame_values.grid(row=0,column=0,padx=5,sticky=NW)
+        
 
         self.refreshValues()
 
         self.frame_generate = LabelFrame(self.generate, text="Générer")
-        self.frame_generate.grid(row=1,column=0,padx=5)
-        self.generate_button = Button(self.frame_generate, text="Générer", font=("", 15, "bold"), command=lambda: generateButton()).grid(row=0,column=0,padx=10,pady=10)
+        self.frame_generate.grid(row=0,column=0,sticky=NW)
+        self.generate_button = Button(self.frame_generate, text="Générer", font=("", 15, "bold"), command=lambda: generateButton()).grid(row=0,column=0,padx=10,pady=9)
         self.file_button = Button(self.frame_generate, text="Enregistrer sous...", font=("",8,"italic"), command= lambda: fileButton()).grid(row=1,column=0,padx=10,pady=2)
         self.browser_button = Button(self.frame_generate, text="Choisir le dossier de sortie", font=("",8,"italic"), command=lambda: browserButton()).grid(row=2,column=0,padx=10,pady=3)
 
@@ -210,26 +239,28 @@ class frontEnd:
             os.execl(sys.executable, 'python', __file__, *sys.argv[1:])
         
         self.frame_settings = LabelFrame(self.settings, text="Réglages")
-        self.frame_settings.grid(row=0,column=0,padx=5)
+        self.frame_settings.grid(row=0,column=0)
 
         self.settings_options_button = Button(self.frame_settings, width=19, text="Modifier les Options", command=lambda: modifyOptions(self)).grid(row=0,column=0,padx=5,pady=3)
 
         self.settings_model_button = Button(self.frame_settings, width=19, text="Modifier le Modèle Word").grid(row=1,column=0,padx=5,pady=3)
-
-        self.settings_a_propos = Button(self.frame_settings, width=19, text="À Propos", command=lambda: self.aboutProgram()).grid(row=2,column=0,padx=5,pady=3)
-    
-    def aboutProgram(self):
-        self.about = Toplevel()
-        self.about.title = f"pyÉtude - À propos"
-
-        self.about_frame = Frame(self.about)
-        self.about_frame.grid()
-
-        self.about_github = Label(self.about_frame, text="Github here", fg="blue", cursor="hand")
-        self.about_github.grid()
+        
+        self.about_github = Label(self.frame_settings, text="Projet GitHub", fg="blue", cursor="hand2",justify=CENTER)
+        self.about_github.grid(row=2,column=0)
         self.about_github.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude"))
-
-        self.about.mainloop()
+        
+        self.about_license = Label(self.frame_settings, text="Sous la license MIT\n© Laurent Bourgon 2019", fg="blue", cursor="hand2", font=("",8,"italic"))
+        self.about_license.grid(row=3,column=0,sticky=S)
+        self.about_license.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE"))
+        # self.settings_a_propos = Button(self.frame_settings, width=19, text="À Propos", command=lambda: self.aboutProgram()).grid(row=2,column=0,padx=5,pady=3)
+    
+    def showAbout(self):
+        self.frame_about = LabelFrame(self.about, text="À Propos")
+        self.frame_about.grid()
+        
+        self.about_github = Label(self.frame_about, text="Github here", fg="blue", cursor="hand2")
+        self.about_github.grid(row=1,column=0,sticky=N)
+        self.about_github.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude"))
 
 class Document:
     def __init__(self):
