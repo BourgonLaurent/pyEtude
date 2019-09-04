@@ -7,7 +7,7 @@
 ██████╔╝ ╚████╔╝ ███████╗   ██║   ╚██████╔╝██████╔╝███████╗
 ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
 ██║        ██║   MIT © Laurent Bourgon 2019
-╚═╝        ╚═╝   v2.0.0~b1
+╚═╝        ╚═╝   v2.0.0
 """
 
 import os, sys, zipfile, json, tkinter.filedialog, webbrowser
@@ -17,24 +17,36 @@ TITLE = r"pyÉtude"
 VERSION = r"v2.0.0~b1"
 
 class Configurator:
+    """## Gestionnaire des auteurs et du Secondaire
+    Si le fichier `pyEtude.json` n'existe pas, le configurateur demandera les infos
+
+    Dans tous les cas: Lit le fichier et envoie les informations à `frontEnd()`
+    """
     def __init__(self):
+        """## Démarre le configurateur
+        1. Met des valeurs de bases pour self.auteur et self.secondaire si jamais l'utilisateur répond en ne mettant rien
+        2. Lance le configurateur
+        """
         self.auteur = "Laurent Bourgon"
         self.secondaire = "Secondaire 5 - 2019-2020"
         self.checkRun()
     
     def checkRun(self):
+        """## Vérifie si le fichier de configuration existe
+        """
         if os.path.isfile("pyEtude.json"):
             json_data = self.readJSON()
         else:
             self.createJSON_GUI()
     
     def createJSON_GUI(self):
+        """## GUI tkinter qui demande les 2 informations
+        """
         self.configurator = Tk()
         self.configurator.title(TITLE + " - " + VERSION )
-        self.configurator.geometry(f"285x172")
 
         self.frame = LabelFrame(self.configurator, text="Configurateur",width=250)
-        self.frame.grid(row=0,column=0,padx=5)
+        self.frame.grid(row=0,column=0,padx=5, pady=5)
 
         self.frame_title = Label(self.frame, text="Veuillez répondre aux questions suivantes",justify=CENTER).grid(row=0,column=0)
 
@@ -54,23 +66,36 @@ class Configurator:
         self.configurator.mainloop()
 
     def getEntries(self):
+        """## Action qui permet de stocker les informations dans les `Entry`
+        """
+        # Prend les infos
         self.auteur = self.configurator_auteur_entry.get().replace("&","")
         self.secondaire = self.configurator_secondaire_entry.get().replace("&","")
+        # Supprime le configurateur
         self.configurator.destroy()
-        self.json_data = dict()
+
+        self.json_data = dict()  # Crée le dictionnaire de données
         self.json_data["auteur"] = self.auteur
         self.json_data["secondaire"] = self.secondaire
+        
+        # Crée le fichier de configuration
         with open("pyEtude.json", "w") as json_f:
             json.dump(self.json_data, json_f)
-
+        # Lance frontEnd() avec les infos indiquées
         frontEnd(self.json_data)
 
     def readJSON(self):
+        """## Action qui lit les informations du fichier de configuration
+        """
+        # Ouvre le fichier de config
         with open("pyEtude.json") as json_f:
-            self.json_data = json.load(json_f)
+            self.json_data = json.load(json_f)  # Lit le fichier de config
+        # Lance frontEnd() avec les infos indiquées
         frontEnd(self.json_data)
 
-class Placeholder(object):
+class Placeholder:
+    """## Classe qui permet d'ajouter un placeholder aux `Entry`
+    """
     def __init__(self):
         __slots__ = 'normal_color', 'normal_font', 'placeholder_text', 'placeholder_color', 'placeholder_font', 'with_placeholder'
     def add_placeholder_to(self, entry, placeholder, color="grey", font=None):
@@ -103,13 +128,21 @@ class Placeholder(object):
         return state
 
 class frontEnd:
-    def __init__(self, json_data):
-        self.auteur = json_data["auteur"]
-        self.secondaire = json_data["secondaire"]
+    """## Main GUI du programme
+    """
+    def __init__(self, jsonData):
+        """## Lance le programme principal
         
+        ### Arguments:\n
+            \tjsonData {dict} -- Un dictionnaire ayant les auteurs et le secondaire
+        """
+        # Extrait les infos dans jsonData
+        self.auteur = jsonData["auteur"]
+        self.secondaire = jsonData["secondaire"]
+        # Par défaut, il n'y a pas de chemins customs
         self.custom_directory = False
         self.custom_name = False
-        
+        # Information par défaut, afin de montrer un exemple à l'utilisateur
         self.titre = "Ceci est un exemple"
         self.soustitre = "Newton, grand physicien"
         self.matiere = "PHY"
@@ -117,28 +150,30 @@ class frontEnd:
         self.section = "La Loi de l'Inertie"
         self.model = "model.docx"
 
-        self.main()
-        self.root.mainloop()
+        self.main()  # Lance le programme principal
+        self.root.mainloop()  # Permet au programme de rester ouvert
 
     def main(self):
-        self.root = Tk()
-        self.root.title(TITLE + " - " + VERSION)
+        """## Fonction "maison" qui regroupe les éléments de bases et renvoies aux autres composants du GUI
+        """
+        self.root = Tk()  # Crée une fenêtre
+        self.root.title(TITLE + " - " + VERSION)  # Met un titre à cette fenêtre
 
-        self.frame = Frame(self.root)
-        self.frame.grid(row=0, column=0, pady=3)
+        self.frame = Frame(self.root)  # Crée un frame principal
+        self.frame.grid(row=0, column=0, pady=3)  # Place le frame principal
 
-        self.input = LabelFrame(self.frame, text="Information")
+        self.input = LabelFrame(self.frame, text="Information")  # Crée un frame pour la section input
         self.input.grid(row=0, column=0, sticky=NW, padx=5)
 
-        self.generate = Frame(self.frame)
+        self.generate = Frame(self.frame)  # Crée un frame pour la section generate
         self.generate.grid(row=1, column=0, sticky=NW, padx=5)
 
-        self.options = Frame(self.frame)
+        self.options = Frame(self.frame)  # Crée un frame pour la section options
         self.options.grid(row=0, column=1, sticky=SE, padx=5)
 
-        self.settings = Frame(self.frame)
+        self.settings = Frame(self.frame)  # Crée un frame pour la section settings
         self.settings.grid(row=1, column=1, sticky=SE, padx=5)
-
+        # Renvoie aux autres composantes du GUI
         self.showInput()
         self.showOptions()
         self.showGenerate()
@@ -147,6 +182,15 @@ class frontEnd:
     def showInput(self):
         
         def callbackEntry(name="", index="", mode=""):
+            """## Stocke les informations dans les `Entry`
+            
+            ### Keyword Arguments:\n
+                \tname {str} -- Nom du StringVar UTILE (default: {""})
+                \tindex {str} -- Index INUTILE (default: {""})
+                \tmode {str} -- Model INUTILE (default: {""})
+                * Les arguments inutiles sont là puisque tkinter envoie toujours 3 arguments
+            """
+            # Regarde quelle variable changer
             if name == "titre":
                 self.titre = self.frame_titre_entry.get().replace("&","")
             elif name == "soustitre":
@@ -157,11 +201,15 @@ class frontEnd:
                 self.numero = self.frame_numero_entry.get().replace("&","")
             elif name == "section":
                 self.section = self.frame_section_entry.get().replace("&","")
-            else:
-                validateButton()
-                return None
-            self.refreshValues()
+            else:  # Si le nom n'est pas identifier, tout sera mis à jour
+                self.titre = self.frame_titre_entry.get().replace("&","")
+                self.soustitre = self.frame_soustitre_entry.get().replace("&","")
+                self.matiere = self.frame_matiere_entry.get().replace("&","")
+                self.numero = self.frame_numero_entry.get().replace("&","")
+                self.section = self.frame_section_entry.get().replace("&","")
+            self.refreshValues()  # Met à jour les valeurs sur le paneau
         
+        # Crée les StringVar qui feront le callback
         self.frame_titre_entry_sv = StringVar(name="titre")
         self.frame_titre_entry_sv.trace_add("write", callbackEntry)
 
@@ -177,14 +225,16 @@ class frontEnd:
         self.frame_section_entry_sv = StringVar(name="section")
         self.frame_section_entry_sv.trace_add("write", callbackEntry)
 
+
+        # Met un Frame à lasection Titre-SousTitre
         self.frame_title = LabelFrame(self.input, text="")
         self.frame_title.grid(row=0, column=0, padx=5, pady=5)
 
-        self.frame_titre = LabelFrame(self.frame_title, text="Titre")
-        self.frame_titre.grid(row=0, column=0, padx=5, pady=3)
-        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond 12", justify=CENTER, textvariable=self.frame_titre_entry_sv)
-        self.frame_titre_entry.grid(row=0,column=0,padx=5,pady=5)
-        Placeholder().add_placeholder_to(self.frame_titre_entry, self.titre)
+        self.frame_titre = LabelFrame(self.frame_title, text="Titre")  # Crée un Frame avec un Label comme titre
+        self.frame_titre.grid(row=0, column=0, padx=5, pady=3)  # Le place
+        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond 12", justify=CENTER, textvariable=self.frame_titre_entry_sv)  # Crée une entrée pour la section
+        self.frame_titre_entry.grid(row=0,column=0,padx=5,pady=5)  # La place
+        Placeholder().add_placeholder_to(self.frame_titre_entry, self.titre)  # Crée le callback avec le StringVar créer plus tôt
 
         self.frame_soustitre = LabelFrame(self.frame_title, text="Sous-Titre")
         self.frame_soustitre.grid(row=1, column=0, padx=5, pady=1.5)
@@ -192,6 +242,7 @@ class frontEnd:
         self.frame_soustitre_entry.grid(row=0,column=0,padx=5,pady=5)
         Placeholder().add_placeholder_to(self.frame_soustitre_entry, self.soustitre)
 
+        # Met un Frame à la section Matiere-Numero
         self.frame_cours = LabelFrame(self.input, text="")
         self.frame_cours.grid(row=1,column=0, padx=5,pady=5)
 
@@ -207,21 +258,13 @@ class frontEnd:
         self.frame_numero_entry.grid(row=0,column=0,padx=5,pady=5)
         Placeholder().add_placeholder_to(self.frame_numero_entry, self.numero)
 
+        # Met un Frame à la section Première Section
         self.frame_section = LabelFrame(self.input, text="Première Section")
         self.frame_section.grid(row=3, column=0, padx=5, pady=3, ipadx=2)
         self.frame_section_label = Label(self.frame_section, text="1.", font="Garamond 12", justify=RIGHT).grid(row=0,column=0)
         self.frame_section_entry = Entry(self.frame_section, font="Garamond 12", justify=CENTER, textvariable=self.frame_section_entry_sv)
         self.frame_section_entry.grid(row=0,column=1,pady=5)
         Placeholder().add_placeholder_to(self.frame_section_entry, self.section)
-
-        def validateButton():
-            self.titre = self.frame_titre_entry.get()
-            self.soustitre = self.frame_soustitre_entry.get()
-            self.matiere = self.frame_matiere_entry.get()
-            self.numero = self.frame_numero_entry.get()
-            self.section = self.frame_section_entry.get()
-            self.refreshValues()
-        #self.input_button = Button(self.input, text="Valider", font=("", 10, "bold"), command=lambda:validateButton()).grid(row=4, column=0,padx=5,pady=8)
 
     def showOptions(self):
         self.frame_options = LabelFrame(self.options, text="Options")

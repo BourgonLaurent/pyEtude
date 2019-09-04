@@ -81,8 +81,11 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 | OS:                | N'importe lequel |                                                                                                 |                                                            |
 | Python:            | `Python 3`       | Développé sous Python 3.7.4, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
 | Extensions Python: | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `tkinter`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `webbrowser`     | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 
 ### Installation <a name = "installation"></a>
 
