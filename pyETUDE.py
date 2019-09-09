@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-/
+# THIS CLI VERSION IS DEPRECATED
+# THERE WILL BE CLOSE TO NOT SUPPORT IN THE FUTURE
+
 intro = """
                  ███████╗████████╗██╗   ██╗██████╗ ███████╗
                  ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝
