@@ -10,7 +10,7 @@
 ╚═╝        ╚═╝   v2.0.0
 """
 
-import os, sys, zipfile, json, tkinter.filedialog, webbrowser
+import os, sys, zipfile, json, tkinter.filedialog, webbrowser, re
 from tkinter import *
 
 TITLE = r"pyÉtude"
@@ -29,14 +29,14 @@ class Configurator:
         """
         self.auteur = "Laurent Bourgon"
         self.secondaire = "Secondaire 5 - 2019-2020"
-        self.other_number = 1
 
         self.mat_dict = {
             "Anglais":"ANG",
             "Arts":"ART",
             "Chimie":"CHM",
+            "Éducation Financière":"EFI",
             "Éducation Physique":"EDP",
-            "Éthique et culture religieuse":"ECR",
+            "Éthique et Culture Religieuse":"ECR",
             "Français":"FRA",
             "Mathématiques":"MAT",
             "Monde Contemporain":"MDC",
@@ -66,13 +66,13 @@ class Configurator:
 
         self.frame_auteur = LabelFrame(self.frame, text="Auteur")
         self.frame_auteur.grid(row=1,column=0,stick=W,padx=5,columnspan=2)
-        self.configurator_auteur_entry = Entry(self.frame_auteur,font="Garamond 12",width=30)
+        self.configurator_auteur_entry = Entry(self.frame_auteur,font="Garamond",width=30)
         self.configurator_auteur_entry.grid(row=0,column=0,padx=2)
         Placeholder().add_placeholder_to(self.configurator_auteur_entry, self.auteur)
 
         self.frame_secondaire = LabelFrame(self.frame, text="Secondaire")
         self.frame_secondaire.grid(row=2,column=0,stick=W,padx=5,pady=5,columnspan=2)
-        self.configurator_secondaire_entry = Entry(self.frame_secondaire,font="Garamond 12",width=30)
+        self.configurator_secondaire_entry = Entry(self.frame_secondaire,font="Garamond",width=30)
         self.configurator_secondaire_entry.grid(row=0,column=0,padx=2)
         Placeholder().add_placeholder_to(self.configurator_secondaire_entry, self.secondaire)
 
@@ -82,11 +82,22 @@ class Configurator:
         self.configurator.mainloop()
 
     def createOTHER_GUI(self):
+        def getMatieres():
+            self.mat_final_dict = dict()
+            for entry in self.entries:
+                if entry[0].get() == "" or entry[1].get() == "":
+                    continue
+                self.mat_final_dict[entry[0].get()] = [entry[1].get(), entry[2].get()]
+
+            self.other.destroy()
+
+        self.other_number = 1
+
         self.other = Toplevel(self.configurator)
         self.other.title("Configurateur de matières")
 
         self.other_button_frame = Frame(self.other)
-        self.other_button_frame.grid(row=1, pady=5)
+        self.other_button_frame.grid(row=1, pady=5, ipady=5)
 
         self.other_reset = Button(self.other_button_frame, text="Paramètres par défaut")
         self.other_reset.grid(row=0,column=0, padx=10)
@@ -94,30 +105,38 @@ class Configurator:
         self.other_add = Button(self.other_button_frame, text="Ajouter une matière", command= lambda: self.createNewWindow())
         self.other_add.grid(row=0,column=1, padx=10)
 
-        self.other_set = Button(self.other_button_frame, text="Appliquer")
+        self.other_set = Button(self.other_button_frame, text="Appliquer", command= lambda: getMatieres())
         self.other_set.grid(row=1,column=0,columnspan=2, pady=5)
 
         self.other_frame = LabelFrame(self.other, text="Matières")
         self.other_frame.grid(row=0, padx=5,pady=5)
 
+        self.entries = list()
+
         for key, value in self.mat_dict.items():
             self.createNewWindow(key, value)
             
-    def createNewWindow(self, long, court):
+    def createNewWindow(self, long="", court=""):
         if self.other_number == 1:
             Label(self.other_frame, text="#").grid(row=0,column=0)
             Label(self.other_frame, text="Long").grid(row=0,column=1)
             Label(self.other_frame, text="Court").grid(row=0,column=2)
+            Label(self.other_frame, text="Dossier (vide si par défaut)").grid(row=0, column=3)
 
         Label(self.other_frame, text=str(self.other_number)).grid(row=self.other_number,column=0)
-        nom = Entry(self.other_frame, font="Garamond 12", justify=CENTER)
+
+        nom = Entry(self.other_frame, font="Garamond", justify=CENTER)
         nom.grid(row=self.other_number, column=1)
         nom.insert(0, long)
 
-        num = Entry(self.other_frame, font="Garamond 12", justify=CENTER)
+        num = Entry(self.other_frame, font="Garamond", justify=CENTER)
         num.grid(row=self.other_number, column=2)
         num.insert(0, court)
 
+        path = Entry(self.other_frame, font="Garamond", justify=CENTER)
+        path.grid(row=self.other_number, column=3)
+
+        self.entries.append((nom, num, path))
         self.other_number += 1
 
     def getEntries(self):
@@ -133,9 +152,18 @@ class Configurator:
         self.json_data["auteur"] = self.auteur
         self.json_data["secondaire"] = self.secondaire
         
+        try:
+            self.mat_final_dict
+        except AttributeError:
+            self.mat_final_dict = self.mat_dict
+        
+        self.json_data["matiere"] = dict()
+        for key, value in self.mat_final_dict.items():
+            self.json_data["matiere"][key] = value
+
         # Crée le fichier de configuration
-        with open("pyEtude.json", "w") as json_f:
-            json.dump(self.json_data, json_f)
+        with open("pyEtude.json", "w", encoding="utf-8") as json_f:
+            json.dump(self.json_data, json_f, sort_keys=True, indent=4)
         # Lance frontEnd() avec les infos indiquées
         frontEnd(self.json_data)
 
@@ -194,6 +222,8 @@ class frontEnd:
         # Extrait les infos dans jsonData
         self.auteur = jsonData["auteur"]
         self.secondaire = jsonData["secondaire"]
+        self.mat_dict = jsonData["matiere"]
+
         # Par défaut, il n'y a pas de chemins customs
         self.custom_directory = False
         self.custom_name = False
@@ -262,7 +292,7 @@ class frontEnd:
                 self.matiere = self.frame_matiere_entry.get().replace("&","")
                 self.numero = self.frame_numero_entry.get().replace("&","")
                 self.section = self.frame_section_entry.get().replace("&","")
-            self.refreshValues()  # Met à jour les valeurs sur le paneau
+            self.refreshValues()  # Met à jour les valeurs sur le panneau
         
         # Crée les StringVar qui feront le callback
         self.frame_titre_entry_sv = StringVar(name="titre")
@@ -287,13 +317,13 @@ class frontEnd:
 
         self.frame_titre = LabelFrame(self.frame_title, text="Titre")  # Crée un Frame avec un Label comme titre
         self.frame_titre.grid(row=0, column=0, padx=5, pady=3)  # Le place
-        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond 12", justify=CENTER, textvariable=self.frame_titre_entry_sv)  # Crée une entrée pour la section
+        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond", justify=CENTER, textvariable=self.frame_titre_entry_sv)  # Crée une entrée pour la section
         self.frame_titre_entry.grid(row=0,column=0,padx=5,pady=5)  # La place
         Placeholder().add_placeholder_to(self.frame_titre_entry, self.titre)  # Crée le callback avec le StringVar créer plus tôt
 
         self.frame_soustitre = LabelFrame(self.frame_title, text="Sous-Titre")
         self.frame_soustitre.grid(row=1, column=0, padx=5, pady=1.5)
-        self.frame_soustitre_entry = Entry(self.frame_soustitre, font="Garamond 12", justify=CENTER, textvariable=self.frame_soustitre_entry_sv)
+        self.frame_soustitre_entry = Entry(self.frame_soustitre, font="Garamond", justify=CENTER, textvariable=self.frame_soustitre_entry_sv)
         self.frame_soustitre_entry.grid(row=0,column=0,padx=5,pady=5)
         Placeholder().add_placeholder_to(self.frame_soustitre_entry, self.soustitre)
 
@@ -303,37 +333,96 @@ class frontEnd:
 
         self.frame_matiere = LabelFrame(self.frame_cours, text="Matière")
         self.frame_matiere.grid(row=1, column=0, padx=5, pady=3)
-        self.frame_matiere_entry = Entry(self.frame_matiere, font="Garamond 12", justify=CENTER, textvariable=self.frame_matiere_entry_sv)
+        self.frame_matiere_entry = Entry(self.frame_matiere, font="Garamond", justify=CENTER, textvariable=self.frame_matiere_entry_sv, width=10)
         self.frame_matiere_entry.grid(row=0,column=0,padx=5,pady=5)
-        Placeholder().add_placeholder_to(self.frame_matiere_entry, self.matiere)
+        self.frame_matiere_entry.config(state='disabled')
 
+        def setMatiereEntry():
+            if cours.get() == "Personnaliser...":
+                self.frame_matiere_entry.config(state='normal')
+                return None
+            self.frame_matiere_entry.config(state='normal')
+            choice = re.sub(r"(?:.* - )", "", cours.get())
+            self.frame_matiere_entry.delete(0, END)
+            self.frame_matiere_entry.insert(0, choice)
+            self.frame_matiere_entry.config(state='disabled')
 
-        def printbutton():
-            print(cours.get())
-        mb = Menubutton(self.frame_matiere, text="^", relief=RAISED)
-        mb.grid(row=0,column=1)
+            for key, values in self.mat_dict.items():
+                if values[0] == choice:
+                    if values[1] == "":
+                        self.custom_directory = False
+                        self.refreshValues()
+                    else:
+                        self.directory_name = values[1]
+                        self.custom_directory = True
+                        self.refreshValues()
 
-        mb.menu = Menu(mb, tearoff=0)
-        mb["menu"] = mb.menu
+            
+        menu_matiere = Menubutton(self.frame_matiere, text="↩", relief=RAISED, width=5)
+        menu_matiere.grid(row=0,column=1, padx=5)
+
+        menu_matiere.menu = Menu(menu_matiere, tearoff=0)
+        menu_matiere["menu"] = menu_matiere.menu
 
         cours = StringVar()
 
-        mb.menu.add_radiobutton(label="Chimie - CHM", variable=cours, command=printbutton)
-        mb.menu.add_radiobutton(label="Physique - PHY", variable=cours, command=printbutton)
-
-        mb.grid(row=0,column=1)
+        for key, value in self.mat_dict.items():
+            menu_matiere.menu.add_radiobutton(label=f"{key} - {value[0]}", variable=cours, command=setMatiereEntry)
+        menu_matiere.menu.add_separator()
+        menu_matiere.menu.add_radiobutton(label="Personnaliser...", variable=cours, command=setMatiereEntry)
 
         self.frame_numero = LabelFrame(self.frame_cours, text="Numéro")
         self.frame_numero.grid(row=2, column=0, padx=5, pady=1.5)
-        self.frame_numero_entry = Entry(self.frame_numero, font="Garamond 12", justify=CENTER, textvariable=self.frame_numero_entry_sv)
+        self.frame_numero_entry = Entry(self.frame_numero, font="Garamond", justify=CENTER, textvariable=self.frame_numero_entry_sv, width=10)
         self.frame_numero_entry.grid(row=0,column=0,padx=5,pady=5)
-        Placeholder().add_placeholder_to(self.frame_numero_entry, self.numero)
+        # Placeholder().add_placeholder_to(self.frame_numero_entry, self.numero)
+        self.frame_numero_entry.config(state='disabled')
 
+        menu_numero = Menubutton(self.frame_numero, text="↩", relief=RAISED, width=5)
+        menu_numero.grid(row=0,column=1, padx=5)
+
+        menu_numero.menu = Menu(menu_numero, tearoff=0)
+        menu_numero["menu"] = menu_numero.menu
+
+
+        chapitreMenu = Menu(menu_numero.menu, tearoff=0)
+        menu_numero.menu.add_cascade(label="Chapitre", menu=chapitreMenu)
+        numero = StringVar()
+        def setNumeroEntry():
+            if numero.get() == "Personnaliser...":
+                self.frame_numero_entry.config(state='normal')
+                return None
+            self.frame_numero_entry.config(state='normal')
+            self.frame_numero_entry.delete(0, END)
+            self.frame_numero_entry.insert(0, numero.get().replace(" - ", ""))
+            self.frame_numero_entry.config(state='disabled')
+        for index in range(0,20):
+            chapitreMenu.add_radiobutton(label=f"CHP{index}", variable=numero, command=setNumeroEntry)
+
+        dateMenu = Menu(menu_numero.menu, tearoff=0)
+        menu_numero.menu.add_cascade(label="Date", menu=dateMenu)
+        for pos, mois in enumerate(("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"), start=1):
+            if mois == "Février":
+                number = 29+1
+            elif mois in ("Avril", "Juin", "Septembre", "Novembre"):
+                number = 30+1
+            else:
+                number = 31+1
+            temp_menu = Menu(dateMenu, tearoff=0)
+            dateMenu.add_cascade(label=mois, menu=temp_menu)
+
+            for d in range(1,number):
+                temp_menu.add_radiobutton(label= f"{str(pos).zfill(2)} - {str(d).zfill(2)}", variable=numero, command=setNumeroEntry)
+
+            del temp_menu
+        menu_numero.menu.add_separator()
+        menu_numero.menu.add_radiobutton(label="Personnaliser...", variable=numero, command=setNumeroEntry)
+        
         # Met un Frame à la section Première Section
         self.frame_section = LabelFrame(self.input, text="Première Section")
         self.frame_section.grid(row=3, column=0, padx=5, pady=3, ipadx=2)
-        self.frame_section_label = Label(self.frame_section, text="1.", font="Garamond 12", justify=RIGHT).grid(row=0,column=0)
-        self.frame_section_entry = Entry(self.frame_section, font="Garamond 12", justify=CENTER, textvariable=self.frame_section_entry_sv)
+        self.frame_section_label = Label(self.frame_section, text="1.", font="Garamond", justify=RIGHT).grid(row=0,column=0)
+        self.frame_section_entry = Entry(self.frame_section, font="Garamond", justify=CENTER, textvariable=self.frame_section_entry_sv)
         self.frame_section_entry.grid(row=0,column=1,pady=5)
         Placeholder().add_placeholder_to(self.frame_section_entry, self.section)
 
@@ -344,11 +433,11 @@ class frontEnd:
         # Crée le label frame pour l'option auteur
         self.frame_options_auteur = LabelFrame(self.frame_options, text="Auteur")
         self.frame_options_auteur.grid(row=0,column=0,padx=5)
-        self.options_auteur_label = Label(self.frame_options_auteur, text=self.auteur, font="Garamond 13 italic").grid(row=0,column=0)
+        self.options_auteur_label = Label(self.frame_options_auteur, text=self.auteur, font=("Garamond", 13, "italic")).grid(row=0,column=0)
         # Crée le label frame pour l'option secondaire
         self.frame_options_secondaire = LabelFrame(self.frame_options, text="Secondaire")
         self.frame_options_secondaire.grid(row=1,column=0,padx=5, pady=2)
-        self.options_secondaire_label = Label(self.frame_options_secondaire, text=self.secondaire, font="Garamond 13 italic").grid(row=0,column=0)
+        self.options_secondaire_label = Label(self.frame_options_secondaire, text=self.secondaire, font=("Garamond", 13, "italic")).grid(row=0,column=0)
         # Crée le label frame qui contiendra toutes les valeurs créées par self.refreshValues()
         self.frame_values = LabelFrame(self.options, text="Valeurs")
         self.frame_values.grid(row=1,column=0,sticky=NW)
@@ -367,7 +456,7 @@ class frontEnd:
             self.filepath = os.path.join(os.getcwd(), f"{self.matiere}-{self.numero}.docx")
         
         try:  # crée le message de valeurs
-            self.values_text = Label(self.frame_values, wraplength=350, text=f"Titre: {self.titre}\nSous-Titre: {self.soustitre}\nMatière: {self.matiere}\nNuméro: {self.numero}\nSection: 1. {self.section}\n\nAuteur: {self.auteur}\nSecondaire: {self.secondaire}\n\n{self.filepath}")
+            self.values_text = Label(self.frame_values, wraplength=350, justify=LEFT, text=f"Titre: {self.titre}\nSous-Titre: {self.soustitre}\nMatière: {self.matiere}\nNuméro: {self.numero}\nSection: 1. {self.section}\n\nAuteur: {self.auteur}\nSecondaire: {self.secondaire}\n\n{self.filepath}")
             self.values_text.grid(row=0,column=0)
         except AttributeError:  # ne met pas l'alerte dans la console, mais le dit dans le debugger
             assert AttributeError
