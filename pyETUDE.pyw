@@ -10,12 +10,13 @@
 ╚═╝        ╚═╝   v2.0.0
 """
 
-import os, sys, zipfile, json, tkinter.filedialog, webbrowser, re
 from tkinter import *
+import json, locale, os, re, sys, tkinter.filedialog, webbrowser, zipfile
 
 TITLE = r"pyÉtude"
 VERSION = r"v2.0.0~b1"
 
+locale.setlocale(locale.LC_ALL, "fr_CA.utf8")  # Met la langue en français en prenant en charge les accents (UTF-8)
 class Configurator:
     """## Gestionnaire des auteurs et du Secondaire
     Si le fichier `pyEtude.json` n'existe pas, le configurateur demandera les infos
@@ -57,35 +58,40 @@ class Configurator:
     def createJSON_GUI(self):
         """## GUI tkinter qui demande les 2 informations
         """
-        self.configurator = Tk()
+        self.configurator = Tk()  # Initialise le configurateur
         self.configurator.title(TITLE + " - " + VERSION )
-
+        # Ajoute un LabelFrame principal
         self.frame = LabelFrame(self.configurator, text="Configurateur",width=250)
         self.frame.grid(row=0,column=0,padx=5, pady=5)
-
+        # Crée la question dans le LabelFrame principal
         self.frame_title = Label(self.frame, text="Veuillez répondre aux questions suivantes",justify=CENTER).grid(row=0,column=0)
-
+        # Crée un frame à l'intérieur du princiapl pour demander l'auteur
         self.frame_auteur = LabelFrame(self.frame, text="Auteur")
         self.frame_auteur.grid(row=1,column=0,stick=W,padx=5,columnspan=2)
 
         self.configurator_auteur_entry = Entry(self.frame_auteur,font="Garamond",width=30)
         self.configurator_auteur_entry.grid(row=0,column=0,padx=2)
         Placeholder().add_placeholder_to(self.configurator_auteur_entry, self.auteur)
-
+        # Crée un frame à l'intérieur du princiapl pour demander le secondaire
         self.frame_secondaire = LabelFrame(self.frame, text="Secondaire")
         self.frame_secondaire.grid(row=2,column=0,stick=W,padx=5,pady=5,columnspan=2)
 
         self.configurator_secondaire_entry = Entry(self.frame_secondaire,font="Garamond",width=30)
         self.configurator_secondaire_entry.grid(row=0,column=0,padx=2)
         Placeholder().add_placeholder_to(self.configurator_secondaire_entry, self.secondaire)
-
+        # Bouton pour enregistrer
         self.configurator_generator_button = Button(self.frame, text="Appliquer et Enregistrer", command= lambda: self.getEntries()).grid(row=3,column=0,pady=5)
+        # Bouton pour ouvrir le menu additionnel ("...")
         self.configurator_other_button = Button(self.frame, text="...", width=2, command= lambda: self.createOTHER_GUI()).grid(row=3, column=1)
         
-        self.configurator.mainloop()
+        self.configurator.mainloop()  # Laisser la fenêtre ouverte jusqu'à sa fermeture
 
     def createOTHER_GUI(self):
+        """## Ouvre une nouvelle fenêtre avec le menu additionnel "..."
+        """
         def getMatieres():
+            """## Enregistre les matières selon les entrées, à utiliser avec un Callback
+            """
             self.mat_final_dict = dict()
             for entry in self.entries:
                 if entry[0].get() == "" or entry[1].get() == "":
@@ -94,9 +100,9 @@ class Configurator:
 
             self.other.destroy()
 
-        self.other_number = 1
+        self.other_number = 1  # (ré)Initialise le compteur du nb. de matières
 
-        self.other = Toplevel(self.configurator)
+        self.other = Toplevel(self.configurator)  # Ouvre une nouvelle fenêtre
         self.other.title("Configurateur de matières")
 
         self.other_button_frame = Frame(self.other)
@@ -114,34 +120,38 @@ class Configurator:
         self.other_frame = LabelFrame(self.other, text="Matières")
         self.other_frame.grid(row=0, padx=5,pady=5)
 
-        self.entries = list()
+        self.entries = list()  # Initialise les entrées, repères qui suivent combien d'entrées il existe
 
-        for key, value in self.mat_dict.items():
+        for key, value in self.mat_dict.items():  # Crée les colonnes pour toutes les valeurs par défaut (self.mat_dict)
             self.createNewWindow(key, value)
             
     def createNewWindow(self, long="", court=""):
-        if self.other_number == 1:
+        """## Crée une nouvelle ligne
+        ### Keyword Arguments:\n
+            \tlong {str} -- Nom prédéfini à mettre dans la case Long (default: {""})
+            \tcourt {str} -- Nom prédéfini à mettre dans la case Court (default: {""})
+        """
+        if self.other_number == 1: # Si c'est la première fois, crée les en-têtes
             Label(self.other_frame, text="#").grid(row=0,column=0)
             Label(self.other_frame, text="Long").grid(row=0,column=1)
             Label(self.other_frame, text="Court").grid(row=0,column=2)
-
             Label(self.other_frame, text="Dossier (vide si par défaut)").grid(row=0, column=3)
 
-        Label(self.other_frame, text=str(self.other_number)).grid(row=self.other_number,column=0)
-
+        Label(self.other_frame, text=str(self.other_number)).grid(row=self.other_number,column=0) # Crée le numéro de ligne
+        # NOM DE LA MATIÈRE
         nom = Entry(self.other_frame, font="Garamond", justify=CENTER)
         nom.grid(row=self.other_number, column=1)
         nom.insert(0, long)
-
+        # NUMÉRO DE LA MATIÈRE
         num = Entry(self.other_frame, font="Garamond", justify=CENTER)
         num.grid(row=self.other_number, column=2)
         num.insert(0, court)
-
+        # CHEMIN DE LA MATIÈRE
         path = Entry(self.other_frame, font="Garamond", justify=CENTER)
         path.grid(row=self.other_number, column=3)
 
-        self.entries.append((nom, num, path))
-        self.other_number += 1
+        self.entries.append((nom, num, path))  # Sauvegarder les entrées dans une liste
+        self.other_number += 1  # Une entrée de plus existe, il faut incrémenter le compteur
 
     def getEntries(self):
         """## Action qui permet de stocker les informations dans les `Entry`
@@ -153,21 +163,21 @@ class Configurator:
         self.configurator.destroy()
 
         self.json_data = dict()  # Crée le dictionnaire de données
-        self.json_data["auteur"] = self.auteur
-        self.json_data["secondaire"] = self.secondaire
+        self.json_data["auteur"] = self.auteur  # Crée une entrée pour l'auteur
+        self.json_data["secondaire"] = self.secondaire  # Crée une entrée pour le secondaire
         
-        try:
+        try:  # Regarde si des entrèes personnalisées pour les matières existent
             self.mat_final_dict
-        except AttributeError:
+        except AttributeError:  # Si les entrées personnalisées n'existent pas
             self.mat_final_dict = self.mat_dict
         
-        self.json_data["matiere"] = dict()
+        self.json_data["matiere"] = dict()  # Crée le dictionnaire de matières
         for key, value in self.mat_final_dict.items():
             self.json_data["matiere"][key] = value
 
         # Crée le fichier de configuration
         with open("pyEtude.json", "w", encoding="utf-8") as json_f:
-            json.dump(self.json_data, json_f, sort_keys=True, indent=4)
+            json.dump(self.json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON selon les règles PRETTY-JSON
         # Lance frontEnd() avec les infos indiquées
         frontEnd(self.json_data)
 
@@ -186,6 +196,15 @@ class Placeholder:
     def __init__(self):
         __slots__ = 'normal_color', 'normal_font', 'placeholder_text', 'placeholder_color', 'placeholder_font', 'with_placeholder'
     def add_placeholder_to(self, entry, placeholder, color="grey", font=None):
+        """## Ajoute un Placeholder à une entrée choisie
+        
+        ### Arguments:\n
+            \tentry {tkinter.Entry()} -- Entrée à ajouter le placeholder
+            \tplaceholder {str} -- Le texte à mettre dans le placeholder
+        ### Keyword Arguments:\n
+            \tcolor {str} -- Couleur du placeholder (default: {"grey"})
+            \tfont {str} -- Police du placeholder (default: {None})
+        """
         normal_color = entry.cget("fg")
         normal_font = entry.cget("font")
         if font is None:
@@ -197,20 +216,20 @@ class Placeholder:
         state.placeholder_font=font
         state.placeholder_text = placeholder
         state.with_placeholder=True
-        def on_focusin(event, entry=entry, state=state):
+        def on_focusin(event, entry=entry, state=state):  # Callback lorsqu'on entre l'entrée
             if state.with_placeholder:
                 entry.delete(0, "end")
                 entry.config(fg = state.normal_color, font=state.normal_font)
                 state.with_placeholder = False
-        def on_focusout(event, entry=entry, state=state):
+        def on_focusout(event, entry=entry, state=state):  # Callback lorsqu'on sort de l'entrée
             if entry.get() == '':
                 entry.insert(0, state.placeholder_text)
                 entry.config(fg = state.placeholder_color, font=state.placeholder_font)
                 state.with_placeholder = True
         entry.insert(0, placeholder)
         entry.config(fg = color, font=font)
-        entry.bind('<FocusIn>', on_focusin, add="+")
-        entry.bind('<FocusOut>', on_focusout, add="+")
+        entry.bind('<FocusIn>', on_focusin, add="+")  # Crée une connexion entre on_focusin() et l'entrée
+        entry.bind('<FocusOut>', on_focusout, add="+")  # Crée une connexion entre on_focusout() et l'entrée
         entry.placeholder_state = state
         return state
 
@@ -224,9 +243,9 @@ class frontEnd:
             \tjsonData {dict} -- Un dictionnaire ayant les auteurs et le secondaire
         """
         # Extrait les infos dans jsonData
-        self.auteur = jsonData["auteur"]
-        self.secondaire = jsonData["secondaire"]
-        self.mat_dict = jsonData["matiere"]
+        self.auteur = jsonData["auteur"]  # Auteur
+        self.secondaire = jsonData["secondaire"]  # Secondaire
+        self.mat_dict = jsonData["matiere"]  # Matières + Clés + Chemins
 
         # Par défaut, il n'y a pas de chemins customs
         self.custom_directory = False
@@ -327,7 +346,7 @@ class frontEnd:
         Placeholder().add_placeholder_to(self.frame_titre_entry, self.titre)  # Crée le callback avec le StringVar créer plus tôt
 
         self.frame_soustitre = LabelFrame(self.frame_title, text="Sous-Titre")
-        self.frame_soustitre.grid(row=1, column=0, padx=5, pady=1.5)
+        self.frame_soustitre.grid(row=1, column=0, padx=5, pady=1)
         self.frame_soustitre_entry = Entry(self.frame_soustitre, font="Garamond", justify=CENTER, textvariable=self.frame_soustitre_entry_sv)
         self.frame_soustitre_entry.grid(row=0,column=0,padx=5,pady=5)
         Placeholder().add_placeholder_to(self.frame_soustitre_entry, self.soustitre)
@@ -371,14 +390,15 @@ class frontEnd:
         menu_matiere["menu"] = menu_matiere.menu
 
         cours = StringVar()
+        
+        for key in sorted(self.mat_dict, key=locale.strxfrm):  # Crée les chemins selon les noms de matières triés selon le locale (avec accents)
+            menu_matiere.menu.add_radiobutton(label=f"{key} - {self.mat_dict[key][0]}", variable=cours, command=setMatiereEntry)
 
-        for key, value in self.mat_dict.items():
-            menu_matiere.menu.add_radiobutton(label=f"{key} - {value[0]}", variable=cours, command=setMatiereEntry)
         menu_matiere.menu.add_separator()
         menu_matiere.menu.add_radiobutton(label="Personnaliser...", variable=cours, command=setMatiereEntry)
 
         self.frame_numero = LabelFrame(self.frame_cours, text="Numéro")
-        self.frame_numero.grid(row=2, column=0, padx=5, pady=1.5)
+        self.frame_numero.grid(row=2, column=0, padx=5, pady=1)
         self.frame_numero_entry = Entry(self.frame_numero, font="Garamond", justify=CENTER, textvariable=self.frame_numero_entry_sv, width=10)
         self.frame_numero_entry.grid(row=0,column=0,padx=5,pady=5)
         self.frame_numero_entry.config(state='disabled')
