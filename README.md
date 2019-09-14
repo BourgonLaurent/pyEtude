@@ -197,9 +197,9 @@ $ python pyEtude.pyw
 
 Ceci est dû à certaines distributions de Linux qui n'incluent pas `tkinter`, le module qui s'occupe du GUI. `tkinter` est un module officiel et installé par défaut, il est alors déjà préinstallé avec Windows et macOS, mais certaines distributions de Linux (dont Ubuntu), ne l'incluent pas. Afin de l'installer, utiliser votre gestionnaire de paquet et installer-le, sur Ubuntu: `sudo apt-get install python3-tk`
 &nbsp;
-- Comment puis-je utiliser mon propre modèle? [Voir la documentation]()
-- Comment puis-je personaliser mes matières? [Voir la documentation]()
-- Comment puis-je modifier le chemin par défaut selon la matière choisie? [Voir la documenation]()
+- Comment puis-je utiliser mon propre modèle? [Voir la documentation](../../wiki/Comment-créer-ses-propres-matières%3F)
+- Comment puis-je personaliser mes matières? [Voir la documentation](../../wiki/Comment-créer-son-propre-modèle%3F)
+- Comment puis-je modifier le chemin par défaut selon la matière choisie? [Voir la documenation](../../wiki/Comment-mettre-des-emplacements-par-défaut-selon-les-matières%3F)
 &nbsp;
 - Mon problème n'est pas ici!:
     Veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
