@@ -7,7 +7,7 @@
     ██████╔╝ ╚████╔╝ ███████╗   ██║   ╚██████╔╝██████╔╝███████╗
     ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
     ██║        ██║   MIT © Laurent Bourgon 2019
-    ╚═╝        ╚═╝   v1.0.0
+    ╚═╝        ╚═╝   v2.0.0
 ---
 <div align="center">
 
@@ -38,7 +38,7 @@ Programme `Python3` qui permet de créer un document `Microsoft Word` pré-confi
 - [Créé avec](#créé)
 - [Contributeurs](#contrib)
 - [Licence](#licence)
-<!--- [Reconnaissances](#recon) --> 
+<!--- [Reconnaissances](#recon) -->
 
 ## 🧐 Problème encontré <a name = "probleme"></a>
 
@@ -58,21 +58,23 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 
 ## ⛓️ Ce qu'il faut et les limites du projet <a name = "limites"></a>
 
-- Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). Il devrait être installé par défaut sur les ordinateurs sous `macOS` ou `Linux`. Pour `iOS`, `Android`, `Windows`, `Nintendo Switch Horizon OS`, ou tout autre système d'exploitation, il faudra l'installer manuellement.
+- Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). À cause de l'ajout d'un GUI, `pyÉtude` ne fonctionne que sous Windows, macOS et Linux (pour l'instant). Pour les autres périphériques, veuillez utiliser la version (obsolète) qui est en ligne de commande (`pyETUDE.py`)
 - Ce projet utilise un document `Word` manuellement configuré et le modifie à l'intérieur. Pour avoir un modèle différent, il faut modifier ce document avec les bonnes balises.
 - Ce projet n'utilise pas le module `python-docx` puisqu'il était trop compliqué d'avoir un résultat correct et sans problème. De plus, cela enlève un élément à télécharger.
 
 ## 🚀 Avenir <a name = "avenir"></a>
 
-- [ ] Télécharger le modèle à distance afin de ne faire qu'un seul fichier à télécharger manuellement
+- [x] Transformer ce programme en GUI pour une utilisation plus facile et rapide
+- [x] Fonctionner sous `Word on iOS/iPadOS` et `LibreOffice` (logiciels qui ne prennent pas en charge les métadonnées)
+- [x] Télécharger le modèle à distance afin de ne faire qu'un seul fichier à télécharger manuellement
 - [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
+- [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc
+- [ ] Avoir un configurateur de modèles afin de créer un modèle personnalisé
 - [ ] Avoir plusieurs modèles qui peuvent être choisis.
-- [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [ ] Transformer ce programme en interface web pour faciliter la tâche
-- [ ] Transformer ce programme en application pour faciliter l'utilisation sur tablettes
+- [ ] Transformer ce programme en application mobile pour faciliter l'utilisation sur tablettes
 
 ## 🏁 Bien Démarrer <a name = "démarrer"></a>
-
 
 ### Configuration requise <a name = "configuration"></a>
 
@@ -80,23 +82,25 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 |--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | OS:                | N'importe lequel |                                                                                                 |                                                            |
 | Python:            | `Python 3`       | Développé sous Python 3.7.4, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
-| Extensions Python: | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+| Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `re`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `tkinter`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `webbrowser`     | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 
 ### Installation <a name = "installation"></a>
 
 1. Assurez-vous que vous respectez la [Configuration requise](#configuration).
-2. Télécharger la version la plus récente de `pyEtude-vX.X.X.zip` dans les [releases](https://github.com/BourgonLaurent/pyEtude/releases).
-3. Décompresser le fichier `pyEtude-vX.X.X.zip` dans un dossier vide.
-4. Exécuter le programme avec le terminal/invite de commande ou selon votre système d'exploitation.
+2. Télécharger la version la plus récente de `pyEtude-vX.X.X.pyw` dans les [releases](https://github.com/BourgonLaurent/pyEtude/releases).
+3. (optionnel, mais recommandé) Déplacer `pyEtude-vX.X.X.pyw` dans un dossier vide.
+4. Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
-$ python pyEtude.py
+$ python pyEtude.pyw
 ```
 
 ## 🎈 Utilisation <a name = "utilisation"></a>
@@ -105,19 +109,29 @@ Exécuter le programme avec le terminal/invite de commande ou selon votre systè
 
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
-$ python pyEtude.py
+$ python pyEtude.pyw
 ```
 
-- Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_ 
+- Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
 
 ## 🖼 Captures d'écran<a name = "screenshots"></a>
 
 ### pyÉtude<a name = "pyEtude"></a>
 
-- Configurateur (premier lancement):
+- Configurateur (premier lancement ou « Modifier les options »):
+
+<div align="center">
+
 [![Configurateur](assets_readme/configurator.png)](/assets_readme/configurator.png)
+
+</div>
+
 - Création:
+<div align="center">
+
 [![Création](assets_readme/pyetude.png)](/assets_readme/pyetude.png)
+
+</div>
 
 ### Résultats <a name = "resultats"></a>
 
@@ -162,8 +176,30 @@ $ python pyEtude.py
 
 - `OSError: [WinError 123] La syntaxe du nom de fichier, de répertoire ou de volume est incorrecte`:
     Le nom de matière et le numéro/chapitre ne peut pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
+- Mes caractères `&` (esperluette) sont tous enlevés et n'apparaissent pas dans mon document:
+    Word a de la difficulté avec l'esperluette. Si vous voulez que j'ajoute un mode de compatibilité pour l'esperluette, veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues).
+&nbsp;
 - `Word a rencontré une erreur lors de l'ouverture du fichier`:
     Cela est surement dû aux valeurs qui contiennent des caractères spéciaux. Si ce n'est pas le cas, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+- Le modèle que j'ai choisi est corrompu!:
+    Veuillez le supprimer et relancer `pyÉtude`, celui-ci le téléchargera automatiquement. Si le problème persiste, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+- Mon nouveau document fait `128Ko`, le modèle fait `28Ko`, pourquoi?:
+    Ceci est dû à un problème dans le calcul de taille, Word va automatiquement régler ce problème (réduire la taille du fichier) lorsque le fichier sera enregistré pour la première fois.
+- J'ai l'erreur suivante `ERREUR LOCALE La langue "fr_CA" n'est pas trouvée`:
+    `pyÉtude` a besoin du module de langue français pour fonctionner correctement, celui-ci est fourni par votre système d'exploitation, si vous ne pouvez pas installer la langue française et que vous souhaitez enlever le message, ajoutez un `#` devant les lignes 19 à 26.
+- J'ai l'erreur suivante:
+```python
+    Traceback (most recent call last):
+      File "./pyETUDE.pyw", line 13, in <module>
+      from tkinter import *
+    ModuleNotFoundError: No module named 'tkinter'
+```
+
+Ceci est dû à certaines distributions de Linux qui n'incluent pas `tkinter`, le module qui s'occupe du GUI. `tkinter` est un module officiel et installé par défaut, il est alors déjà préinstallé avec Windows et macOS, mais certaines distributions de Linux (dont Ubuntu), ne l'incluent pas. Afin de l'installer, utiliser votre gestionnaire de paquet et installer-le, sur Ubuntu: `sudo apt-get install python3-tk`
+&nbsp;
+- Comment puis-je utiliser mon propre modèle? [Voir la documentation]()
+- Comment puis-je personaliser mes matières? [Voir la documentation]()
+- Comment puis-je modifier le chemin par défaut selon la matière choisie? [Voir la documenation]()
 &nbsp;
 - Mon problème n'est pas ici!:
     Veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).

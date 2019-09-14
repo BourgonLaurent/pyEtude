@@ -11,12 +11,19 @@
 """
 
 from tkinter import *
-import json, locale, os, re, sys, tkinter.filedialog, webbrowser, zipfile
+import json, locale, os, re, sys, tkinter.filedialog, tkinter.messagebox, urllib.request, webbrowser, zipfile
 
 TITLE = r"pyÉtude"
-VERSION = r"v2.0.0~b1"
+VERSION = r"v2.0.0"
 
-locale.setlocale(locale.LC_ALL, "fr_CA.utf8")  # Met la langue en français en prenant en charge les accents (UTF-8)
+try:
+    locale.setlocale(locale.LC_ALL, "fr_CA.utf8")  # Met la langue en français en prenant en charge les accents (UTF-8)
+except:
+    Tk().withdraw()
+    tkinter.messagebox.showerror("ERREUR LOCALE", "La langue \"fr_CA\" n'est pas trouvée\npyÉtude va se lancer en mode compatibilité\nCela pourrait entraîner une instabilité du programme")
+    assert EnvironmentError
+    locale.setlocale(locale.LC_ALL, (None, None))
+    
 class Configurator:
     """## Gestionnaire des auteurs et du Secondaire
     Si le fichier `pyEtude.json` n'existe pas, le configurateur demandera les infos
@@ -44,7 +51,6 @@ class Configurator:
             "Monde Contemporain":"MDC",
             "Physique":"PHY"
         }
-
         self.checkRun()
     
     def checkRun(self):
@@ -169,7 +175,9 @@ class Configurator:
         try:  # Regarde si des entrèes personnalisées pour les matières existent
             self.mat_final_dict
         except AttributeError:  # Si les entrées personnalisées n'existent pas
-            self.mat_final_dict = self.mat_dict
+            self.mat_final_dict = dict()
+            for key, value in self.mat_dict.items():  # Ajoute une entrée vide pour signifier qu'il faut utiliser la valeur par défaut
+                self.mat_final_dict[key] = [value, ""]
         
         self.json_data["matiere"] = dict()  # Crée le dictionnaire de matières
         for key, value in self.mat_final_dict.items():
@@ -258,9 +266,16 @@ class frontEnd:
         self.section = "La Loi de l'Inertie"
         self.model = "model.docx"
 
+        self.checkModels("model.docx")
         self.main()  # Lance le programme principal
         self.root.mainloop()  # Permet au programme de rester ouvert
-
+    def checkModels(self, model_name:str):
+        if os.path.isfile(model_name):
+            return False
+        else:
+            urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{model_name}", model_name)
+            return True
+        
     def main(self):
         """## Fonction "maison" qui regroupe les éléments de bases et renvoies aux autres composants du GUI
         """
@@ -492,7 +507,6 @@ class frontEnd:
         def browserButton():
             self.directory_name = tkinter.filedialog.askdirectory()
             if not self.directory_name:
-                print("hello")
                 return None
             self.custom_directory = True
             self.refreshValues()
@@ -529,7 +543,7 @@ class frontEnd:
 
         self.settings_options_button = Button(self.frame_settings, width=19, text="Modifier les Options", command=lambda: modifyOptions(self)).grid(row=0,column=0,padx=5,pady=3)
 
-        self.settings_model_button = Button(self.frame_settings, width=19, text="Modifier le Modèle Word", command=lambda: self.showModelWindow()).grid(row=1,column=0,padx=5,pady=3)
+        self.settings_model_button = Button(self.frame_settings, width=19, text="Modifier le Modèle", command=lambda: self.showModelWindow()).grid(row=1,column=0,padx=5,pady=3)
         
         self.about_github = Label(self.frame_settings, text="Projet GitHub", fg="blue", cursor="hand2",justify=CENTER)
         self.about_github.grid(row=2,column=0)
@@ -591,7 +605,11 @@ class Document:
     def main(self):
         self.exportWord(self.model, self.folder)
 
-        self.modifyOptions(os.path.join(self.folder, "docProps", "core.xml"), self.options)
+        # self.modifyOptions(os.path.join(self.folder, "docProps", "core.xml"), self.options)
+        self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.options)
+        self.modifyOptions(os.path.join(self.folder, "word", "header1.xml"), self.options)
+        self.modifyOptions(os.path.join(self.folder, "word", "footer1.xml"), self.options)
+
         self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.sections)
 
         self.packWord(self.folder, self.filepath)
@@ -659,10 +677,10 @@ class Document:
         ### Returns:\n
             \tstr -- the name of the zip file that was created
         """
-
+        locale.setlocale(locale.LC_ALL, (None, None))  # Fix compatibility with locale
         with zipfile.ZipFile(final, "w") as zip_file:
             for root, dirs, files in os.walk(folder):
-                zip_file.write(os.path.join(root, "."))
+                # zip_file.write(os.path.join(root, "."))
 
                 for File in files:
                     filePath = os.path.join(root, File)
