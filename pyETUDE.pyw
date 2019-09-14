@@ -11,6 +11,7 @@
 """
 
 from tkinter import *
+from tkinter.ttk import *
 import json, locale, os, re, sys, tkinter.filedialog, tkinter.messagebox, urllib.request, webbrowser, zipfile
 
 TITLE = r"pyÉtude"
@@ -23,7 +24,7 @@ except:
     tkinter.messagebox.showerror("ERREUR LOCALE", "La langue \"fr_CA\" n'est pas trouvée\npyÉtude va se lancer en mode compatibilité\nCela pourrait entraîner une instabilité du programme")
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
-    
+
 class Configurator:
     """## Gestionnaire des auteurs et du Secondaire
     Si le fichier `pyEtude.json` n'existe pas, le configurateur demandera les infos
@@ -51,6 +52,9 @@ class Configurator:
             "Monde Contemporain":"MDC",
             "Physique":"PHY"
         }
+
+        
+
         self.checkRun()
     
     def checkRun(self):
@@ -66,6 +70,16 @@ class Configurator:
         """
         self.configurator = Tk()  # Initialise le configurateur
         self.configurator.title(TITLE + " - " + VERSION )
+        self.configurator.resizable(False, False)
+
+        self.style = Style()
+        if os.name == "nt":
+            self.style.theme_use("vista")
+        else:
+            self.style.theme_use("clam")
+        self.style.configure("NormalEntry.TEntry", font=("Garamond", 12))
+        self.style.configure("PlaceHolderEntry.TEntry", foreground="grey")
+
         # Ajoute un LabelFrame principal
         self.frame = LabelFrame(self.configurator, text="Configurateur",width=250)
         self.frame.grid(row=0,column=0,padx=5, pady=5)
@@ -75,16 +89,18 @@ class Configurator:
         self.frame_auteur = LabelFrame(self.frame, text="Auteur")
         self.frame_auteur.grid(row=1,column=0,stick=W,padx=5,columnspan=2)
 
-        self.configurator_auteur_entry = Entry(self.frame_auteur,font="Garamond",width=30)
+        self.configurator_auteur_entry = Entry(self.frame_auteur, style="NormalEntry.TEntry", font=("Garamond", 12), width=30)
         self.configurator_auteur_entry.grid(row=0,column=0,padx=2)
         Placeholder().add_placeholder_to(self.configurator_auteur_entry, self.auteur)
+
         # Crée un frame à l'intérieur du princiapl pour demander le secondaire
         self.frame_secondaire = LabelFrame(self.frame, text="Secondaire")
         self.frame_secondaire.grid(row=2,column=0,stick=W,padx=5,pady=5,columnspan=2)
 
-        self.configurator_secondaire_entry = Entry(self.frame_secondaire,font="Garamond",width=30)
+        self.configurator_secondaire_entry = Entry(self.frame_secondaire, style="NormalEntry.TEntry", font=("Garamond", 12),width=30)
         self.configurator_secondaire_entry.grid(row=0,column=0,padx=2)
         Placeholder().add_placeholder_to(self.configurator_secondaire_entry, self.secondaire)
+
         # Bouton pour enregistrer
         self.configurator_generator_button = Button(self.frame, text="Appliquer et Enregistrer", command= lambda: self.getEntries()).grid(row=3,column=0,pady=5)
         # Bouton pour ouvrir le menu additionnel ("...")
@@ -105,16 +121,23 @@ class Configurator:
                 self.mat_final_dict[entry[0].get()] = [entry[1].get(), entry[2].get()]
 
             self.other.destroy()
+        
+        def reloadMatieres():
+            """## Met les valeurs par défaut en quittant et ouvrant à nouveau self.createOTHER_GUI()
+            """
+            self.other.destroy()
+            self.createOTHER_GUI()
 
         self.other_number = 1  # (ré)Initialise le compteur du nb. de matières
 
         self.other = Toplevel(self.configurator)  # Ouvre une nouvelle fenêtre
         self.other.title("Configurateur de matières")
+        self.other.resizable(False, False)
 
         self.other_button_frame = Frame(self.other)
         self.other_button_frame.grid(row=1, pady=5)
 
-        self.other_reset = Button(self.other_button_frame, text="Paramètres par défaut")
+        self.other_reset = Button(self.other_button_frame, text="Paramètres par défaut", command= lambda: reloadMatieres())
         self.other_reset.grid(row=0,column=0, padx=10)
 
         self.other_add = Button(self.other_button_frame, text="Ajouter une matière", command= lambda: self.createNewWindow())
@@ -202,44 +225,39 @@ class Placeholder:
     """## Classe qui permet d'ajouter un placeholder aux `Entry`
     """
     def __init__(self):
-        __slots__ = 'normal_color', 'normal_font', 'placeholder_text', 'placeholder_color', 'placeholder_font', 'with_placeholder'
-    def add_placeholder_to(self, entry, placeholder, color="grey", font=None):
-        """## Ajoute un Placeholder à une entrée choisie
-        
+        __slots__ = 'normal_style', 'placeholder_text', 'with_placeholder'
+    def add_placeholder_to(self, entry: tkinter.ttk.Entry, placeholder: str, placeholder_style="PlaceHolderEntry.TEntry"):
+        """## Classe pour faire un placeholder
+        Pour utiliser cette classe, vous devrez avoir deux styles:
+        1) Le style par défaut, celui qui sera affiché lorsque l'utilisateur aura réellement mis du texte
+        2) Un style qui servira de "placeholder", par défaut il s'appelle "PlaceHolderEntry.TEntry", si vous utilisez un autre nom, veuillez l'indiquer avec le kargs placeholder_style=
         ### Arguments:\n
-            \tentry {tkinter.Entry()} -- Entrée à ajouter le placeholder
+            \tentry {tkinter.ttk.Entry} -- Entrée à ajouter le placeholder
             \tplaceholder {str} -- Le texte à mettre dans le placeholder
         ### Keyword Arguments:\n
-            \tcolor {str} -- Couleur du placeholder (default: {"grey"})
-            \tfont {str} -- Police du placeholder (default: {None})
+            \tplaceholder_style {str} -- Le style de placeholder à utiliser (défault: {"PlaceHolderEntry.TEntry"})
         """
-        normal_color = entry.cget("fg")
-        normal_font = entry.cget("font")
-        if font is None:
-            font = normal_font
-        state = Placeholder()
-        state.normal_color=normal_color
-        state.normal_font=normal_font
-        state.placeholder_color=color
-        state.placeholder_font=font
+        normal_style = entry.cget("style")  # Enregistre le style initial de l'entrée
+        state = Placeholder()  # Enregistre Placeholder pour qu'il puisse enregistrer les états
+        state.normal_style = normal_style
         state.placeholder_text = placeholder
         state.with_placeholder=True
         def on_focusin(event, entry=entry, state=state):  # Callback lorsqu'on entre l'entrée
-            if state.with_placeholder:
-                entry.delete(0, "end")
-                entry.config(fg = state.normal_color, font=state.normal_font)
-                state.with_placeholder = False
+            if state.with_placeholder:  # Regarde si le placeholder est activé
+                entry.delete(0, "end")  # Enlève le placeholder
+                entry.config(style=state.normal_style)  # Met le style original
+                state.with_placeholder = False  # Réinitialise state
         def on_focusout(event, entry=entry, state=state):  # Callback lorsqu'on sort de l'entrée
-            if entry.get() == '':
-                entry.insert(0, state.placeholder_text)
-                entry.config(fg = state.placeholder_color, font=state.placeholder_font)
-                state.with_placeholder = True
-        entry.insert(0, placeholder)
-        entry.config(fg = color, font=font)
+            if entry.get() == '':  # Regarde sile placeholder est vide
+                entry.insert(0, state.placeholder_text)  # Insert le placeholder
+                entry.config(style="PlaceHolderEntry.TEntry")  # Ajoute le style du placeholder
+                state.with_placeholder = True  # Initialise le placeholder
+        entry.insert(0, placeholder)  # Insert le placeholder dans l'entrée
+        entry.config(style=placeholder_style)  # Ajoute le style du placeholder pour l'initialiser
         entry.bind('<FocusIn>', on_focusin, add="+")  # Crée une connexion entre on_focusin() et l'entrée
         entry.bind('<FocusOut>', on_focusout, add="+")  # Crée une connexion entre on_focusout() et l'entrée
-        entry.placeholder_state = state
-        return state
+        entry.placeholder_state = state  # Enregistre l'état
+        return state  # Retourne l'état avec ses valeurs
 
 class frontEnd:
     """## Main GUI du programme
@@ -281,7 +299,21 @@ class frontEnd:
         """
         self.root = Tk()  # Crée une fenêtre
         self.root.title(TITLE + " - " + VERSION)  # Met un titre à cette fenêtre
+        self.root.resizable(False, False)
 
+        self.style = Style()
+        if os.name == "nt":
+            self.style.theme_use("vista")
+        else:
+            self.style.theme_use("clam")
+
+        self.style.configure("BlueLink.TLabel", foreground="blue")
+        self.style.configure("RaisedButton.TButton", relief="raised")
+        self.style.configure("Generate.TButton", font=("", 15, "bold"))
+        self.style.configure("OtherGen.TButton", font=("", 8, "italic"))
+        self.style.configure("NormalEntry.TEntry", font=("Garamond", 12))
+        self.style.configure("PlaceHolderEntry.TEntry", foreground="grey")
+        
         self.frame = Frame(self.root)  # Crée un frame principal
         self.frame.grid(row=0, column=0, pady=3)  # Place le frame principal
 
@@ -350,29 +382,31 @@ class frontEnd:
 
 
         # Met un Frame à la section Titre-SousTitre
-        self.frame_title = LabelFrame(self.input, text="")
-        self.frame_title.grid(row=0, column=0, padx=5, pady=5)
+        # self.frame_title = LabelFrame(self.input, text="")
+        self.frame_title = Frame(self.input, borderwidth=2)
+        self.frame_title.grid(row=0, column=0, padx=5)
 
         self.frame_titre = LabelFrame(self.frame_title, text="Titre")  # Crée un Frame avec un Label comme titre
         self.frame_titre.grid(row=0, column=0, padx=5, pady=3)  # Le place
 
-        self.frame_titre_entry = Entry(self.frame_titre, font="Garamond", justify=CENTER, textvariable=self.frame_titre_entry_sv)  # Crée une entrée pour la section
+        self.frame_titre_entry = Entry(self.frame_titre, style="NormalEntry.TEntry", font=("Garamond", 12), justify=CENTER, textvariable=self.frame_titre_entry_sv)  # Crée une entrée pour la section
         self.frame_titre_entry.grid(row=0,column=0,padx=5,pady=5)  # La place
         Placeholder().add_placeholder_to(self.frame_titre_entry, self.titre)  # Crée le callback avec le StringVar créer plus tôt
 
         self.frame_soustitre = LabelFrame(self.frame_title, text="Sous-Titre")
         self.frame_soustitre.grid(row=1, column=0, padx=5, pady=1)
-        self.frame_soustitre_entry = Entry(self.frame_soustitre, font="Garamond", justify=CENTER, textvariable=self.frame_soustitre_entry_sv)
+        self.frame_soustitre_entry = Entry(self.frame_soustitre, style="NormalEntry.TEntry", font=("Garamond", 12), justify=CENTER, textvariable=self.frame_soustitre_entry_sv)
         self.frame_soustitre_entry.grid(row=0,column=0,padx=5,pady=5)
         Placeholder().add_placeholder_to(self.frame_soustitre_entry, self.soustitre)
 
         # Met un Frame à la section Matiere-Numero
-        self.frame_cours = LabelFrame(self.input, text="")
+        # self.frame_cours = LabelFrame(self.input, text="")
+        self.frame_cours = Frame(self.input, borderwidth=2)
         self.frame_cours.grid(row=1,column=0, padx=5,pady=5)
 
         self.frame_matiere = LabelFrame(self.frame_cours, text="Matière")
-        self.frame_matiere.grid(row=1, column=0, padx=5, pady=3)
-        self.frame_matiere_entry = Entry(self.frame_matiere, font="Garamond", justify=CENTER, textvariable=self.frame_matiere_entry_sv, width=10)
+        self.frame_matiere.grid(row=1, column=0, padx=5)
+        self.frame_matiere_entry = Entry(self.frame_matiere, style="NormalEntry.TEntry", font=("Garamond", 12), justify=CENTER, textvariable=self.frame_matiere_entry_sv, width=10)
         self.frame_matiere_entry.grid(row=0,column=0,padx=5,pady=5)
 
         self.frame_matiere_entry.config(state='disabled')
@@ -398,7 +432,7 @@ class frontEnd:
                         self.refreshValues()
 
             
-        menu_matiere = Menubutton(self.frame_matiere, text="↩", relief=RAISED, width=5)
+        menu_matiere = Menubutton(self.frame_matiere, text="↩", style="RaisedButton.TButton", width=5)
         menu_matiere.grid(row=0,column=1, padx=5)
 
         menu_matiere.menu = Menu(menu_matiere, tearoff=0)
@@ -418,7 +452,7 @@ class frontEnd:
         self.frame_numero_entry.grid(row=0,column=0,padx=5,pady=5)
         self.frame_numero_entry.config(state='disabled')
 
-        menu_numero = Menubutton(self.frame_numero, text="↩", relief=RAISED, width=5)
+        menu_numero = Menubutton(self.frame_numero, text="↩", style="RaisedButton.TButton", width=5)
         menu_numero.grid(row=0,column=1, padx=5)
 
         menu_numero.menu = Menu(menu_numero, tearoff=0)
@@ -461,8 +495,8 @@ class frontEnd:
         # Met un Frame à la section Première Section
         self.frame_section = LabelFrame(self.input, text="Première Section")
         self.frame_section.grid(row=3, column=0, padx=5, pady=3, ipadx=2)
-        self.frame_section_label = Label(self.frame_section, text="1.", font="Garamond", justify=RIGHT).grid(row=0,column=0)
-        self.frame_section_entry = Entry(self.frame_section, font="Garamond", justify=CENTER, textvariable=self.frame_section_entry_sv)
+        self.frame_section_label = Label(self.frame_section, text="1.", font=("Garamond", 12), justify=RIGHT).grid(row=0,column=0)
+        self.frame_section_entry = Entry(self.frame_section, style="NormalEntry.TEntry", font=("Garamond", 12), justify=CENTER, textvariable=self.frame_section_entry_sv)
         self.frame_section_entry.grid(row=0,column=1,pady=5)
         Placeholder().add_placeholder_to(self.frame_section_entry, self.section)
 
@@ -527,11 +561,11 @@ class frontEnd:
 
         self.frame_generate = LabelFrame(self.generate, text="Générer")
         self.frame_generate.grid(row=0,column=0,sticky=NW)
-        self.generate_button = Button(self.frame_generate, text="Générer", font=("", 15, "bold"), command=lambda: generateButton())
+        self.generate_button = Button(self.frame_generate, text="Générer",style="Generate.TButton", command=lambda: generateButton())
         self.generate_button.grid(row=0,column=0,padx=10,pady=9)
-        self.file_button = Button(self.frame_generate, text="Enregistrer sous...", font=("",8,"italic"), command= lambda: fileButton())
+        self.file_button = Button(self.frame_generate, text="Enregistrer sous...", style="OtherGen.TButton", command= lambda: fileButton())
         self.file_button.grid(row=1,column=0,padx=10,pady=2)
-        self.browser_button = Button(self.frame_generate, text="Choisir le dossier de sortie", font=("",8,"italic"), command=lambda: browserButton()).grid(row=2,column=0,padx=10,pady=3)
+        self.browser_button = Button(self.frame_generate, text="Choisir le dossier de sortie", style="OtherGen.TButton", command=lambda: browserButton()).grid(row=2,column=0,padx=10,pady=3)
 
     def showSettings(self):
         def modifyOptions(self):
@@ -545,11 +579,11 @@ class frontEnd:
 
         self.settings_model_button = Button(self.frame_settings, width=19, text="Modifier le Modèle", command=lambda: self.showModelWindow()).grid(row=1,column=0,padx=5,pady=3)
         
-        self.about_github = Label(self.frame_settings, text="Projet GitHub", fg="blue", cursor="hand2",justify=CENTER)
+        self.about_github = Label(self.frame_settings, text="Projet GitHub", style="BlueLink.TLabel", cursor="hand2",justify=CENTER)
         self.about_github.grid(row=2,column=0)
         self.about_github.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude"))
         
-        self.about_license = Label(self.frame_settings, text="Sous la license MIT\n© Laurent Bourgon 2019", fg="blue", cursor="hand2", font=("",8,"italic"))
+        self.about_license = Label(self.frame_settings, text="Sous la license MIT\n© Laurent Bourgon 2019", style="BlueLink.TLabel", cursor="hand2", font=("",8,"italic"))
         self.about_license.grid(row=3,column=0,sticky=S)
         self.about_license.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE"))
         # self.settings_a_propos = Button(self.frame_settings, width=19, text="À Propos", command=lambda: self.aboutProgram()).grid(row=2,column=0,padx=5,pady=3)
@@ -558,7 +592,7 @@ class frontEnd:
         self.frame_about = LabelFrame(self.about, text="À Propos")
         self.frame_about.grid()
         
-        self.about_github = Label(self.frame_about, text="Github here", fg="blue", cursor="hand2")
+        self.about_github = Label(self.frame_about, text="Github here", style="BlueLink.TLabel", cursor="hand2")
         self.about_github.grid(row=1,column=0,sticky=N)
         self.about_github.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude"))
     
@@ -686,7 +720,10 @@ class Document:
                     filePath = os.path.join(root, File)
                     inZipPath = filePath.replace(folder, "", 1).lstrip("\\/")
                     zip_file.write(filePath, inZipPath)
-        print(f"\nLe document a été créé: {self.filepath}")
+        print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
+
+        Tk().withdraw()  # Si démarré sous .pyw
+        tkinter.messagebox.showinfo(TITLE+VERSION, f"Le document a été créé: {self.filepath}")
         return final
 
     def cleanTemp(self, folder:str) -> str:
