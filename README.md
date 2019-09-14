@@ -174,6 +174,8 @@ $ python pyEtude.pyw
 
 ## ⁉️ Foire Aux Questions <a name = "faq"></a>
 
+- L'application est horrible sous `macOS`!:
+    Ceci est dû au moyen dont `macOS` gère les applications, ceci devrait être réglé lorsque le nouveau GUI pour tablettes/mobiles arrivera puisqu'il permettra de transférer cette application pour `macOS`.
 - `OSError: [WinError 123] La syntaxe du nom de fichier, de répertoire ou de volume est incorrecte`:
     Le nom de matière et le numéro/chapitre ne peut pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
 - Mes caractères `&` (esperluette) sont tous enlevés et n'apparaissent pas dans mon document:

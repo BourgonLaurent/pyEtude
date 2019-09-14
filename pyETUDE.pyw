@@ -19,10 +19,13 @@ VERSION = r"v2.0.0"
 
 try:
     locale.setlocale(locale.LC_ALL, "fr_CA.utf8")  # Met la langue en français en prenant en charge les accents (UTF-8)
-except:
-    Tk().withdraw()
-    tkinter.messagebox.showerror("ERREUR LOCALE", "La langue \"fr_CA\" n'est pas trouvée\npyÉtude va se lancer en mode compatibilité\nCela pourrait entraîner une instabilité du programme")
-    assert EnvironmentError
+except locale.Error:
+    if sys.platform == "darwin":  # macOS ne fonctionne pas avec les locales
+        assert EnvironmentError
+    else:
+        Tk().withdraw()
+        tkinter.messagebox.showerror("ERREUR LOCALE", "La langue \"fr_CA\" n'est pas trouvée\npyÉtude va se lancer en mode compatibilité\nCela pourrait entraîner une instabilité du programme")
+        assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
 class Configurator:
