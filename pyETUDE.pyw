@@ -10,21 +10,23 @@
 ╚═╝        ╚═╝   v2.0.0
 """
 
-from tkinter import *
-from tkinter.ttk import *
+from tkinter import *  # pylint: disable=unused-wildcard-import
+from tkinter.ttk import *  # pylint: disable=unused-wildcard-import
 import json, locale, os, re, sys, tkinter.filedialog, tkinter.messagebox, urllib.request, webbrowser, zipfile
 
 TITLE = r"pyÉtude"
 VERSION = r"v2.0.0"
 
+os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
+
 try:
-    locale.setlocale(locale.LC_ALL, "fr_CA.utf8")  # Met la langue en français en prenant en charge les accents (UTF-8)
+    locale.setlocale(locale.LC_ALL, "")  # Met la langue en français en prenant en charge les accents (UTF-8)
 except locale.Error:
-    if sys.platform == "darwin":  # macOS ne fonctionne pas avec les locales
+    if sys.platform == "darwin":  # macOS retourne toujours une erreur
         assert EnvironmentError
     else:
         Tk().withdraw()
-        tkinter.messagebox.showerror("ERREUR LOCALE", "La langue \"fr_CA\" n'est pas trouvée\npyÉtude va se lancer en mode compatibilité\nCela pourrait entraîner une instabilité du programme")
+        tkinter.messagebox.showerror("ERREUR LOCALE", "Une langue \"UTF-8\" n'est pas trouvée\npyÉtude va se lancer en mode compatibilité\nCela pourrait entraîner une instabilité du programme")
         assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
@@ -55,16 +57,14 @@ class Configurator:
             "Monde Contemporain":"MDC",
             "Physique":"PHY"
         }
-
         
-
         self.checkRun()
     
     def checkRun(self):
         """## Vérifie si le fichier de configuration existe
         """
         if os.path.isfile("pyEtude.json"):
-            json_data = self.readJSON()
+            self.readJSON()
         else:
             self.createJSON_GUI()
     
@@ -228,7 +228,7 @@ class Placeholder:
     """## Classe qui permet d'ajouter un placeholder aux `Entry`
     """
     def __init__(self):
-        __slots__ = 'normal_style', 'placeholder_text', 'with_placeholder'
+        __slots__ = 'normal_style', 'placeholder_text', 'with_placeholder'  # pylint: disable=unused-variable
     def add_placeholder_to(self, entry: tkinter.ttk.Entry, placeholder: str, placeholder_style="PlaceHolderEntry.TEntry"):
         """## Classe pour faire un placeholder
         Pour utiliser cette classe, vous devrez avoir deux styles:
@@ -424,7 +424,7 @@ class frontEnd:
             self.frame_matiere_entry.insert(0, choice)
             self.frame_matiere_entry.config(state='disabled')
 
-            for key, values in self.mat_dict.items():
+            for values in self.mat_dict.values():
                 if values[0] == choice:
                     if values[1] == "":
                         self.custom_directory = False
@@ -523,7 +523,7 @@ class frontEnd:
 
     def refreshValues(self):
         try:  # test s'il faut enlever les anciennes valeurs
-            self.values_text.destroy()
+            self.values_text.destroy()  # pylint: disable=access-member-before-definition
         except:  # ne fait rien
             pass
         # Regarde si l'utilisateur a spécifé un dossier
@@ -589,15 +589,6 @@ class frontEnd:
         self.about_license = Label(self.frame_settings, text="Sous la license MIT\n© Laurent Bourgon 2019", style="BlueLink.TLabel", cursor="hand2", font=("",8,"italic"))
         self.about_license.grid(row=3,column=0,sticky=S)
         self.about_license.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE"))
-        # self.settings_a_propos = Button(self.frame_settings, width=19, text="À Propos", command=lambda: self.aboutProgram()).grid(row=2,column=0,padx=5,pady=3)
-    
-    def showAbout(self):
-        self.frame_about = LabelFrame(self.about, text="À Propos")
-        self.frame_about.grid()
-        
-        self.about_github = Label(self.frame_about, text="Github here", style="BlueLink.TLabel", cursor="hand2")
-        self.about_github.grid(row=1,column=0,sticky=N)
-        self.about_github.bind("<Button-1>", lambda e: webbrowser.open_new(r"https://github.com/BourgonLaurent/pyEtude"))
     
     def showModelWindow(self):
         self.model_window = Toplevel()
@@ -716,7 +707,7 @@ class Document:
         """
         locale.setlocale(locale.LC_ALL, (None, None))  # Fix compatibility with locale
         with zipfile.ZipFile(final, "w") as zip_file:
-            for root, dirs, files in os.walk(folder):
+            for root, dirs, files in os.walk(folder):  # pylint: disable=unused-variable
                 # zip_file.write(os.path.join(root, "."))
 
                 for File in files:

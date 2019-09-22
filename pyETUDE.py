@@ -208,7 +208,7 @@ class Document():
         """
 
         with zipfile.ZipFile(final, "w") as zip_file:
-            for root, dirs, files in os.walk(folder):
+            for root, dirs, files in os.walk(folder):  # pylint: disable=unused-variable
                 zip_file.write(os.path.join(root, "."))
 
                 for File in files:
@@ -232,10 +232,10 @@ class Document():
             \tstr -- Returns the name of the folder deleted
         """
         if os.path.isdir(folder):
-            for root, dirs, files in os.walk(folder, topdown=False):
+            for root, dirs, files in os.walk(folder, topdown=False):    # pylint: disable=unused-variable
                 for File in files:
                     os.remove(os.path.join(root, File))
-                for Dir in dirs:
+                for Dir in dirs:    # pylint: disable=unused-variable
                     os.rmdir(os.path.join(root, Dir))
             os.rmdir(folder)
         else:
