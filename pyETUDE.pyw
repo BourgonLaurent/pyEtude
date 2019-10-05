@@ -717,7 +717,15 @@ class Document:
         print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
 
         Tk().withdraw()  # Si démarré sous .pyw
-        tkinter.messagebox.showinfo(TITLE+VERSION, f"Le document a été créé: {self.filepath}")
+        open_doc_choice = tkinter.messagebox.askquestion(TITLE + " " + VERSION, f"Le document a été créé: {self.filepath}\n\nVoulez-vous l'ouvrir?")
+        if open_doc_choice == "yes":
+            os.system('"' + self.filepath + '"')
+        elif open_doc_choice == "no":
+            pass
+        else:
+            assert AttributeError
+
+        
         return final
 
     def cleanTemp(self, folder:str) -> str:
