@@ -51,7 +51,7 @@ class frontEnd:
             "Monde Contemporain":["MDC", ""],
             "Physique":["PHY", ""]
             }
-        if os.path.isfile("./pyEtude_qt.json") == True:
+        if os.path.isfile("./pyEtude.json") == True:
             # Donne accès au générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
@@ -75,7 +75,19 @@ class frontEnd:
             self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))  # pylint: disable=undefined-variable
     
     def readJSON(self):
-        pass
+        with open("pyEtude.json") as json_f:
+            jsonData = json.load(json_f)
+        
+        self.auteur = jsonData["auteur"]
+        self.sec = jsonData["secondaire"]
+        if not jsonData["matieres"]:
+            self.matieres = self.matieresDefault
+            self.setMatieres(self.matieresDefault)
+        else:
+            self.matieres = jsonData["matieres"]
+            self.setMatieres(self.matieres)
+        
+        print(jsonData)
 
     def aboutTab(self):
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
@@ -102,6 +114,7 @@ class frontEnd:
                     if matiere.text() != "" and mat.text() != "":
                         self.matieres[matiere.text()] = [mat.text(), path.text()]
             writeJSON()
+            self.firstLaunch()
         
         def writeJSON():
             json_data = dict()
