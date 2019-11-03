@@ -251,6 +251,15 @@
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::InternalMove</enum>
+       </property>
+       <property name="defaultDropAction">
+        <enum>Qt::MoveAction</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -261,7 +270,7 @@
         <number>0</number>
        </property>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>225</number>
+        <number>175</number>
        </attribute>
        <attribute name="horizontalHeaderStretchLastSection">
         <bool>true</bool>
@@ -283,6 +292,9 @@
        <column>
         <property name="text">
          <string>Nom Court</string>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
         </property>
        </column>
        <column>
@@ -352,7 +364,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Parcourir</string>
+        <string>Parcourir...</string>
        </property>
       </widget>
      </widget>

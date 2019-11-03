@@ -10,9 +10,8 @@
 ╚═╝        ╚═╝   
 """
 import os, json
-from PyQt5 import uic
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore, QtGui, QtWidgets
 
 os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
 
@@ -22,7 +21,7 @@ class frontEnd:
     def __init__(self):
         self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
 
-        self.app = QApplication([])  # pylint: disable=undefined-variable
+        self.app = QApplication([])
 
         self.window = self.Window()
         self.ui = self.Ui()
@@ -56,6 +55,7 @@ class frontEnd:
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
             self.ui.tabWidget.setCurrentIndex(0)
+            self.ui.matieresPersoCheckBox.setChecked(True)
             self.readJSON()
         else:
             assert FileNotFoundError
@@ -70,9 +70,9 @@ class frontEnd:
             self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
         for i, key in enumerate(datadict):  # met les données du dictionnaire
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
-            self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))  # pylint: disable=undefined-variable
-            self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))  # pylint: disable=undefined-variable
-            self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))  # pylint: disable=undefined-variable
+            self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))
+            self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))
+            self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))
     
     def readJSON(self):
         with open("pyEtude.json") as json_f:
@@ -86,8 +86,6 @@ class frontEnd:
         else:
             self.matieres = jsonData["matieres"]
             self.setMatieres(self.matieres)
-        
-        print(jsonData)
 
     def aboutTab(self):
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
@@ -142,9 +140,19 @@ class frontEnd:
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
         def delRow():
             self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
+        def resetRows():
+            self.setMatieres(self.matieresDefault)
+        def browseDirectory():
+            if self.ui.matiereTableWidget.currentColumn() == 2:
+                row = self.ui.matiereTableWidget.currentRow()
+                filename = QFileDialog.getExistingDirectory()
+                self.ui.matiereTableWidget.setItem(row, 2, QTableWidgetItem(filename))
         
         self.ui.matiereTablePlus.clicked.connect(addRow)
         self.ui.matiereTableMinus.clicked.connect(delRow)
+        self.ui.matiereTableReset.clicked.connect(resetRows)
+
+        self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
     
     def esperLimit(self, lineedit):
         lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
