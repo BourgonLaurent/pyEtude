@@ -13,11 +13,17 @@
     <height>620</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
+  <property name="minimumSize">
+   <size>
+    <width>812</width>
+    <height>620</height>
+   </size>
   </property>
-  <property name="windowOpacity">
-   <double>1.000000000000000</double>
+  <property name="maximumSize">
+   <size>
+    <width>812</width>
+    <height>620</height>
+   </size>
   </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonTextOnly</enum>

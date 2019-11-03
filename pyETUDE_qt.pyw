@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
-import os
-
-os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
-
+"""
+                 ███████╗████████╗██╗   ██╗██████╗ ███████╗
+                 ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝
+██████╗ ██╗   ██╗█████╗     ██║   ██║   ██║██║  ██║█████╗  
+██╔══██╗╚██╗ ██╔╝██╔══╝     ██║   ██║   ██║██║  ██║██╔══╝  
+██████╔╝ ╚████╔╝ ███████╗   ██║   ╚██████╔╝██████╔╝███████╗
+██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
+██║        ██║   MIT © Laurent Bourgon 2019
+╚═╝        ╚═╝   
+"""
+import os, json
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
 
-VERSION = "2.1.0~b2"
+VERSION = "2.1.0~b4"
 
 class frontEnd:
     def __init__(self):
@@ -32,16 +40,16 @@ class frontEnd:
     
     def firstLaunch(self):
         self.matieresDefault = {
-            "Anglais":"ANG",
-            "Arts":"ART",
-            "Chimie":"CHM",
-            "Éducation Financière":"EFI",
-            "Éducation Physique":"EDP",
-            "Éthique et Culture Religieuse":"ECR",
-            "Français":"FRA",
-            "Mathématiques":"MAT",
-            "Monde Contemporain":"MDC",
-            "Physique":"PHY"
+            "Anglais":["ANG", ""],
+            "Arts":["ART", ""],
+            "Chimie":["CHM", ""],
+            "Éducation Financière":["EFI", ""],
+            "Éducation Physique":["EDP", ""],
+            "Éthique et Culture Religieuse":["ECR", ""],
+            "Français":["FRA", ""],
+            "Mathématiques":["MAT", ""],
+            "Monde Contemporain":["MDC", ""],
+            "Physique":["PHY", ""]
             }
         if os.path.isfile("./pyEtude_qt.json") == True:
             # Donne accès au générateur
@@ -63,7 +71,8 @@ class frontEnd:
         for i, key in enumerate(datadict):  # met les données du dictionnaire
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
             self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))  # pylint: disable=undefined-variable
-            self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key]))  # pylint: disable=undefined-variable
+            self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))  # pylint: disable=undefined-variable
+            self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))  # pylint: disable=undefined-variable
     
     def readJSON(self):
         pass
@@ -83,7 +92,30 @@ class frontEnd:
             else:
                 self.sec = self.ui.secLineEdit.placeholderText()
             
-            print(self.auteur + self.sec)
+            self.matieres = {}
+
+            for row in range(self.ui.matiereTableWidget.rowCount()):
+                matiere = self.ui.matiereTableWidget.item(row, 0)
+                mat = self.ui.matiereTableWidget.item(row, 1)
+                path = self.ui.matiereTableWidget.item(row, 2)
+                if matiere != None and mat != None and path != None:
+                    if matiere.text() != "" and mat.text() != "":
+                        self.matieres[matiere.text()] = [mat.text(), path.text()]
+            writeJSON()
+        
+        def writeJSON():
+            json_data = dict()
+            json_data["auteur"] = self.auteur
+            json_data["secondaire"] = self.sec
+            json_data["matieres"] = dict()
+
+            if self.ui.matieresPersoCheckBox.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
+                for key, value in self.matieres.items():
+                    json_data["matieres"][key] = value
+            
+            with open("pyEtude.json", "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
+                json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
+
         # Empêche l'utilisation des esperluètes "&"
         self.esperLimit(self.ui.auteurLineEdit)
         self.esperLimit(self.ui.secLineEdit)
