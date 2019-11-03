@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>812</width>
+    <height>620</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonTextOnly</enum>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>791</width>
+      <height>601</height>
+     </rect>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::West</enum>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="tab_gen">
+     <attribute name="title">
+      <string>Générateur</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Créer un document</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_config">
+     <attribute name="title">
+      <string>Configurateur</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Modifier les Informations</string>
+     </attribute>
+     <widget class="QGroupBox" name="infoPerso">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>311</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Informations Personnelles</string>
+      </property>
+      <widget class="QGroupBox" name="auteurConfig">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>291</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Auteur</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>271</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="auteurLayout">
+         <item>
+          <widget class="QLineEdit" name="auteurLineEdit">
+           <property name="font">
+            <font>
+             <family>Garamond</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>Laurent Bourgon</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="secConfig">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>291</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Secondaire</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>271</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="secLayout">
+         <item>
+          <widget class="QLineEdit" name="secLineEdit">
+           <property name="font">
+            <font>
+             <family>Garamond</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>Secondaire 5 - 2019-2020</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>20</y>
+        <width>378</width>
+        <height>201</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="configSaveLayout" stretch="0">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="configSaveButton">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="text">
+          <string>Appliquer et Enregistrer</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="matieresConfig">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>751</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Matières</string>
+      </property>
+      <widget class="QCheckBox" name="matieresPersoCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>171</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Matières Personnalisées</string>
+       </property>
+       <property name="tristate">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="matiereTableWidget">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>731</width>
+         <height>311</height>
+        </rect>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="textElideMode">
+        <enum>Qt::ElideNone</enum>
+       </property>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>225</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderStretchLastSection">
+        <bool>false</bool>
+       </attribute>
+       <row>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>5</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>6</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>7</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>8</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>9</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>10</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>11</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>12</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>13</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>14</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>15</string>
+        </property>
+       </row>
+       <column>
+        <property name="text">
+         <string>Matière</string>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Nom Court</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Chemin</string>
+        </property>
+       </column>
+       <item row="0" column="0">
+        <property name="text">
+         <string>Anglais</string>
+        </property>
+        <property name="textAlignment">
+         <set>AlignLeading|AlignVCenter</set>
+        </property>
+       </item>
+       <item row="1" column="0">
+        <property name="text">
+         <string>Arts</string>
+        </property>
+       </item>
+       <item row="2" column="0">
+        <property name="text">
+         <string>Chimie</string>
+        </property>
+       </item>
+       <item row="3" column="0">
+        <property name="text">
+         <string>Éducation Financière</string>
+        </property>
+       </item>
+       <item row="4" column="0">
+        <property name="text">
+         <string>Éducation Physique</string>
+        </property>
+       </item>
+       <item row="5" column="0">
+        <property name="text">
+         <string>Éthique et Culture Religieuse</string>
+        </property>
+       </item>
+       <item row="6" column="0">
+        <property name="text">
+         <string>Français</string>
+        </property>
+       </item>
+       <item row="7" column="0">
+        <property name="text">
+         <string>Mathématiques</string>
+        </property>
+       </item>
+       <item row="8" column="0">
+        <property name="text">
+         <string>Monde Contemporain</string>
+        </property>
+       </item>
+       <item row="9" column="0">
+        <property name="text">
+         <string>Physique</string>
+        </property>
+       </item>
+       <item row="10" column="0">
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+      </widget>
+      <widget class="QPushButton" name="matiereTablePlus">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>700</x>
+         <y>20</y>
+         <width>21</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="matiereTableMinus">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>720</x>
+         <y>20</y>
+         <width>21</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_about">
+     <attribute name="title">
+      <string>À Propos</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>À Propos</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>-1</x>
+        <y>-1</y>
+        <width>791</width>
+        <height>561</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="aboutLayout">
+       <item>
+        <widget class="QLabel" name="titleLabel">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:28pt; font-weight:600;&quot;&gt;pyÉtude&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="versionLayout" stretch="0,0">
+         <item>
+          <widget class="QLabel" name="versionLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Version: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="varVersionLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;[VERSION]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="gitHubLabel">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;© Laurent Bourgon Sous la license MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Projet GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude#faq&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez un problème?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>matieresPersoCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>matiereTableWidget</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>139</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>407</x>
+     <y>417</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>matieresPersoCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>matiereTableMinus</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>772</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>matieresPersoCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>matiereTablePlus</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>752</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
