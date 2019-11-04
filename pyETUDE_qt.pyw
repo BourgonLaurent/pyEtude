@@ -9,11 +9,17 @@
 ██║        ██║   MIT © Laurent Bourgon 2019
 ╚═╝        ╚═╝   
 """
-import os, json
+import json, locale, os, sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
 
 os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
+
+try:
+    locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+except:
+    assert EnvironmentError
+    locale.setlocale(locale.LC_ALL, (None, None))
 
 VERSION = "2.1.0~b4"
 
@@ -27,6 +33,7 @@ class frontEnd:
         self.ui = self.Ui()
         self.ui.setupUi(self.window)
 
+        self.genTab()
         self.configTab()
         self.aboutTab()
 
@@ -57,6 +64,8 @@ class frontEnd:
             self.ui.tabWidget.setCurrentIndex(0)
             self.ui.matieresPersoCheckBox.setChecked(True)
             self.readJSON()
+            self.ui.auteurLineEdit.setText(self.auteur)
+            self.ui.secLineEdit.setText(self.sec)
         else:
             assert FileNotFoundError
             # Empêche l'accès au générateur
@@ -68,7 +77,7 @@ class frontEnd:
     def setMatieres(self, datadict):
         for i in range(0,self.ui.matiereTableWidget.rowCount()+1):  # Enlève les vieilles données
             self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
-        for i, key in enumerate(datadict):  # met les données du dictionnaire
+        for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):  # met les données du dictionnaire
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
             self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))
             self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))
@@ -87,8 +96,35 @@ class frontEnd:
             self.matieres = jsonData["matieres"]
             self.setMatieres(self.matieres)
 
-    def aboutTab(self):
-        self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
+    def genTab(self):
+        def hiee():
+            print("hi")
+        
+        def calendarView():
+            def hi(loop):
+                print(loop)
+                calendarView.done(0)
+            calendarView = QDialog()
+
+            calendar = QCalendarWidget(calendarView)
+            calendar.setGeometry(QtCore.QRect(0, 0, 312, 183))
+            calendar.setFirstDayOfWeek(QtCore.Qt.Monday)
+            calendar.setGridVisible(True)
+            calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
+            calendar.setDateEditEnabled(True)
+            calendar.setObjectName("matCalendarWidget")
+
+            calendar.clicked.connect(hi)
+
+            calendarView.setWindowTitle("Veuillez choisir une date")
+            calendarView.exec_()
+
+        matMenu = QMenu()
+
+        calendarButton = matMenu.addAction("Choisir une date...")
+        calendarButton.triggered.connect(calendarView)
+
+        self.ui.matToolButton.setMenu(matMenu)
 
     def configTab(self):
         def saveVariable():
@@ -153,7 +189,9 @@ class frontEnd:
         self.ui.matiereTableReset.clicked.connect(resetRows)
 
         self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
-    
+
+    def aboutTab(self):
+        self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
     def esperLimit(self, lineedit):
         lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
 
