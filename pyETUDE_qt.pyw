@@ -9,7 +9,7 @@
 ██║        ██║   MIT © Laurent Bourgon 2019
 ╚═╝        ╚═╝   
 """
-import json, locale, os, sys
+import json, locale, os
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
 
@@ -21,14 +21,13 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = "2.1.0~b4"
+VERSION = "2.1.0~b5"
 
 class frontEnd:
     def __init__(self):
         self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
 
         self.app = QApplication([])
-
         self.window = self.Window()
         self.ui = self.Ui()
         self.ui.setupUi(self.window)
@@ -57,7 +56,7 @@ class frontEnd:
             "Monde Contemporain":["MDC", ""],
             "Physique":["PHY", ""]
             }
-        if os.path.isfile("./pyEtude.json") == True:
+        if os.path.isfile("./pyEtude.json"):
             # Donne accès au générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
@@ -97,13 +96,18 @@ class frontEnd:
             self.setMatieres(self.matieres)
 
     def genTab(self):
-        def hiee():
-            print("hi")
+        def isChecked(selection):
+            if selection.text() == "Choisir une date":
+                calendarView()
+            elif selection.text() == "Personnaliser":
+                self.ui.numLineEdit.setEnabled(True)
+                self.ui.numLineEdit.clear()
+            else:
+                self.ui.numLineEdit.setEnabled(False)
+                self.ui.numLineEdit.setText(selection.text())
         
         def calendarView():
-            def hi(loop):
-                print(loop)
-                calendarView.done(0)
+            self.ui.numLineEdit.setEnabled(False)
             calendarView = QDialog()
 
             calendar = QCalendarWidget(calendarView)
@@ -111,20 +115,33 @@ class frontEnd:
             calendar.setFirstDayOfWeek(QtCore.Qt.Monday)
             calendar.setGridVisible(True)
             calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
-            calendar.setDateEditEnabled(True)
-            calendar.setObjectName("matCalendarWidget")
+            calendar.setObjectName("numCalendarWidget")
 
-            calendar.clicked.connect(hi)
+            def qdateToString(qdate):
+                self.numero = qdate.toString("MMdd")
+                self.ui.numLineEdit.setText(self.numero)
+                calendarView.done(0)
+            
+            calendar.clicked.connect(qdateToString)
 
             calendarView.setWindowTitle("Veuillez choisir une date")
             calendarView.exec_()
 
-        matMenu = QMenu()
+        numMenu = QMenu("numMenu")
+        numMenu.triggered.connect(isChecked)
+        self.ui.numToolButton.setMenu(numMenu)
+        numActionGroup = QActionGroup(numMenu, exclusive=True)
+        
+        chapterButton = numMenu.addMenu("Chapitre")
+        for i in range(20):
+            chapterButton.addAction(numActionGroup.addAction(QAction(f"CHP{str(i)}", checkable=True)))
+        
+        calendarAction = numActionGroup.addAction(QAction("Choisir une date", checkable=True))
+        numMenu.addAction(calendarAction)
+        numMenu.addSeparator()
 
-        calendarButton = matMenu.addAction("Choisir une date...")
-        calendarButton.triggered.connect(calendarView)
-
-        self.ui.matToolButton.setMenu(matMenu)
+        personalizeNumAction = numActionGroup.addAction(QAction("Personnaliser", checkable=True))
+        numMenu.addAction(personalizeNumAction)
 
     def configTab(self):
         def saveVariable():

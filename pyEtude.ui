@@ -181,9 +181,9 @@
       <widget class="QGroupBox" name="matGroupBox">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>80</x>
          <y>150</y>
-         <width>291</width>
+         <width>171</width>
          <height>61</height>
         </rect>
        </property>
@@ -193,7 +193,7 @@
        <widget class="QWidget" name="verticalLayoutWidget_8">
         <property name="geometry">
          <rect>
-          <x>70</x>
+          <x>10</x>
           <y>20</y>
           <width>101</width>
           <height>31</height>
@@ -233,7 +233,7 @@
        <widget class="QToolButton" name="matToolButton">
         <property name="geometry">
          <rect>
-          <x>180</x>
+          <x>120</x>
           <y>25</y>
           <width>41</width>
           <height>21</height>
@@ -274,6 +274,173 @@
          <enum>Qt::NoArrow</enum>
         </property>
        </widget>
+      </widget>
+      <widget class="QGroupBox" name="numGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>210</y>
+         <width>171</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Numéro</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_10">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>101</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="numLayout">
+         <item>
+          <widget class="QLineEdit" name="numLineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Garamond</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>0920</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QToolButton" name="numToolButton">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>25</y>
+          <width>41</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string>↩</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::InstantPopup</enum>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextOnly</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
+        <property name="arrowType">
+         <enum>Qt::NoArrow</enum>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="sectionGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>300</y>
+         <width>291</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Première Section</string>
+       </property>
+       <widget class="QLabel" name="sectionNumLabel">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>25</y>
+          <width>47</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Garamond</family>
+          <pointsize>14</pointsize>
+          <underline>true</underline>
+         </font>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;1.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="sectionLineEdit">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>21</y>
+          <width>241</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Garamond</family>
+          <pointsize>12</pointsize>
+          <underline>true</underline>
+         </font>
+        </property>
+        <property name="maxLength">
+         <number>32767</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="placeholderText">
+         <string>La Loi de l'Inertie</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <zorder>sectionLineEdit</zorder>
+       <zorder>sectionNumLabel</zorder>
       </widget>
      </widget>
     </widget>
@@ -619,10 +786,10 @@
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>-1</x>
-        <y>-1</y>
-        <width>791</width>
-        <height>561</height>
+        <x>0</x>
+        <y>0</y>
+        <width>681</width>
+        <height>591</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="aboutLayout">
@@ -669,7 +836,7 @@
        <item>
         <widget class="QLabel" name="gitHubLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;© Laurent Bourgon Sous la license MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Projet GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude#faq&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez un problème?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;© Laurent Bourgon Sous la license MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Projet GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude#faq&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Vous avez un problème?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
