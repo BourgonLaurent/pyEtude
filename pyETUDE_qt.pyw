@@ -32,12 +32,12 @@ class frontEnd:
         self.ui = self.Ui()
         self.ui.setupUi(self.window)
 
-        self.genTab()
-        self.configTab()
-        self.aboutTab()
-
         self.firstLaunch()
         
+        if self.configDone:
+            self.genTab()
+        self.configTab()
+        self.aboutTab()
 
         self.window.setWindowTitle("pyÉtude - v" + VERSION)
         self.window.show()
@@ -45,18 +45,19 @@ class frontEnd:
     
     def firstLaunch(self):
         self.matieresDefault = {
-            "Anglais":["ANG", ""],
-            "Arts":["ART", ""],
-            "Chimie":["CHM", ""],
-            "Éducation Financière":["EFI", ""],
-            "Éducation Physique":["EDP", ""],
-            "Éthique et Culture Religieuse":["ECR", ""],
-            "Français":["FRA", ""],
-            "Mathématiques":["MAT", ""],
-            "Monde Contemporain":["MDC", ""],
-            "Physique":["PHY", ""]
+            "Anglais": ["ANG", ""],
+            "Arts": ["ART", ""],
+            "Chimie": ["CHM", ""],
+            "Éducation Financière": ["EFI", ""],
+            "Éducation Physique": ["EDP", ""],
+            "Éthique et Culture Religieuse": ["ECR", ""],
+            "Français": ["FRA", ""],
+            "Mathématiques": ["MAT", ""],
+            "Monde Contemporain": ["MDC", ""],
+            "Physique": ["PHY", ""]
             }
         if os.path.isfile("./pyEtude.json"):
+            self.configDone = True
             # Donne accès au générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
@@ -65,6 +66,7 @@ class frontEnd:
             self.readJSON()
             self.ui.auteurLineEdit.setText(self.auteur)
             self.ui.secLineEdit.setText(self.sec)
+            self.genTab()
         else:
             assert FileNotFoundError
             # Empêche l'accès au générateur
@@ -72,6 +74,7 @@ class frontEnd:
             self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
             self.ui.tabWidget.setCurrentIndex(1)
             self.setMatieres(self.matieresDefault)
+            self.configDone = False
 
     def setMatieres(self, datadict):
         for i in range(0,self.ui.matiereTableWidget.rowCount()+1):  # Enlève les vieilles données
@@ -96,12 +99,42 @@ class frontEnd:
             self.setMatieres(self.matieres)
 
     def genTab(self):
+        self.matGenTab()
+        self.numGenTab()
+
+        self.ui.auteurPersoLabel.setText(self.auteur)
+        self.ui.secPersoLabel.setText(self.sec)
+    
+    def matGenTab(self):
+        def isChecked(selection):
+            if selection.text() == "Personnaliser":
+                self.ui.matLineEdit.setEnabled(True)
+                self.ui.matLineEdit.clear()
+                self.ui.matLineEdit.setFocus()
+            else:
+                self.ui.matLineEdit.setEnabled(False)
+                self.ui.matLineEdit.setText(self.matieres[selection.text()][0])
+        
+        matMenu = QMenu("matMenu")
+        matMenu.triggered.connect(isChecked)
+        self.ui.matToolButton.setMenu(matMenu)
+        matActionGroup = QActionGroup(matMenu, exclusive=True)
+
+        for mat in sorted(self.matieres, key=locale.strxfrm):
+            matMenu.addAction(matActionGroup.addAction(QAction(f"{mat}", checkable=True)))
+
+        matMenu.addSeparator()
+        personalizeMatAction = matActionGroup.addAction(QAction("Personnaliser", checkable=True))
+        matMenu.addAction(personalizeMatAction)
+
+    def numGenTab(self):
         def isChecked(selection):
             if selection.text() == "Choisir une date":
                 calendarView()
             elif selection.text() == "Personnaliser":
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
+                self.ui.numLineEdit.setFocus()
             else:
                 self.ui.numLineEdit.setEnabled(False)
                 self.ui.numLineEdit.setText(selection.text())

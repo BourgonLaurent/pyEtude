@@ -72,7 +72,7 @@
         <x>10</x>
         <y>10</y>
         <width>321</width>
-        <height>481</height>
+        <height>371</height>
        </rect>
       </property>
       <property name="title">
@@ -217,11 +217,17 @@
              <pointsize>12</pointsize>
             </font>
            </property>
+           <property name="text">
+            <string>PHY</string>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
            <property name="placeholderText">
-            <string>PHY</string>
+            <string/>
            </property>
            <property name="clearButtonEnabled">
             <bool>false</bool>
@@ -314,11 +320,14 @@
              <pointsize>12</pointsize>
             </font>
            </property>
+           <property name="text">
+            <string>0920</string>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
            <property name="placeholderText">
-            <string>0920</string>
+            <string/>
            </property>
            <property name="clearButtonEnabled">
             <bool>false</bool>
@@ -441,6 +450,109 @@
        </widget>
        <zorder>sectionLineEdit</zorder>
        <zorder>sectionNumLabel</zorder>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="infoPersoGroupBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>430</y>
+        <width>321</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Pour modifier les informations, veuillez aller dans le Configurateur</string>
+      </property>
+      <property name="title">
+       <string>Informations Personnelles</string>
+      </property>
+      <widget class="QGroupBox" name="auteurPersoGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>291</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Auteur</string>
+       </property>
+       <widget class="QLabel" name="auteurPersoLabel">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>271</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Garamond</family>
+          <pointsize>18</pointsize>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>Auteur</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="secPersoGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>291</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Secondaire</string>
+       </property>
+       <widget class="QLabel" name="secPersoLabel">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>271</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Garamond</family>
+          <pointsize>17</pointsize>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>Secondaire</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>
@@ -884,8 +996,8 @@
      <y>250</y>
     </hint>
     <hint type="destinationlabel">
-     <x>752</x>
-     <y>252</y>
+     <x>672</x>
+     <y>254</y>
     </hint>
    </hints>
   </connection>
@@ -900,8 +1012,8 @@
      <y>250</y>
     </hint>
     <hint type="destinationlabel">
-     <x>772</x>
-     <y>252</y>
+     <x>692</x>
+     <y>254</y>
     </hint>
    </hints>
   </connection>
@@ -916,8 +1028,8 @@
      <y>250</y>
     </hint>
     <hint type="destinationlabel">
-     <x>699</x>
-     <y>252</y>
+     <x>646</x>
+     <y>254</y>
     </hint>
    </hints>
   </connection>
@@ -932,8 +1044,8 @@
      <y>250</y>
     </hint>
     <hint type="destinationlabel">
-     <x>746</x>
-     <y>587</y>
+     <x>693</x>
+     <y>589</y>
     </hint>
    </hints>
   </connection>
