@@ -9,7 +9,7 @@
 ██║        ██║   MIT © Laurent Bourgon 2019
 ╚═╝        ╚═╝   
 """
-import json, locale, os
+import json, locale, os, re, sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
 
@@ -21,16 +21,24 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = "2.1.0~b5"
+VERSION = r"2.1.0~b5"
+DEBUG = True
 
 class frontEnd:
     def __init__(self):
-        self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
+        if DEBUG:
+            self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
+            self.app = QApplication([])
+            self.window = self.Window()
+            self.ui = self.Ui()
+            self.ui.setupUi(self.window)
+        else:
+            import pyet_ui
+            self.app = QApplication([])
+            self.window = QtWidgets.QMainWindow()
+            self.ui = pyet_ui.Ui_MainWindow()
+            self.ui.setupUi(self.window)
 
-        self.app = QApplication([])
-        self.window = self.Window()
-        self.ui = self.Ui()
-        self.ui.setupUi(self.window)
 
         self.firstLaunch()
         
@@ -104,6 +112,10 @@ class frontEnd:
 
         self.ui.auteurPersoLabel.setText(self.auteur)
         self.ui.secPersoLabel.setText(self.sec)
+        for le in (self.ui.matLineEdit, self.ui.numLineEdit, self.ui.sectionLineEdit, self.ui.soustitreLineEdit, self.ui.titreLineEdit):
+            self.esperLimit(le)
+        
+        self.pathGenTab()
     
     def matGenTab(self):
         def isChecked(selection):
@@ -129,9 +141,9 @@ class frontEnd:
 
     def numGenTab(self):
         def isChecked(selection):
-            if selection.text() == "Choisir une date":
+            if selection.text() == calendarAction.text():
                 calendarView()
-            elif selection.text() == "Personnaliser":
+            elif selection.text() == personalizeNumAction.text():
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
                 self.ui.numLineEdit.setFocus()
@@ -176,17 +188,74 @@ class frontEnd:
         personalizeNumAction = numActionGroup.addAction(QAction("Personnaliser", checkable=True))
         numMenu.addAction(personalizeNumAction)
 
+    def pathGenTab(self):
+        def mPEvent(QMEvent):
+            pathMenu.move(self.ui.pathPathLabel.mapToGlobal(QtCore.QPoint(0, 12)) + QMEvent.pos())
+            pathMenu.show()
+        def isChecked(selection):
+            if selection.text() == openPathAction.text():
+                if sys.platform == "win32":
+                    try:
+                        os.startfile(self.filepaths[0])
+                    except:
+                        pass
+                else:
+                    os.system(fr'open {self.filepaths[0]}')
+            
+            elif selection.text() == customPathAction.text():
+                getSaveFilePath = QFileDialog()
+                getSaveFilePath.setNameFilters(["Microsoft Word (*.docx)"])
+                getSaveFilePath.setAcceptMode(QFileDialog.AcceptSave)
+                getSaveFilePath.exec_()
+                if getSaveFilePath.selectedFiles() != "":
+                    self.filepaths = [getSaveFilePath.directory().path(), getSaveFilePath.selectedFiles()[0]]
+            
+            elif selection.text() == customDirectoryAction.text():
+                filepath = QFileDialog.getExistingDirectory()
+                if filepath != "":
+                    self.filepaths = [filepath, filepath + "/" + self.filename]
+            
+            elif selection.text() == defaultPathAction.text():
+                self.filepaths = self.defaultFilePaths
+            
+            self.updatePathLabel()
+        
+        pathMenu = QMenu("pathMenu")
+        pathMenu.triggered.connect(isChecked)
+        pathActionGroup = QActionGroup(pathMenu)
+        self.ui.pathPathLabel.mousePressEvent = mPEvent
+        self.filename = "CHP-3.docx"
+        self.filepaths = ["Aucun chemin de sauvegarde", "Aucun chemin de sauvegarde"]
+        self.defaultFilePaths = self.filepaths
+
+        openPathAction = pathActionGroup.addAction(QAction("Ouvrir le dossier sélectionné"))
+        pathMenu.addAction(openPathAction)
+        pathMenu.addSeparator()
+
+        customPathAction = pathActionGroup.addAction(QAction("Enregistrer sous..."))
+        pathMenu.addAction(customPathAction)
+
+        customDirectoryAction = pathActionGroup.addAction(QAction("Choisir le dossier de sortie"))
+        pathMenu.addAction(customDirectoryAction)
+        pathMenu.addSeparator()
+
+        defaultPathAction = pathActionGroup.addAction(QAction("Restaurer la valeur par défaut"))
+        pathMenu.addAction(defaultPathAction)
+
+    def updatePathLabel(self):
+        self.ui.pathPathLabel.setText(self.filepaths[1])
+
     def configTab(self):
         def saveVariable():
             if self.ui.auteurLineEdit.text() != "":
-                self.auteur = self.ui.auteurLineEdit.text()
+                self.auteur = self.ui.auteurLineEdit.text().replace("&","")
             else:
-                self.auteur = self.ui.auteurLineEdit.placeholderText()
+                self.auteur = self.ui.auteurLineEdit.placeholderText().replace("&","")
             
             if self.ui.secLineEdit.text() != "":
-                self.sec = self.ui.secLineEdit.text()
+                self.sec = self.ui.secLineEdit.text().replace("&","")
             else:
-                self.sec = self.ui.secLineEdit.placeholderText()
+                self.sec = self.ui.secLineEdit.placeholderText().replace("&","")
             
             self.matieres = {}
 
@@ -196,7 +265,7 @@ class frontEnd:
                 path = self.ui.matiereTableWidget.item(row, 2)
                 if matiere != None and mat != None and path != None:
                     if matiere.text() != "" and mat.text() != "":
-                        self.matieres[matiere.text()] = [mat.text(), path.text()]
+                        self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path.text().replace("&","")]
             writeJSON()
             self.firstLaunch()
         
