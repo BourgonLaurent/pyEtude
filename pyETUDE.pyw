@@ -9,7 +9,7 @@
 ██║        ██║   MIT © Laurent Bourgon 2019
 ╚═╝        ╚═╝   
 """
-import json, locale, os, re, sys, zipfile, urllib.request
+import json, locale, os, re, sys, zipfile, urllib.request, urllib.error
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
 
@@ -28,7 +28,10 @@ class frontEnd:
     def __init__(self):
         if DEBUG:
             if not os.path.isfile("pyEtude.ui"):
-                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyEtude.ui", "pyEtude.ui")
+                try:
+                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyEtude.ui", "pyEtude.ui")
+                except urllib.error.HTTPError:
+                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/pyEtude.ui", "pyEtude.ui")
             self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
             self.app = QApplication([])
             self.window = self.Window()
@@ -36,7 +39,10 @@ class frontEnd:
             self.ui.setupUi(self.window)
         else:
             if not os.path.isfile("pyet_ui.py"):
-                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyet_ui.py", "pyet_ui.py")
+                try:
+                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyet_ui.py", "pyet_ui.py")
+                except urllib.error.HTTPError:
+                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/pyet_ui.py", "pyet_ui.py")
             import pyet_ui
             self.app = QApplication([])
             self.window = QtWidgets.QMainWindow()
@@ -147,8 +153,10 @@ class frontEnd:
                 modelMessageBox.addButton(QMessageBox.Ok)
                 modelMessageBox.exec_()
 
-                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{self.model}", self.model)
-
+                try:
+                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{self.model}", self.model)
+                except urllib.error.HTTPError:
+                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{self.model}", self.model)
             Document(self.titre, self.soustitre, self.auteur, self.sec,
             self.matiere, self.numero, self.section, self.model, self.filepaths[2])
             self.createdOnce = True
