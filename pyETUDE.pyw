@@ -245,12 +245,12 @@ class frontEnd:
         if self.numero == "":
             self.numero = self.ui.numLineEdit.placeholderText()
         
-        if self.customMatName:
-            fp = os.path.realpath(__file__).replace(os.path.basename(__file__), "").replace("\\","/")
-            self.defaultFilePaths = [fp, f"{self.matiere}-{self.numero}.docx", f"{fp}{self.matiere}-{self.numero}.docx"]
-        for mat in self.matieres.values():
-            if mat[0] == self.matiere:
-                self.defaultFilePaths = [mat[1], f"/{self.matiere}-{self.numero}.docx", f"{mat[1]}/{self.matiere}-{self.numero}.docx"]
+        if self.customMatName: # os.path.realpath(__file__).replace(os.path.basename(__file__), "")
+            self.defaultFilePaths = [os.getcwd(), f"{self.matiere}-{self.numero}.docx", f"{os.getcwd()}/{self.matiere}-{self.numero}.docx"]
+        else:
+            for mat in self.matieres.values():
+                if mat[0] == self.matiere:
+                    self.defaultFilePaths = [mat[1], f"/{self.matiere}-{self.numero}.docx", f"{mat[1]}/{self.matiere}-{self.numero}.docx"]
         self.filepaths = self.defaultFilePaths
         self.updatePathLabel()
 
