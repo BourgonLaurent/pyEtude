@@ -27,12 +27,16 @@ DEBUG = False
 class frontEnd:
     def __init__(self):
         if DEBUG:
+            if not os.path.isfile("pyEtude.ui"):
+                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyEtude.ui", "pyEtude.ui")
             self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
             self.app = QApplication([])
             self.window = self.Window()
             self.ui = self.Ui()
             self.ui.setupUi(self.window)
         else:
+            if not os.path.isfile("pyet_ui.py"):
+                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyet_ui.py", "pyet_ui.py")
             import pyet_ui
             self.app = QApplication([])
             self.window = QtWidgets.QMainWindow()
@@ -143,7 +147,7 @@ class frontEnd:
                 modelMessageBox.addButton(QMessageBox.Ok)
                 modelMessageBox.exec_()
 
-                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{self.model}", self.model)
+                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{self.model}", self.model)
 
             Document(self.titre, self.soustitre, self.auteur, self.sec,
             self.matiere, self.numero, self.section, self.model, self.filepaths[2])
