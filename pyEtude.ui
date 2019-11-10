@@ -579,7 +579,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>Secondaire</string>
+        <string>Niveau</string>
        </property>
        <widget class="QLabel" name="secPersoLabel">
         <property name="geometry">
@@ -598,7 +598,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Secondaire</string>
+         <string>Niveau</string>
         </property>
         <property name="textFormat">
          <enum>Qt::RichText</enum>
@@ -736,7 +736,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>Secondaire</string>
+        <string>Niveau</string>
        </property>
        <widget class="QWidget" name="verticalLayoutWidget_3">
         <property name="geometry">

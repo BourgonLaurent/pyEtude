@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'pyEtude.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.3
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -452,15 +450,15 @@ class Ui_MainWindow(object):
         self.infoPersoGroupBox.setTitle(_translate("MainWindow", "Informations Personnelles"))
         self.auteurPersoGroupBox.setTitle(_translate("MainWindow", "Auteur"))
         self.auteurPersoLabel.setText(_translate("MainWindow", "Auteur"))
-        self.secPersoGroupBox.setTitle(_translate("MainWindow", "Secondaire"))
-        self.secPersoLabel.setText(_translate("MainWindow", "Secondaire"))
+        self.secPersoGroupBox.setTitle(_translate("MainWindow", "Niveau"))
+        self.secPersoLabel.setText(_translate("MainWindow", "Niveau"))
         self.genPushButton.setText(_translate("MainWindow", "Générer"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.genTab), _translate("MainWindow", "Générateur"))
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.genTab), _translate("MainWindow", "Créer un document"))
         self.infoPerso.setTitle(_translate("MainWindow", "Informations Personnelles"))
         self.auteurConfig.setTitle(_translate("MainWindow", "Auteur"))
         self.auteurLineEdit.setPlaceholderText(_translate("MainWindow", "Laurent Bourgon"))
-        self.secConfig.setTitle(_translate("MainWindow", "Secondaire"))
+        self.secConfig.setTitle(_translate("MainWindow", "Niveau"))
         self.secLineEdit.setPlaceholderText(_translate("MainWindow", "Secondaire 5 - 2019-2020"))
         self.configSaveButton.setText(_translate("MainWindow", "Appliquer et Enregistrer"))
         self.matieresConfig.setTitle(_translate("MainWindow", "Matières Personnalisées"))
@@ -482,3 +480,4 @@ class Ui_MainWindow(object):
         self.gitHubLabel.setText(_translate("MainWindow", "<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE\"><span style=\" text-decoration: underline\">© Laurent Bourgon Sous la license MIT</span></a></p><p><br/></p><p><a href=\"https://github.com/BourgonLaurent/pyEtude\"><span style=\" text-decoration: underline\">Projet GitHub</span></a></p><p><a href=\"https://github.com/BourgonLaurent/pyEtude#faq\"><span style=\" text-decoration: underline\">Vous avez un problème?</span></a></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), _translate("MainWindow", "À Propos"))
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.aboutTab), _translate("MainWindow", "À Propos"))
+
