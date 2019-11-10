@@ -21,7 +21,7 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.1.0~b12"
+VERSION = r"2.1.0"
 DEBUG = False
 
 class frontEnd:
