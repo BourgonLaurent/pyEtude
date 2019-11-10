@@ -9,7 +9,7 @@
 ██║        ██║   MIT © Laurent Bourgon 2019
 ╚═╝        ╚═╝   
 """
-import json, locale, os, re, sys, zipfile
+import json, locale, os, re, sys, zipfile, urllib.request
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
 
@@ -22,7 +22,7 @@ except:
     locale.setlocale(locale.LC_ALL, (None, None))
 
 VERSION = r"2.1.0~b12"
-DEBUG = True
+DEBUG = False
 
 class frontEnd:
     def __init__(self):
@@ -133,6 +133,17 @@ class frontEnd:
             self.section = getValue(self.ui.sectionLineEdit)
             
             self.model = "model.docx"
+
+            if not os.path.isfile(self.model):
+                modelMessageBox = QMessageBox()
+                modelMessageBox.setIcon(QMessageBox.Information)
+                modelMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Modèle")
+
+                modelMessageBox.setText(f"Le model: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
+                modelMessageBox.addButton(QMessageBox.Ok)
+                modelMessageBox.exec_()
+
+                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{self.model}", self.model)
 
             Document(self.titre, self.soustitre, self.auteur, self.sec,
             self.matiere, self.numero, self.section, self.model, self.filepaths[2])
