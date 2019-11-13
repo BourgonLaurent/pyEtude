@@ -12,7 +12,6 @@
 import json, locale, os, sys, zipfile, urllib.request, urllib.error
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
-import qdarkstyle
 
 os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
 
@@ -22,8 +21,8 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.2.0~b10"
-DEBUG = True
+VERSION = r"2.2.0"
+DEBUG = False
 
 
 class frontEnd:
@@ -354,7 +353,10 @@ class frontEnd:
         else:
             for mat in self.matieres.values():
                 if mat[0] == self.matiere:
+                    if mat[1] == "":
+                        mat[1] = os.getcwd()
                     self.defaultFilePaths = [mat[1], f"/{self.matiere}-{self.numero}.docx", f"{mat[1]}/{self.matiere}-{self.numero}.docx"]
+
         self.filepaths = self.defaultFilePaths
         self.updatePathLabel()
 
@@ -456,9 +458,13 @@ class frontEnd:
                 matiere = self.ui.matiereTableWidget.item(row, 0)
                 mat = self.ui.matiereTableWidget.item(row, 1)
                 path = self.ui.matiereTableWidget.item(row, 2)
-                if matiere != None and mat != None and path != None:
+                if matiere != None and mat != None:
                     if matiere.text() != "" and mat.text() != "":
-                        self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path.text().replace("&","")]
+                        if path == None:
+                            path_text = ""
+                        else:
+                            path_text = path.text().replace("&","")
+                        self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path_text]
             writeJSON()
             self.firstLaunch()
         
@@ -487,7 +493,10 @@ class frontEnd:
         def addRow():
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
         def delRow():
-            self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
+            if self.ui.matiereTableWidget.currentRow() == -1:  # if no row is selected
+                self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
+            else:
+                self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.currentRow())
         def resetRows():
             self.setMatieres(self.matieresDefault)
         
