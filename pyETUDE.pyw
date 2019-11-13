@@ -9,9 +9,10 @@
 ██║        ██║   MIT © Laurent Bourgon 2019
 ╚═╝        ╚═╝   
 """
-import json, locale, os, re, sys, zipfile, urllib.request, urllib.error
+import json, locale, os, sys, zipfile, urllib.request, urllib.error
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
+import qdarkstyle
 
 os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
 
@@ -21,34 +22,29 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.1.0"
-DEBUG = False
+VERSION = r"2.2.0~b5"
+DEBUG = True
+
 
 class frontEnd:
     def __init__(self):
         if DEBUG:
             if not os.path.isfile("pyEtude.ui"):
-                try:
-                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyEtude.ui", "pyEtude.ui")
-                except urllib.error.HTTPError:
-                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/pyEtude.ui", "pyEtude.ui")
+                self.downloadData("pyEtude.ui")
             self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
             self.app = QApplication([])
             self.window = self.Window()
             self.ui = self.Ui()
-            self.ui.setupUi(self.window)
         else:
             if not os.path.isfile("pyet_ui.py"):
-                try:
-                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/pyet_ui.py", "pyet_ui.py")
-                except urllib.error.HTTPError:
-                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/pyet_ui.py", "pyet_ui.py")
+                self.downloadData("pyet_ui.py")
             import pyet_ui
             self.app = QApplication([])
             self.window = QtWidgets.QMainWindow()
             self.ui = pyet_ui.Ui_MainWindow()
-            self.ui.setupUi(self.window)
-
+            
+        self.ui.setupUi(self.window)
+        self.app.setStyle("Fusion")
 
         self.firstLaunch()
         
@@ -61,6 +57,30 @@ class frontEnd:
         self.window.show()
         self.app.exec_()
     
+    def downloadData(self, name, create=True):
+        """## Télécharge un fichier du répertoire GitHub raw
+        
+        ### Arguments:\n
+            \tname {str} -- Nom du fichier à prendre
+        ### Keyword Arguments:\n
+            \tcreate {bool} -- Crée un fichier (default: {True})
+        
+        ### Returns:\n
+            \t[str] -- (Seulement si create=False): données décodées qui ont été prises
+        """
+        if create:
+            try:
+                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{name}", name)
+            except urllib.error.HTTPError:
+                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{name}", name)
+        else:
+            try:
+                with urllib.request.urlopen(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{name}") as ur:
+                    return ur.read().decode()
+            except urllib.error.HTTPError:
+                with urllib.request.urlopen(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{name}") as ur:
+                    return ur.read().decode()
+
     def firstLaunch(self):
         self.matieresDefault = {
             "Anglais": ["ANG", ""],
@@ -153,10 +173,8 @@ class frontEnd:
                 modelMessageBox.addButton(QMessageBox.Ok)
                 modelMessageBox.exec_()
 
-                try:
-                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{self.model}", self.model)
-                except urllib.error.HTTPError:
-                    urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{self.model}", self.model)
+                self.downloadData(self.model)
+            
             Document(self.titre, self.soustitre, self.auteur, self.sec,
             self.matiere, self.numero, self.section, self.model, self.filepaths[2])
             self.createdOnce = True
@@ -181,6 +199,26 @@ class frontEnd:
         matMenu.triggered.connect(isChecked)
         self.ui.matToolButton.setMenu(matMenu)
         matActionGroup = QActionGroup(matMenu, exclusive=True)
+
+        matMenu.setStyleSheet("""QMenu {
+                              border: 0.5px solid #787878;
+                              color: #F0F0F0;
+                              margin: 0px;
+                            }
+                            QMenu::separator {
+                              height: 1px;
+                              background-color: #505F69;
+                            }
+                            QMenu::item {
+                              background-color: #32414B;
+                              padding: 4px 0px 4px 24px;
+                              /* Reserve space for selection border */
+                              border: 1px transparent #32414B;
+                            }
+                            QMenu::item:selected {
+                              color: #F0F0F0;
+                              background-color: #505F69;
+                            }""")
 
         for mat in sorted(self.matieres, key=locale.strxfrm):
             matMenu.addAction(matActionGroup.addAction(QAction(f"{mat}", checkable=True)))
@@ -234,6 +272,26 @@ class frontEnd:
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
         numActionGroup = QActionGroup(numMenu, exclusive=True)
+
+        numMenu.setStyleSheet("""QMenu {
+                              border: 0.5px solid #787878;
+                              color: #F0F0F0;
+                              margin: 0px;
+                            }
+                            QMenu::separator {
+                              height: 1px;
+                              background-color: #505F69;
+                            }
+                            QMenu::item {
+                              background-color: #32414B;
+                              padding: 4px 0px 4px 24px;
+                              /* Reserve space for selection border */
+                              border: 1px transparent #32414B;
+                            }
+                            QMenu::item:selected {
+                              color: #F0F0F0;
+                              background-color: #505F69;
+                            }""")
         
         chapterButton = numMenu.addMenu("Chapitre")
         for i in range(20):
@@ -257,7 +315,7 @@ class frontEnd:
         if self.numero == "":
             self.numero = self.ui.numLineEdit.placeholderText()
         
-        if self.customMatName: # os.path.realpath(__file__).replace(os.path.basename(__file__), "")
+        if self.customMatName:
             self.defaultFilePaths = [os.getcwd(), f"{self.matiere}-{self.numero}.docx", f"{os.getcwd()}/{self.matiere}-{self.numero}.docx"]
         else:
             for mat in self.matieres.values():
@@ -304,6 +362,26 @@ class frontEnd:
         pathMenu.triggered.connect(isChecked)
         pathActionGroup = QActionGroup(pathMenu)
 
+        pathMenu.setStyleSheet("""QMenu {
+                              border: 0.5px solid #787878;
+                              color: #F0F0F0;
+                              margin: 0px;
+                            }
+                            QMenu::separator {
+                              height: 1px;
+                              background-color: #505F69;
+                            }
+                            QMenu::item {
+                              background-color: #32414B;
+                              padding: 4px 10px 4px 24px;
+                              /* Reserve space for selection border */
+                              border: 1px transparent #32414B;
+                            }
+                            QMenu::item:selected {
+                              color: #F0F0F0;
+                              background-color: #505F69;
+                            }""")
+
         self.pathRanOnce = False
         self.ui.pathPathLabel.linkActivated.connect(QLActivated)
 
@@ -324,7 +402,7 @@ class frontEnd:
     def updatePathLabel(self):
         # self.ui.pathPathLabel.setText(self.filepaths[2].replace("/", " > ").replace("\\", " > "))
         fp = self.filepaths[2].replace("/", " > ").replace("\\", " > ")
-        self.ui.pathPathLabel.setText(QtCore.QCoreApplication.translate("MainWindow", fr"""<html><head/><body><p><a href="none"><span style=" font-size:9pt; text-decoration: underline; color:\#000000;">{fp}</span></a></p></body></html>"""))
+        self.ui.pathPathLabel.setText(QtCore.QCoreApplication.translate("MainWindow", fr"""<html><head/><body><p><a href="none"><span style=" font-size:11pt; text-decoration: underline; color:\#f0f0f0;">{fp}</span></a></p></body></html>"""))
 
     def configTab(self):
         def saveVariable():
