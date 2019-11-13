@@ -22,7 +22,7 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.2.0~b5"
+VERSION = r"2.2.0~b10"
 DEBUG = True
 
 
@@ -257,6 +257,39 @@ class frontEnd:
             calendar.setGridVisible(True)
             calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
             calendar.setObjectName("numCalendarWidget")
+            calendarView.setStyleSheet("""
+                                    QAbstractItemView {
+                                      alternate-background-color: #19232D;
+                                      color: #F0F0F0;
+                                      border: 1px solid #32414B;
+                                      border-radius: 4px;
+                                    }
+                                    QWidget {
+                                      background-color: #19232D;
+                                      border: 0px solid #32414B;
+                                      padding: 0px;
+                                      color: #F0F0F0;
+                                      selection-background-color: #1464A0;
+                                      selection-color: #F0F0F0;
+                                    }
+                                    QWidget::item:selected {
+                                      background-color: #1464A0;
+                                    }
+                                    QWidget::item:hover {
+                                      background-color: #148CD2;
+                                      color: #32414B;
+                                    }
+                                    QCalendarWidget {
+                                      border: 1px solid #32414B;
+                                      border-radius: 4px;
+                                    }
+                                    QCalendarWidget QAbstractItemView:disabled {
+                                      color: #787878;
+                                    }""")
+            calwe_format = QtGui.QTextCharFormat()
+            calwe_format.setForeground(QtGui.QColor("#148CD2"))
+            calendar.setWeekdayTextFormat(QtCore.Qt.Saturday, calwe_format)
+            calendar.setWeekdayTextFormat(QtCore.Qt.Sunday, calwe_format)
 
             def qdateToString(qdate):
                 self.numero = qdate.toString("MMdd")
@@ -267,11 +300,12 @@ class frontEnd:
 
             calendarView.setWindowTitle("Veuillez choisir une date")
             calendarView.exec_()
-
+        
         numMenu = QMenu("numMenu")
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
         numActionGroup = QActionGroup(numMenu, exclusive=True)
+        # numMenu.move(0, 0)  # numMenu.mapToGlobal(QtCore.QPoint(0, self.ui.numToolButton.geometry().height()))
 
         numMenu.setStyleSheet("""QMenu {
                               border: 0.5px solid #787878;
