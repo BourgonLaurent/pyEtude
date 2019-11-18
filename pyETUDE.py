@@ -624,7 +624,7 @@ class Document:
             \tstr -- the name of the zip file that was created
         """
         locale.setlocale(locale.LC_ALL, (None, None))  # Fix compatibility with locale
-        with zipfile.ZipFile(final, "w") as zip_file:
+        with zipfile.ZipFile(final, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
             for root, dirs, files in os.walk(folder):  # pylint: disable=unused-variable
                 # zip_file.write(os.path.join(root, "."))
 
