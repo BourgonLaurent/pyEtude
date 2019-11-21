@@ -21,7 +21,7 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.3.0~b1"
+VERSION = r"2.3.0"
 DEBUG = False
 
 
@@ -141,6 +141,12 @@ class frontEnd:
 
         self.ui.auteurPersoLabel.setText(self.auteur)
         self.ui.secPersoLabel.setText(self.sec)
+
+        for le in (self.ui.matLineEdit, self.ui.numLineEdit):
+            le.setStyleSheet("""QLineEdit {
+                                border-top-right-radius: 0px;
+                                border-bottom-right-radius: 0px;}""")
+
         for le in (self.ui.matLineEdit, self.ui.numLineEdit, self.ui.sectionLineEdit, self.ui.soustitreLineEdit, self.ui.titreLineEdit):
             self.esperLimit(le)
         
@@ -208,17 +214,17 @@ class frontEnd:
                             }
                             QMenu::separator {
                               height: 1px;
-                              background-color: #505F69;
+                              background-color: #444444;
                             }
                             QMenu::item {
-                              background-color: #32414B;
+                              background-color: #262626;
                               padding: 4px 0px 4px 24px;
                               /* Reserve space for selection border */
                               border: 1px transparent #32414B;
                             }
                             QMenu::item:selected {
                               color: #F0F0F0;
-                              background-color: #505F69;
+                              background-color: #605e5c;
                             }""")
 
         for mat in sorted(self.matieres, key=locale.strxfrm):
@@ -229,7 +235,7 @@ class frontEnd:
         matMenu.addAction(personalizeMatAction)
 
         self.customMatName = False
-        self.filepaths = [".", "/PHY-0920.docx", "./PHY-0920.docx"]
+        self.filepaths = [".", "PHY-0920.docx", os.path.join(".","PHY-0920.docx")]
         self.defaultFilePaths = self.filepaths
         self.defaultFilePathChanged()
 
@@ -255,19 +261,18 @@ class frontEnd:
                 numMatMessageBox.setIcon(QMessageBox.Information)
                 numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
 
-                numMatMessageBox.setStyleSheet("""
-                                            QWidget {
-                                              background-color: #19232D;
+                numMatMessageBox.setStyleSheet("""QWidget {
+                                              background-color: #262626;
                                               border: 0px solid #32414B;
                                               padding: 0px;
-                                              color: #F0F0F0;
+                                              color: #FFFFFF;
                                               selection-background-color: #1464A0;
-                                              selection-color: #F0F0F0;
+                                              selection-color: #FFFFFF;
                                             }
                                             QPushButton {
-                                              background-color: #505F69;
-                                              border: 1px solid #32414B;
-                                              color: #F0F0F0;
+                                              background-color: #484644;
+                                              border: 1px solid #605e5c;
+                                              color: #FFFFFF;
                                               border-radius: 4px;
                                               padding-left: 30px;
                                               padding-right: 30px;
@@ -276,18 +281,16 @@ class frontEnd:
                                               outline: none;
                                             }
                                             QPushButton:pressed {
-                                              background-color: #19232D;
-                                              border: 1px solid #19232D;
+                                              background-color: #323130;
                                             }
                                             QPushButton:pressed:hover {
-                                              border: 1px solid #148CD2;
+                                              background-color: #323130;
                                             }
                                             QPushButton:hover {
-                                              border: 1px solid #148CD2;
-                                              color: #F0F0F0;
+                                              background-color: #605e5c;
                                             }""")
 
-                numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\tNouveau fichier: {self.matiere}-CHP{newchpfile}")
+                numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-CHP{newchpfile}")
 
                 buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
                 buttonOpen.setText("Oui")
@@ -338,6 +341,7 @@ class frontEnd:
         def calendarView():
             self.ui.numLineEdit.setEnabled(False)
             calendarView = QDialog()
+            calendarView.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.MSWindowsFixedSizeDialogHint | QtCore.Qt.WindowMinimizeButtonHint)
 
             calendar = QCalendarWidget(calendarView)
             calendar.setGeometry(QtCore.QRect(0, 0, 312, 183))
@@ -347,18 +351,18 @@ class frontEnd:
             calendar.setObjectName("numCalendarWidget")
             calendarView.setStyleSheet("""
                                     QAbstractItemView {
-                                      alternate-background-color: #19232D;
+                                      alternate-background-color: #484644;
                                       color: #F0F0F0;
                                       border: 1px solid #32414B;
                                       border-radius: 4px;
                                     }
                                     QWidget {
-                                      background-color: #19232D;
-                                      border: 0px solid #32414B;
+                                      background-color: #262626;
+                                      border: 0px solid #444444;
                                       padding: 0px;
-                                      color: #F0F0F0;
-                                      selection-background-color: #1464A0;
-                                      selection-color: #F0F0F0;
+                                      color: #FFFFFF;
+                                      selection-background-color: #444444;
+                                      selection-color: #FFFFFF;
                                     }
                                     QWidget::item:selected {
                                       background-color: #1464A0;
@@ -370,22 +374,18 @@ class frontEnd:
                                     QCalendarWidget {
                                       border: 1px solid #32414B;
                                       border-radius: 4px;
-                                    }
-                                    QCalendarWidget QAbstractItemView:disabled {
-                                      color: #787878;
                                     }""")
             calwe_format = QtGui.QTextCharFormat()
             calwe_format.setForeground(QtGui.QColor("#148CD2"))
             calendar.setWeekdayTextFormat(QtCore.Qt.Saturday, calwe_format)
             calendar.setWeekdayTextFormat(QtCore.Qt.Sunday, calwe_format)
-
+        
             def qdateToString(qdate):
                 self.numero = qdate.toString("MMdd")
                 self.ui.numLineEdit.setText(self.numero)
                 calendarView.done(0)
             
             calendar.clicked.connect(qdateToString)
-
             calendarView.setWindowTitle("Veuillez choisir une date")
             calendarView.exec_()
         
@@ -401,17 +401,17 @@ class frontEnd:
                             }
                             QMenu::separator {
                               height: 1px;
-                              background-color: #505F69;
+                              background-color: #444444;
                             }
                             QMenu::item {
-                              background-color: #32414B;
+                              background-color: #262626;
                               padding: 4px 0px 4px 24px;
                               /* Reserve space for selection border */
                               border: 1px transparent #32414B;
                             }
                             QMenu::item:selected {
                               color: #F0F0F0;
-                              background-color: #505F69;
+                              background-color: #605e5c;
                             }""")
         
         chapterButton = numMenu.addMenu("Chapitre")
@@ -486,17 +486,17 @@ class frontEnd:
                             }
                             QMenu::separator {
                               height: 1px;
-                              background-color: #505F69;
+                              background-color: #444444;
                             }
                             QMenu::item {
-                              background-color: #32414B;
+                              background-color: #262626;
                               padding: 4px 10px 4px 24px;
                               /* Reserve space for selection border */
                               border: 1px transparent #32414B;
                             }
                             QMenu::item:selected {
                               color: #F0F0F0;
-                              background-color: #505F69;
+                              background-color: #605e5c;
                             }""")
 
         self.pathRanOnce = False
@@ -717,7 +717,36 @@ class Document:
         docMessageBox.setIcon(QMessageBox.Information)
         docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
 
-        docMessageBox.setText(f"Le document a été créé: {self.filepath}\n\nVoulez-vous l'ouvrir?")
+        docMessageBox.setStyleSheet("""QWidget {
+                                      background-color: #262626;
+                                      border: 0px solid #32414B;
+                                      padding: 0px;
+                                      color: #FFFFFF;
+                                      selection-background-color: #1464A0;
+                                      selection-color: #FFFFFF;
+                                    }
+                                    QPushButton {
+                                      background-color: #484644;
+                                      border: 1px solid #605e5c;
+                                      color: #FFFFFF;
+                                      border-radius: 4px;
+                                      padding-left: 30px;
+                                      padding-right: 30px;
+                                      padding-top: 5px;
+                                      padding-bottom: 5px;
+                                      outline: none;
+                                    }
+                                    QPushButton:pressed {
+                                      background-color: #323130;
+                                    }
+                                    QPushButton:pressed:hover {
+                                      background-color: #323130;
+                                    }
+                                    QPushButton:hover {
+                                      background-color: #605e5c;}""")
+
+
+        docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
 
         buttonOpen = docMessageBox.addButton(QMessageBox.Open)
         buttonOpen.setText("Ouvrir le fichier")
