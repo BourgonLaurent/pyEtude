@@ -21,7 +21,7 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.2.0"
+VERSION = r"2.3.0~b1"
 DEBUG = False
 
 
@@ -149,17 +149,18 @@ class frontEnd:
         self.createdOnce = False
         self.ui.genPushButton.pressed.connect(self.createDocument)
     
+    def getLineEditValue(self, lineedit):
+        value = lineedit.text()
+        if value == "":
+            value = lineedit.placeholderText()
+        
+        return value
+
     def createDocument(self):
         if not self.createdOnce:
-            def getValue(lineedit):
-                value = lineedit.text()
-                if value == "":
-                    value = lineedit.placeholderText()
-                return value
-
-            self.titre = getValue(self.ui.titreLineEdit)
-            self.soustitre = getValue(self.ui.soustitreLineEdit)
-            self.section = getValue(self.ui.sectionLineEdit)
+            self.titre = self.getLineEditValue(self.ui.titreLineEdit)
+            self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
+            self.section = self.getLineEditValue(self.ui.sectionLineEdit)
             
             self.model = "model.docx"
 
@@ -181,7 +182,6 @@ class frontEnd:
             self.createdOnce = False
 
     def matGenTab(self):
-        self.matiere = "PHY"
         def isChecked(selection):
             if selection.text() == "Personnaliser":
                 self.ui.matLineEdit.setEnabled(True)
@@ -192,12 +192,14 @@ class frontEnd:
                 self.customMatName = False
                 self.ui.matLineEdit.setEnabled(False)
                 self.ui.matLineEdit.setText(self.matieres[selection.text()][0])
-                # self.defaultFilePathChanged()
         
+        self.matiere = "PHY"
+
         matMenu = QMenu("matMenu")
         matMenu.triggered.connect(isChecked)
         self.ui.matToolButton.setMenu(matMenu)
         matActionGroup = QActionGroup(matMenu, exclusive=True)
+
 
         matMenu.setStyleSheet("""QMenu {
                               border: 0.5px solid #787878;
@@ -231,13 +233,100 @@ class frontEnd:
         self.defaultFilePaths = self.filepaths
         self.defaultFilePathChanged()
 
-        self.ui.matLineEdit.textChanged.connect(self.defaultFilePathChanged)
+        self.showedMatDialog = False
+        self.ui.matLineEdit.textChanged.connect(self.checkNumMat)
+
+    def checkNumMat(self):
+        if not self.showedMatDialog:
+            self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
+            matpath = self.checkCustomMatNamePath()
+
+            chpfiles = []
+
+            for _, _, files in os.walk(matpath):
+                for filename in files:
+                    if filename.startswith(f"{self.matiere}-CHP") and filename.endswith(".docx"):
+                        chpfiles.append(filename)
+            
+            if chpfiles:
+                newchpfile = int(max(chpfiles).replace(f"{self.matiere}-CHP", "").replace(".docx", "")) + 1
+                
+                numMatMessageBox = QMessageBox()
+                numMatMessageBox.setIcon(QMessageBox.Information)
+                numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
+
+                numMatMessageBox.setStyleSheet("""
+                                            QWidget {
+                                              background-color: #19232D;
+                                              border: 0px solid #32414B;
+                                              padding: 0px;
+                                              color: #F0F0F0;
+                                              selection-background-color: #1464A0;
+                                              selection-color: #F0F0F0;
+                                            }
+                                            QPushButton {
+                                              background-color: #505F69;
+                                              border: 1px solid #32414B;
+                                              color: #F0F0F0;
+                                              border-radius: 4px;
+                                              padding-left: 30px;
+                                              padding-right: 30px;
+                                              padding-top: 5px;
+                                              padding-bottom: 5px;
+                                              outline: none;
+                                            }
+                                            QPushButton:pressed {
+                                              background-color: #19232D;
+                                              border: 1px solid #19232D;
+                                            }
+                                            QPushButton:pressed:hover {
+                                              border: 1px solid #148CD2;
+                                            }
+                                            QPushButton:hover {
+                                              border: 1px solid #148CD2;
+                                              color: #F0F0F0;
+                                            }""")
+
+                numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\tNouveau fichier: {self.matiere}-CHP{newchpfile}")
+
+                buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
+                buttonOpen.setText("Oui")
+                buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
+                buttonIgnore.setText("Non")
+
+                numMatMessageBox.exec_()
+                if numMatMessageBox.clickedButton().text() == "Oui":
+                    self.ui.numLineEdit.setEnabled(False)
+                    self.ui.numLineEdit.setText(f"CHP{newchpfile}")
+                else:
+                    assert ConnectionRefusedError
+            
+            self.showedMatDialog = True
+        else:
+            self.showedMatDialog = False
+        
+        self.defaultFilePathChanged()
+    
+    def checkCustomMatNamePath(self):
+        if self.customMatName:
+            return os.getcwd()
+        else:
+            for mat in self.matieres.values():
+                if mat[0] == self.matiere:
+                    if mat[1] == "":  # S'il n'y a aucun chemin perso pour cette matière
+                        return os.getcwd()  # Overwrite le chemin perso par le chemin actuel
+                    else:
+                        return mat[1]
+
 
     def numGenTab(self):
         self.numero = "0920"
         def isChecked(selection):
             if selection.text() == calendarAction.text():
                 calendarView()
+            elif selection.text() == autoNumAction.text():
+                self.showedMatDialog = False
+                self.checkNumMat()
             elif selection.text() == personalizeNumAction.text():
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
@@ -304,7 +393,6 @@ class frontEnd:
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
         numActionGroup = QActionGroup(numMenu, exclusive=True)
-        # numMenu.move(0, 0)  # numMenu.mapToGlobal(QtCore.QPoint(0, self.ui.numToolButton.geometry().height()))
 
         numMenu.setStyleSheet("""QMenu {
                               border: 0.5px solid #787878;
@@ -334,31 +422,25 @@ class frontEnd:
         numMenu.addAction(calendarAction)
         numMenu.addSeparator()
 
+        autoNumAction = numActionGroup.addAction(QAction("Automatique", checkable=True))
+        numMenu.addAction(autoNumAction)
+
         personalizeNumAction = numActionGroup.addAction(QAction("Personnaliser", checkable=True))
         numMenu.addAction(personalizeNumAction)
 
         self.ui.numLineEdit.textChanged.connect(self.defaultFilePathChanged)
     
     def defaultFilePathChanged(self):
-        self.matiere = self.ui.matLineEdit.text().translate({ord(i): None for i in '\\/:*?"<>|'})
-        if self.matiere == "":
-            self.matiere = self.ui.matLineEdit.placeholderText()
+        self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
 
-        self.numero = self.ui.numLineEdit.text().translate({ord(i): None for i in '\\/:*?"<>|'})
-        if self.numero == "":
-            self.numero = self.ui.numLineEdit.placeholderText()
+        self.numero = self.getLineEditValue(self.ui.numLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
         
-        if self.customMatName:
-            self.defaultFilePaths = [os.getcwd(), f"{self.matiere}-{self.numero}.docx", f"{os.getcwd()}/{self.matiere}-{self.numero}.docx"]
-        else:
-            for mat in self.matieres.values():
-                if mat[0] == self.matiere:
-                    if mat[1] == "":
-                        mat[1] = os.getcwd()
-                    self.defaultFilePaths = [mat[1], f"/{self.matiere}-{self.numero}.docx", f"{mat[1]}/{self.matiere}-{self.numero}.docx"]
+        matpath = self.checkCustomMatNamePath()
+        self.defaultFilePaths = [matpath, f"{self.matiere}-{self.numero}.docx", os.path.join(matpath, f"{self.matiere}-{self.numero}.docx")] # Chemin, fichier, chemin complet
 
         self.filepaths = self.defaultFilePaths
         self.updatePathLabel()
+        
 
     def pathGenTab(self):
         def isChecked(selection):
@@ -381,11 +463,10 @@ class frontEnd:
             elif selection.text() == customDirectoryAction.text():
                 filepath = QFileDialog.getExistingDirectory()
                 if filepath != "":
-                    self.filepaths = [filepath, f"/{self.matiere}-{self.numero}.docx", f"{filepath}/{self.matiere}-{self.numero}.docx"]
+                    self.filepaths = [filepath, f"/{self.matiere}-{self.numero}.docx", os.path.join(filepath, f"{self.matiere}-{self.numero}.docx")]
             
             elif selection.text() == defaultPathAction.text():
                 self.filepaths = self.defaultFilePaths
-            pathMenu.setVisible(False)
             self.updatePathLabel()
         
         def QLActivated():
@@ -436,8 +517,7 @@ class frontEnd:
         pathMenu.addAction(defaultPathAction)
 
     def updatePathLabel(self):
-        # self.ui.pathPathLabel.setText(self.filepaths[2].replace("/", " > ").replace("\\", " > "))
-        fp = self.filepaths[2].replace("/", " > ").replace("\\", " > ")
+        fp = self.filepaths[2].replace("/", " > ").replace("\\", " > ")  # Bypass f-string \\ restriction
         self.ui.pathPathLabel.setText(QtCore.QCoreApplication.translate("MainWindow", fr"""<html><head/><body><p><a href="none"><span style=" font-size:11pt; text-decoration: underline; color:\#f0f0f0;">{fp}</span></a></p></body></html>"""))
 
     def configTab(self):
@@ -551,7 +631,6 @@ class Document:
     def main(self):
         self.exportWord(self.model, self.folder)
 
-        # self.modifyOptions(os.path.join(self.folder, "docProps", "core.xml"), self.options)
         self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.options)
         self.modifyOptions(os.path.join(self.folder, "word", "header1.xml"), self.options)
         self.modifyOptions(os.path.join(self.folder, "word", "footer1.xml"), self.options)
