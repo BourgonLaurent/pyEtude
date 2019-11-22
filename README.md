@@ -8,7 +8,7 @@
     ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
     ██║        ██║   MIT © Laurent Bourgon 2019
     ╚═╝        ╚═╝   
-    Ce document est basé sous la version v2.3.1
+    Ce document est relatif à la version v2.3.1
 ---
 <div align="center">
 
