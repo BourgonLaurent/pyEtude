@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\pyEtude.ui'
+# Form implementation generated from reading ui file 'pyEtude.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -2239,4 +2241,3 @@ class Ui_MainWindow(object):
         self.gitHubLabel.setText(_translate("MainWindow", "<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#f0f0f0;\">© Laurent Bourgon Sous la license MIT</span></a></p><p><span style=\" color:#f0f0f0;\"><br/></span></p><p><a href=\"https://github.com/BourgonLaurent/pyEtude\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Projet GitHub</span></a></p><p><a href=\"https://github.com/BourgonLaurent/pyEtude#faq\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Vous avez un problème?</span></a></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), _translate("MainWindow", "À Propos"))
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.aboutTab), _translate("MainWindow", "À Propos"))
-
