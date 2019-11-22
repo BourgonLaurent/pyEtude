@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'pyEtude.ui'
+# Form implementation generated from reading ui file '.\pyEtude.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -1332,20 +1332,20 @@ class Ui_MainWindow(object):
 "  background-color: #19232D;\n"
 "}\n"
 "\n"
-"QTabBar::tab:!selected {\n"
+"/* QTabBar::tab:!selected {\n"
 "  border-right: 2px solid #19232D;\n"
 "  margin-left: 2px;\n"
-"}\n"
+"} */\n"
 "\n"
 "QTabBar::tab {\n"
 "  color: #FFFFFF;\n"
 "  background-color: #323130;\n"
-"  margin-top: 2px;\n"
 "  padding-left: 4px;\n"
 "  padding-right: 4px;\n"
 "  padding-top: 12px;\n"
 "  padding-bottom: 12px;\n"
-"  min-height: 5px;\n"
+"  border-top-left-radius: 4px;\n"
+"  border-bottom-left-radius: 4px;\n"
 "}\n"
 "\n"
 "QTabBar::tab:selected {\n"

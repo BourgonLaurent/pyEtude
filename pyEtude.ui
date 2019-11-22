@@ -1346,20 +1346,20 @@ QTabBar::tab:!selected:disabled {
   background-color: #19232D;
 }
 
-QTabBar::tab:!selected {
+/* QTabBar::tab:!selected {
   border-right: 2px solid #19232D;
   margin-left: 2px;
-}
+} */
 
 QTabBar::tab {
   color: #FFFFFF;
   background-color: #323130;
-  margin-top: 2px;
   padding-left: 4px;
   padding-right: 4px;
   padding-top: 12px;
   padding-bottom: 12px;
-  min-height: 5px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 QTabBar::tab:selected {
