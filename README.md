@@ -122,7 +122,7 @@ $ python pyEtude.pyw
 
 ### pyÉtude<a name = "pyEtude"></a>
 
-- Configurateur (premier lancement ou « Modifier les options »):
+- Configurateur (premier lancement):
 
 <div align="center">
 
