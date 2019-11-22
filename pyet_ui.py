@@ -33,20 +33,20 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QWidget:disabled {\n"
-"  background-color: #19232D;\n"
+"  background-color: #252424;\n"
 "  color: #787878;\n"
 "  selection-background-color: #14506E;\n"
 "  selection-color: #787878;\n"
 "}\n"
 "\n"
-"QWidget::item:selected {\n"
+"/* QWidget::item:selected {\n"
 "  background-color: none;\n"
 "}\n"
 "\n"
 "QWidget::item:hover {\n"
 "  background-color: #148CD2;\n"
 "  color: #32414B;\n"
-"}\n"
+"} */\n"
 "\n"
 "/* QMainWindow ------------------------------------------------------------\n"
 "\n"
@@ -465,7 +465,7 @@ class Ui_MainWindow(object):
 "--------------------------------------------------------------------------- */\n"
 "\n"
 "QScrollBar:vertical {\n"
-"  background-color: #262626;\n"
+"  background-color: #484644;\n"
 "  width: 16px;\n"
 "  margin: 16px 2px 16px 2px;\n"
 "  border: 1px solid #444444;\n"
@@ -1256,6 +1256,10 @@ class Ui_MainWindow(object):
 "  border: 1px solid #444444;\n"
 "}\n"
 "\n"
+"QTabWidget QScrollArea {\n"
+"  background-color: #484644;\n"
+"}\n"
+"\n"
 "QTabWidget QWidget QWidget\n"
 "QTableView,\n"
 "QTabWidget QTreeView,\n"
@@ -1317,27 +1321,6 @@ class Ui_MainWindow(object):
 "https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtabwidget-and-qtabbar\n"
 "\n"
 "--------------------------------------------------------------------------- */\n"
-"QTabBar::tab {\n"
-"  /* !selected and disabled ----------------------------------------- */\n"
-"  /* selected ------------------------------------------------------- */\n"
-"}\n"
-"\n"
-"QTabBar::tab:selected:disabled {\n"
-"  border-left: 3px solid #14506E;\n"
-"  color: #787878;\n"
-"  background-color: #32414B;\n"
-"}\n"
-"\n"
-"QTabBar::tab:!selected:disabled {\n"
-"  border-left: 3px solid #19232D;\n"
-"  color: #787878;\n"
-"  background-color: #19232D;\n"
-"}\n"
-"\n"
-"/* QTabBar::tab:!selected {\n"
-"  border-right: 2px solid #19232D;\n"
-"  margin-left: 2px;\n"
-"} */\n"
 "\n"
 "QTabBar::tab {\n"
 "  color: #FFFFFF;\n"
@@ -1368,6 +1351,12 @@ class Ui_MainWindow(object):
 "  border-top-right-radius: 3px;\n"
 "  border-bottom-right-radius: 3px;\n"
 "  padding: 0px;\n"
+"}\n"
+"\n"
+"QTabBar::tab:!selected:disabled {\n"
+"  border-left: 3px solid #252424;\n"
+"  color: #787878;\n"
+"  background-color: #252424;\n"
 "}\n"
 "\n"
 "QTabBar QToolButton {\n"
@@ -1521,7 +1510,7 @@ class Ui_MainWindow(object):
 "QListView,\n"
 "QTableView,\n"
 "QColumnView {\n"
-"  background-color: #363636;\n"
+"  background-color: #484644;\n"
 "  alternate-background-color: #262626;\n"
 "  color: #F0F0F0;\n"
 "  /* gridline-color: #FFFFFF; */\n"
@@ -1550,7 +1539,7 @@ class Ui_MainWindow(object):
 "QTableView::hover,\n"
 "QColumnView::hover {\n"
 "  background-color: #363636;\n"
-"  border: 0px solid #969696;\n"
+"  border: 1px solid #969696;\n"
 "}\n"
 "\n"
 "QTreeView::item:pressed,\n"
@@ -1884,6 +1873,7 @@ class Ui_MainWindow(object):
         self.matLineEdit.setObjectName("matLineEdit")
         self.matToolButton = QtWidgets.QPushButton(self.matGroupBox)
         self.matToolButton.setGeometry(QtCore.QRect(101, 25, 20, 29))
+        self.matToolButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.matToolButton.setText("")
         self.matToolButton.setObjectName("matToolButton")
         self.matToolButton.raise_()
@@ -1909,6 +1899,7 @@ class Ui_MainWindow(object):
         self.numLineEdit.setObjectName("numLineEdit")
         self.numToolButton = QtWidgets.QPushButton(self.numGroupBox)
         self.numToolButton.setGeometry(QtCore.QRect(101, 25, 21, 29))
+        self.numToolButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.numToolButton.setText("")
         self.numToolButton.setObjectName("numToolButton")
         self.numToolButton.raise_()
@@ -2084,13 +2075,21 @@ class Ui_MainWindow(object):
         self.matiereTableWidget = QtWidgets.QTableWidget(self.matieresConfig)
         self.matiereTableWidget.setEnabled(True)
         self.matiereTableWidget.setGeometry(QtCore.QRect(10, 30, 641, 191))
+        self.matiereTableWidget.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.matiereTableWidget.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.matiereTableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.matiereTableWidget.setAutoScroll(False)
+        self.matiereTableWidget.setAutoScrollMargin(0)
         self.matiereTableWidget.setDragEnabled(True)
         self.matiereTableWidget.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.matiereTableWidget.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.matiereTableWidget.setAlternatingRowColors(True)
-        self.matiereTableWidget.setTextElideMode(QtCore.Qt.ElideNone)
-        self.matiereTableWidget.setRowCount(8)
+        self.matiereTableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.matiereTableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.matiereTableWidget.setShowGrid(False)
+        self.matiereTableWidget.setWordWrap(False)
+        self.matiereTableWidget.setCornerButtonEnabled(True)
+        self.matiereTableWidget.setRowCount(15)
         self.matiereTableWidget.setObjectName("matiereTableWidget")
         self.matiereTableWidget.setColumnCount(3)
         item = QtWidgets.QTableWidgetItem()
@@ -2110,6 +2109,20 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.matiereTableWidget.setVerticalHeaderItem(7, item)
         item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(8, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(9, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(10, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(11, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(12, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(13, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.matiereTableWidget.setVerticalHeaderItem(14, item)
+        item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         self.matiereTableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -2118,24 +2131,31 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.matiereTableWidget.setHorizontalHeaderItem(2, item)
         self.matiereTableWidget.horizontalHeader().setDefaultSectionSize(175)
+        self.matiereTableWidget.horizontalHeader().setHighlightSections(True)
         self.matiereTableWidget.horizontalHeader().setStretchLastSection(True)
         self.matiereTableWidget.verticalHeader().setVisible(False)
+        self.matiereTableWidget.verticalHeader().setHighlightSections(False)
+        self.matiereTableWidget.verticalHeader().setSortIndicatorShown(False)
         self.matiereTableWidget.verticalHeader().setStretchLastSection(False)
         self.matiereTablePlus = QtWidgets.QPushButton(self.matieresConfig)
         self.matiereTablePlus.setEnabled(True)
         self.matiereTablePlus.setGeometry(QtCore.QRect(10, 230, 21, 21))
+        self.matiereTablePlus.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.matiereTablePlus.setObjectName("matiereTablePlus")
         self.matiereTableMinus = QtWidgets.QPushButton(self.matieresConfig)
         self.matiereTableMinus.setEnabled(True)
         self.matiereTableMinus.setGeometry(QtCore.QRect(33, 230, 21, 21))
+        self.matiereTableMinus.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.matiereTableMinus.setObjectName("matiereTableMinus")
         self.matiereTableReset = QtWidgets.QPushButton(self.matieresConfig)
         self.matiereTableReset.setEnabled(True)
         self.matiereTableReset.setGeometry(QtCore.QRect(63, 230, 75, 21))
+        self.matiereTableReset.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.matiereTableReset.setObjectName("matiereTableReset")
         self.matiereTableBrowse = QtWidgets.QPushButton(self.matieresConfig)
         self.matiereTableBrowse.setEnabled(True)
         self.matiereTableBrowse.setGeometry(QtCore.QRect(576, 230, 75, 21))
+        self.matiereTableBrowse.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.matiereTableBrowse.setObjectName("matiereTableBrowse")
         self.tabWidget.addTab(self.configTab, "")
         self.aboutTab = QtWidgets.QWidget()
@@ -2173,7 +2193,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -2222,6 +2242,20 @@ class Ui_MainWindow(object):
         item = self.matiereTableWidget.verticalHeaderItem(6)
         item.setText(_translate("MainWindow", "New Row"))
         item = self.matiereTableWidget.verticalHeaderItem(7)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(8)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(9)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(10)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(11)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(12)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(13)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.matiereTableWidget.verticalHeaderItem(14)
         item.setText(_translate("MainWindow", "New Row"))
         item = self.matiereTableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Matière"))

@@ -21,7 +21,7 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.3.0"
+VERSION = r"2.3.1"
 DEBUG = False
 
 
@@ -248,10 +248,8 @@ class frontEnd:
             matpath = self.checkCustomMatNamePath()
 
             chpfiles = []
-
-            for _, _, files in os.walk(matpath):
-                for filename in files:
-                    if filename.startswith(f"{self.matiere}-CHP") and filename.endswith(".docx"):
+            for filename in [f for f in os.listdir(matpath) if os.path.isfile(os.path.join(matpath, f))]:  # Does not look in other folders
+                if filename.startswith(f"{self.matiere}-CHP") and filename.endswith(".docx"):
                         chpfiles.append(filename)
             
             if chpfiles:
