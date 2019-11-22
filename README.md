@@ -7,7 +7,8 @@
     ██████╔╝ ╚████╔╝ ███████╗   ██║   ╚██████╔╝██████╔╝███████╗
     ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
     ██║        ██║   MIT © Laurent Bourgon 2019
-    ╚═╝        ╚═╝   v2.0.0
+    ╚═╝        ╚═╝   
+    Ce document est basé sous la version v2.3.1
 ---
 <div align="center">
 
@@ -53,12 +54,12 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 1. Extraire le fichier modèle dans un dossier temporaire
 2. Remplacer les informations par ce qui a été demandé au niveau du GUI
     - Le programme remplacera des valeurs dans les fichiers `.xml` du document `Word`.
-3. Zipper le dossier temporaire et le supprimer
+3. Zipper et compresser le dossier temporaire et le supprimer
 4. Renommer l'extension du fichier créé pour qu'il soit reconnu par `Microsoft Word`
 
 ## ⛓️ Ce qu'il faut et les limites du projet <a name = "limites"></a>
 
-- Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). À cause de l'ajout d'un GUI, `pyÉtude` ne fonctionne que sous Windows, macOS et Linux (pour l'instant). Pour les autres périphériques, veuillez utiliser la version (obsolète) qui est en ligne de commande (`pyETUDE.py`)
+- Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). À cause de l'ajout d'un GUI, `pyÉtude` ne fonctionne que sous Windows, macOS et Linux (pour l'instant). Pour les autres périphériques, veuillez utiliser la version (obsolète) qui est en ligne de commande (`pyETUDE_cli.py`)
 - Ce projet utilise un document `Word` manuellement configuré et le modifie à l'intérieur. Pour avoir un modèle différent, il faut modifier ce document avec les bonnes balises.
 - Ce projet n'utilise pas le module `python-docx` puisqu'il était trop compliqué d'avoir un résultat correct et sans problème. De plus, cela enlève un élément à télécharger.
 
@@ -66,9 +67,12 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 
 - [x] Transformer ce programme en GUI pour une utilisation plus facile et rapide
 - [x] Fonctionner sous `Word on iOS/iPadOS` et `LibreOffice` (logiciels qui ne prennent pas en charge les métadonnées)
+- [x] Mettre en place des chemins de sortie personnalisés selon la matière sélectionnée
 - [x] Télécharger le modèle à distance afin de ne faire qu'un seul fichier à télécharger manuellement
+- [x] Mode sombre (pour le bien des yeux!)
+- [x] Matières Intelligentes qui savent quel document créé selon ceux qui ont déjà été créés
 - [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
-- [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc
+- [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [ ] Avoir un configurateur de modèles afin de créer un modèle personnalisé
 - [ ] Avoir plusieurs modèles qui peuvent être choisis.
 - [ ] Transformer ce programme en interface web pour faciliter la tâche
@@ -81,15 +85,14 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 | Catégorie          | Valeur           | Notes additionnelles                                                                            | Installation                                               |
 |--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | OS:                | N'importe lequel |                                                                                                 |                                                            |
-| Python:            | `Python 3`       | Développé sous Python 3.7.4, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
+| Python:            | `Python 3`       | Développé sous Python 3.7.4 (et aussi 3.8.0), veuillez mettre à jour votre version si vous avez des problèmes| [Télécharger `Python3`](https://www.python.org/downloads/) |
 | Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `re`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `urllib`         | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `tkinter`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `webbrowser`     | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
+|                    | `PyQt5`          | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**    | Télécharger avec PyPi `pip install PyQt5` (ou `pip3 install PyQt5`, selon votre environnement)|
 
 ### Installation <a name = "installation"></a>
 
@@ -98,6 +101,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 3. (optionnel, mais recommandé) Déplacer `pyEtude-vX.X.X.pyw` dans un dossier vide.
 4. Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
+Avec le terminal:
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
 $ python pyEtude.pyw
@@ -105,7 +109,7 @@ $ python pyEtude.pyw
 
 ## 🎈 Utilisation <a name = "utilisation"></a>
 
-Exécuter le programme avec le terminal/invite de commande ou selon votre système d'exploitation.
+Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
@@ -126,14 +130,15 @@ $ python pyEtude.pyw
 
 </div>
 
-- Création:
+- Générateur:
+
 <div align="center">
 
-[![Création](assets_readme/pyetude.png)](/assets_readme/pyetude.png)
+[![Générateur](assets_readme/pyetude.png)](/assets_readme/pyetude.png)
 
 </div>
 
-### Résultats <a name = "resultats"></a>
+### Exemple fictif <a name = "resultats"></a>
 
 | Réglage       | Valeur                   |
 |---------------|--------------------------|
@@ -174,33 +179,32 @@ $ python pyEtude.pyw
 
 ## ⁉️ Foire Aux Questions <a name = "faq"></a>
 
-- L'application est horrible sous `macOS`!:
-    Ceci est dû au moyen dont `macOS` gère les applications, ceci devrait être réglé lorsque le nouveau GUI pour tablettes/mobiles arrivera puisqu'il permettra de transférer cette application pour `macOS`.
 - `OSError: [WinError 123] La syntaxe du nom de fichier, de répertoire ou de volume est incorrecte`:
-    Le nom de matière et le numéro/chapitre ne peut pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
+    Le nom de matière et le numéro/chapitre ne peuvent pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
 - Mes caractères `&` (esperluette) sont tous enlevés et n'apparaissent pas dans mon document:
     Word a de la difficulté avec l'esperluette. Si vous voulez que j'ajoute un mode de compatibilité pour l'esperluette, veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues).
 &nbsp;
 - `Word a rencontré une erreur lors de l'ouverture du fichier`:
     Cela est surement dû aux valeurs qui contiennent des caractères spéciaux. Si ce n'est pas le cas, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
 - Le modèle que j'ai choisi est corrompu!:
-    Veuillez le supprimer et relancer `pyÉtude`, celui-ci le téléchargera automatiquement. Si le problème persiste, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
-- Mon nouveau document fait `128Ko`, le modèle fait `28Ko`, pourquoi?:
-    Ceci est dû à un problème dans le calcul de taille, Word va automatiquement régler ce problème (réduire la taille du fichier) lorsque le fichier sera enregistré pour la première fois.
-- J'ai l'erreur suivante `ERREUR LOCALE La langue "fr_CA" n'est pas trouvée`:
-    `pyÉtude` a besoin du module de langue français pour fonctionner correctement, celui-ci est fourni par votre système d'exploitation, si vous ne pouvez pas installer la langue française et que vous souhaitez enlever le message, ajoutez un `#` devant les lignes 19 à 26.
+    Veuillez supprimer le modèle (le fichier `.docx`) et relancer `pyÉtude`, celui-ci le téléchargera automatiquement. Si le problème persiste, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+- Mon nouveau document fait `24Ko`, le modèle fait `28Ko`, pourquoi?:
+    Ceci est dû à un problème dans la compression du fichier, Word utilise une compression propre à lui et c'est pour cela que le document montera de `4Ko` dès la première sauvegarde.
+- Mes matières ne sont pas ordonnées correctement dans le menu du Générateur!
+    Ceci est dû au fait que l'ordinateur pense que `é`, `à`, ... sont des lettres complètement différentes de `e` et `a`: pour résoudre cela, j'utilise un dictionnaire créé par le système d'exploitation au lancement du logiciel. Cependant, quelques systèmes d'exploitation n'ont pas cette fonctionnalité (ex `macOS`). Si vous souhaitez vraiment cette fonctionnalité, veuillez faire un [ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues).
+
 - J'ai l'erreur suivante:
 ```python
     Traceback (most recent call last):
       File "./pyETUDE.pyw", line 13, in <module>
-      from tkinter import *
-    ModuleNotFoundError: No module named 'tkinter'
+      from PyQt5 import QtCore, QtGui, QtWidgets, uic
+    ModuleNotFoundError: No module named 'PyQt5'
 ```
 
-Ceci est dû à certaines distributions de Linux qui n'incluent pas `tkinter`, le module qui s'occupe du GUI. `tkinter` est un module officiel et installé par défaut, il est alors déjà préinstallé avec Windows et macOS, mais certaines distributions de Linux (dont Ubuntu), ne l'incluent pas. Afin de l'installer, utiliser votre gestionnaire de paquet et installer-le, sur Ubuntu: `sudo apt-get install python3-tk`
+Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propre à chaque version.
 &nbsp;
-- Comment puis-je utiliser mon propre modèle? [Voir la documentation](../../wiki/Comment-créer-ses-propres-matières%3F)
-- Comment puis-je personaliser mes matières? [Voir la documentation](../../wiki/Comment-créer-son-propre-modèle%3F)
+- Comment puis-je utiliser mon propre modèle? [Voir la documentation](../../wiki/Comment-créer-son-propre-modèle%3F)
+- Comment puis-je personaliser mes matières? [Voir la documentation](../../wiki/Comment-créer-ses-propres-matières%3F)
 - Comment puis-je modifier le chemin par défaut selon la matière choisie? [Voir la documenation](../../wiki/Comment-mettre-des-emplacements-par-défaut-selon-les-matières%3F)
 &nbsp;
 - Mon problème n'est pas ici!:
@@ -214,12 +218,15 @@ Ceci est dû à certaines distributions de Linux qui n'incluent pas `tkinter`, l
 
 - [Visual Studio Code](https://code.visualstudio.com/) pour écrire, modifier et effectuer le déboggage du programme
 - [λ cmder Console Emulator](https://cmder.net/) pour le développement et pour l'invite de commande
+- [Qt Designer](https://build-system.fman.io/qt-designer-download) pour créer le gabarit de l'application
+- [Python 3](https://www.python.org/) pour compiler et lancer ce programme
+- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/intro) pour tout le GUI et la transformation du `.ui` en `.py`
 - [Microsoft Word 365](https://products.office.com/fr-ca/word) pour créer le modèle utilisé
 - [GitHub](https://github.com/) pour organiser, publier et sauvegarder ce projet
 
 ## ✍️ Contributeurs <a name = "contrib"></a>
 
-- [@BourgonLaurent](https://github.com/BourgonLaurent) - Idée & Programme en entier
+- [@BourgonLaurent](https://github.com/BourgonLaurent) - Idée & Conception du programme en entier
 
 <!--- ## 🎉 Reconnaissances <a name = "recon"></a> -->
 
