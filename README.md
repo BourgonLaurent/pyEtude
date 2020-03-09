@@ -6,9 +6,9 @@
     ██╔══██╗╚██╗ ██╔╝██╔══╝     ██║   ██║   ██║██║  ██║██╔══╝  
     ██████╔╝ ╚████╔╝ ███████╗   ██║   ╚██████╔╝██████╔╝███████╗
     ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
-    ██║        ██║   MIT © Laurent Bourgon 2019
+    ██║        ██║   MIT © Laurent Bourgon 2020
     ╚═╝        ╚═╝   
-    Ce document est relatif à la version v2.3.1
+    Ce document est relatif à la version v2.3.2
 ---
 <div align="center">
 
@@ -85,7 +85,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 | Catégorie          | Valeur           | Notes additionnelles                                                                            | Installation                                               |
 |--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | OS:                | N'importe lequel |                                                                                                 |                                                            |
-| Python:            | `Python 3`       | Développé sous Python 3.7.4 (et aussi 3.8.0), veuillez mettre à jour votre version si vous avez des problèmes| [Télécharger `Python3`](https://www.python.org/downloads/) |
+| Python:            | `Python 3`       | Développé sous Python 3.8.2, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
 | Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |

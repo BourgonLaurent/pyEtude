@@ -6,7 +6,7 @@
 ██╔══██╗╚██╗ ██╔╝██╔══╝     ██║   ██║   ██║██║  ██║██╔══╝  
 ██████╔╝ ╚████╔╝ ███████╗   ██║   ╚██████╔╝██████╔╝███████╗
 ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
-██║        ██║   MIT © Laurent Bourgon 2019
+██║        ██║   MIT © Laurent Bourgon 2020
 ╚═╝        ╚═╝   
 """
 import json, locale, os, sys, zipfile, urllib.request, urllib.error
