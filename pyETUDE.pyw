@@ -204,7 +204,8 @@ class frontEnd:
         matMenu = QMenu("matMenu")
         matMenu.triggered.connect(isChecked)
         self.ui.matToolButton.setMenu(matMenu)
-        matActionGroup = QActionGroup(matMenu, exclusive=True)
+        matActionGroup = QActionGroup(matMenu)
+        matActionGroup.setExclusive(True)
 
 
         matMenu.setStyleSheet("""QMenu {
@@ -218,7 +219,7 @@ class frontEnd:
                             }
                             QMenu::item {
                               background-color: #262626;
-                              padding: 4px 0px 4px 24px;
+                              padding: 4px 4px 4px 4px;
                               /* Reserve space for selection border */
                               border: 1px transparent #32414B;
                             }
@@ -390,7 +391,8 @@ class frontEnd:
         numMenu = QMenu("numMenu")
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
-        numActionGroup = QActionGroup(numMenu, exclusive=True)
+        numActionGroup = QActionGroup(numMenu)
+        numActionGroup.setExclusive(True)
 
         numMenu.setStyleSheet("""QMenu {
                               border: 0.5px solid #787878;
@@ -403,7 +405,7 @@ class frontEnd:
                             }
                             QMenu::item {
                               background-color: #262626;
-                              padding: 4px 0px 4px 24px;
+                              padding: 4px 4px 4px 4px;
                               /* Reserve space for selection border */
                               border: 1px transparent #32414B;
                             }
