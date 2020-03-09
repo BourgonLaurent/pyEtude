@@ -21,7 +21,7 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.3.1"
+VERSION = r"2.3.2"
 DEBUG = False
 
 
