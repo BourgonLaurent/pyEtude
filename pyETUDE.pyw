@@ -21,10 +21,89 @@ except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-VERSION = r"2.3.2"
-DEBUG = False
 
+VERSION = r'2.4.0~b1'
+DEBUG = True
 
+GITHUB_LINK = r'https://raw.githubusercontent.com/BourgonLaurent/pyEtude'
+STYLES = {
+    "menu":"""QMenu {
+                  border: 0.5px solid #787878;
+                  color: #F0F0F0;
+                  margin: 0px;
+                }
+                QMenu::separator {
+                  height: 1px;
+                  background-color: #444444;
+                }
+                QMenu::item {
+                  background-color: #262626;
+                  padding: 4px 4px 4px 4px;
+                  /* Reserve space for selection border */
+                  border: 1px transparent #32414B;
+                }
+                QMenu::item:selected {
+                  color: #F0F0F0;
+                  background-color: #605e5c;
+                }""",
+    "message_box":"""QWidget {
+                      background-color: #262626;
+                      border: 0px solid #32414B;
+                      padding: 0px;
+                      color: #FFFFFF;
+                      selection-background-color: #1464A0;
+                      selection-color: #FFFFFF;
+                    }
+                    QPushButton {
+                      background-color: #484644;
+                      border: 1px solid #605e5c;
+                      color: #FFFFFF;
+                      border-radius: 4px;
+                      padding-left: 30px;
+                      padding-right: 30px;
+                      padding-top: 5px;
+                      padding-bottom: 5px;
+                      outline: none;
+                    }
+                    QPushButton:pressed {
+                      background-color: #323130;
+                    }
+                    QPushButton:pressed:hover {
+                      background-color: #323130;
+                    }
+                    QPushButton:hover {
+                      background-color: #605e5c;
+                    }""",
+    "calendar":"""QAbstractItemView {
+                      alternate-background-color: #484644;
+                      color: #F0F0F0;
+                      border: 1px solid #32414B;
+                      border-radius: 4px;
+                    }
+                    QWidget {
+                      background-color: #262626;
+                      border: 0px solid #444444;
+                      padding: 0px;
+                      color: #FFFFFF;
+                      selection-background-color: #444444;
+                      selection-color: #FFFFFF;
+                    }
+                    QWidget::item:selected {
+                      background-color: #1464A0;
+                    }
+                    QWidget::item:hover {
+                      background-color: #148CD2;
+                      color: #32414B;
+                    }
+                    QCalendarWidget {
+                      border: 1px solid #32414B;
+                      border-radius: 4px;
+                    }""",
+    "line_edit":"""QLineEdit {
+                        border-top-right-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                    }"""
+}
 class frontEnd:
     def __init__(self):
         if DEBUG:
@@ -69,15 +148,15 @@ class frontEnd:
         """
         if create:
             try:
-                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{name}", name)
+                urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/{name}", name)
             except urllib.error.HTTPError:
-                urllib.request.urlretrieve(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{name}", name)
+                urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/{name}", name)
         else:
             try:
-                with urllib.request.urlopen(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/{VERSION}/{name}") as ur:
+                with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/{name}") as ur:
                     return ur.read().decode()
             except urllib.error.HTTPError:
-                with urllib.request.urlopen(fr"https://raw.githubusercontent.com/BourgonLaurent/pyEtude/master/{name}") as ur:
+                with urllib.request.urlopen(fr"{GITHUB_LINK}/master/{name}") as ur:
                     return ur.read().decode()
 
     def firstLaunch(self):
@@ -100,9 +179,12 @@ class frontEnd:
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
             self.ui.tabWidget.setCurrentIndex(0)
             self.ui.matieresConfig.setChecked(True)
+
             self.readJSON()
+
             self.ui.auteurLineEdit.setText(self.auteur)
             self.ui.secLineEdit.setText(self.sec)
+
             self.genTab()
         else:
             assert FileNotFoundError
@@ -110,6 +192,7 @@ class frontEnd:
             self.ui.tabWidget.setTabEnabled(0, False)
             self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
             self.ui.tabWidget.setCurrentIndex(1)
+            
             self.setMatieres(self.matieresDefault)
             self.configDone = False
 
@@ -143,9 +226,7 @@ class frontEnd:
         self.ui.secPersoLabel.setText(self.sec)
 
         for le in (self.ui.matLineEdit, self.ui.numLineEdit):
-            le.setStyleSheet("""QLineEdit {
-                                border-top-right-radius: 0px;
-                                border-bottom-right-radius: 0px;}""")
+            le.setStyleSheet(STYLES["line_edit"])
 
         for le in (self.ui.matLineEdit, self.ui.numLineEdit, self.ui.sectionLineEdit, self.ui.soustitreLineEdit, self.ui.titreLineEdit):
             self.esperLimit(le)
@@ -175,7 +256,7 @@ class frontEnd:
                 modelMessageBox.setIcon(QMessageBox.Information)
                 modelMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Modèle")
 
-                modelMessageBox.setText(f"Le model: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
+                modelMessageBox.setText(f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
                 modelMessageBox.addButton(QMessageBox.Ok)
                 modelMessageBox.exec_()
 
@@ -208,25 +289,7 @@ class frontEnd:
         matActionGroup.setExclusive(True)
 
 
-        matMenu.setStyleSheet("""QMenu {
-                              border: 0.5px solid #787878;
-                              color: #F0F0F0;
-                              margin: 0px;
-                            }
-                            QMenu::separator {
-                              height: 1px;
-                              background-color: #444444;
-                            }
-                            QMenu::item {
-                              background-color: #262626;
-                              padding: 4px 4px 4px 4px;
-                              /* Reserve space for selection border */
-                              border: 1px transparent #32414B;
-                            }
-                            QMenu::item:selected {
-                              color: #F0F0F0;
-                              background-color: #605e5c;
-                            }""")
+        matMenu.setStyleSheet(STYLES["menu"])
 
         for mat in sorted(self.matieres, key=locale.strxfrm):
             matMenu.addAction(matActionGroup.addAction(QAction(f"{mat}", checkable=True)))
@@ -260,34 +323,7 @@ class frontEnd:
                 numMatMessageBox.setIcon(QMessageBox.Information)
                 numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
 
-                numMatMessageBox.setStyleSheet("""QWidget {
-                                              background-color: #262626;
-                                              border: 0px solid #32414B;
-                                              padding: 0px;
-                                              color: #FFFFFF;
-                                              selection-background-color: #1464A0;
-                                              selection-color: #FFFFFF;
-                                            }
-                                            QPushButton {
-                                              background-color: #484644;
-                                              border: 1px solid #605e5c;
-                                              color: #FFFFFF;
-                                              border-radius: 4px;
-                                              padding-left: 30px;
-                                              padding-right: 30px;
-                                              padding-top: 5px;
-                                              padding-bottom: 5px;
-                                              outline: none;
-                                            }
-                                            QPushButton:pressed {
-                                              background-color: #323130;
-                                            }
-                                            QPushButton:pressed:hover {
-                                              background-color: #323130;
-                                            }
-                                            QPushButton:hover {
-                                              background-color: #605e5c;
-                                            }""")
+                numMatMessageBox.setStyleSheet(STYLES["message_box"])
 
                 numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-CHP{newchpfile}")
 
@@ -348,32 +384,9 @@ class frontEnd:
             calendar.setGridVisible(True)
             calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
             calendar.setObjectName("numCalendarWidget")
-            calendarView.setStyleSheet("""
-                                    QAbstractItemView {
-                                      alternate-background-color: #484644;
-                                      color: #F0F0F0;
-                                      border: 1px solid #32414B;
-                                      border-radius: 4px;
-                                    }
-                                    QWidget {
-                                      background-color: #262626;
-                                      border: 0px solid #444444;
-                                      padding: 0px;
-                                      color: #FFFFFF;
-                                      selection-background-color: #444444;
-                                      selection-color: #FFFFFF;
-                                    }
-                                    QWidget::item:selected {
-                                      background-color: #1464A0;
-                                    }
-                                    QWidget::item:hover {
-                                      background-color: #148CD2;
-                                      color: #32414B;
-                                    }
-                                    QCalendarWidget {
-                                      border: 1px solid #32414B;
-                                      border-radius: 4px;
-                                    }""")
+
+            calendarView.setStyleSheet(STYLES["calendar"])
+
             calwe_format = QtGui.QTextCharFormat()
             calwe_format.setForeground(QtGui.QColor("#148CD2"))
             calendar.setWeekdayTextFormat(QtCore.Qt.Saturday, calwe_format)
@@ -394,25 +407,7 @@ class frontEnd:
         numActionGroup = QActionGroup(numMenu)
         numActionGroup.setExclusive(True)
 
-        numMenu.setStyleSheet("""QMenu {
-                              border: 0.5px solid #787878;
-                              color: #F0F0F0;
-                              margin: 0px;
-                            }
-                            QMenu::separator {
-                              height: 1px;
-                              background-color: #444444;
-                            }
-                            QMenu::item {
-                              background-color: #262626;
-                              padding: 4px 4px 4px 4px;
-                              /* Reserve space for selection border */
-                              border: 1px transparent #32414B;
-                            }
-                            QMenu::item:selected {
-                              color: #F0F0F0;
-                              background-color: #605e5c;
-                            }""")
+        numMenu.setStyleSheet(STYLES["menu"])
         
         chapterButton = numMenu.addMenu("Chapitre")
         for i in range(20):
@@ -479,25 +474,7 @@ class frontEnd:
         pathMenu.triggered.connect(isChecked)
         pathActionGroup = QActionGroup(pathMenu)
 
-        pathMenu.setStyleSheet("""QMenu {
-                              border: 0.5px solid #787878;
-                              color: #F0F0F0;
-                              margin: 0px;
-                            }
-                            QMenu::separator {
-                              height: 1px;
-                              background-color: #444444;
-                            }
-                            QMenu::item {
-                              background-color: #262626;
-                              padding: 4px 10px 4px 24px;
-                              /* Reserve space for selection border */
-                              border: 1px transparent #32414B;
-                            }
-                            QMenu::item:selected {
-                              color: #F0F0F0;
-                              background-color: #605e5c;
-                            }""")
+        pathMenu.setStyleSheet(STYLES["menu"])
 
         self.pathRanOnce = False
         self.ui.pathPathLabel.linkActivated.connect(QLActivated)
@@ -603,6 +580,7 @@ class frontEnd:
     
     def esperLimit(self, lineedit):
         lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
+
 
 class Document:
     def __init__(self, titre, soustitre, auteur, secondaire, matiere, numero, section, model, filepath):
@@ -717,33 +695,7 @@ class Document:
         docMessageBox.setIcon(QMessageBox.Information)
         docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
 
-        docMessageBox.setStyleSheet("""QWidget {
-                                      background-color: #262626;
-                                      border: 0px solid #32414B;
-                                      padding: 0px;
-                                      color: #FFFFFF;
-                                      selection-background-color: #1464A0;
-                                      selection-color: #FFFFFF;
-                                    }
-                                    QPushButton {
-                                      background-color: #484644;
-                                      border: 1px solid #605e5c;
-                                      color: #FFFFFF;
-                                      border-radius: 4px;
-                                      padding-left: 30px;
-                                      padding-right: 30px;
-                                      padding-top: 5px;
-                                      padding-bottom: 5px;
-                                      outline: none;
-                                    }
-                                    QPushButton:pressed {
-                                      background-color: #323130;
-                                    }
-                                    QPushButton:pressed:hover {
-                                      background-color: #323130;
-                                    }
-                                    QPushButton:hover {
-                                      background-color: #605e5c;}""")
+        docMessageBox.setStyleSheet(STYLES["menu"])
 
 
         docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
@@ -796,4 +748,4 @@ class Document:
 
 
 if __name__ == "__main__":
-    fe = frontEnd()
+    frontEnd()
