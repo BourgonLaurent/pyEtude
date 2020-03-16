@@ -19,12 +19,15 @@ try:
 except ImportError as e:
     # Crée le message d'erreur
     error_message = f"""[!] Impossible de continuer:\n\n\t{e.msg}\n\n
-[*] Avez-vous installé {e.name}? Essayez la commande suivante:
-\t\tpip install {e.name}"""
+[*] Avez-vous installé {e.name}?\nC'est un module nécessaire au fonctionnement de pyÉtude.\n\nEssayez la commande suivante:
+\t\tpip install {e.name}\n\nSinon référez-vous au README.md de la page GitHub."""
     # Essaie de montrer un message d'erreur à l'aide d'un GUI par défaut
     try:
-        from tkinter import messagebox
-        messagebox.showerror("Configuration requise non respectée", error_message)
+        from tkinter import Tk
+        from tkinter.messagebox import showerror
+
+        Tk().withdraw()
+        showerror("pyÉtude - Configuration requise non respectée", error_message)
     except ImportError: # Le module de GUI n'existe pas
         print(error_message)
     # Quitte le programme en indiquant l'erreur
