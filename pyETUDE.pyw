@@ -308,7 +308,7 @@ class frontEnd:
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
 
-        # Connection du bouton Générer à sa fonction
+        # Connection du bouton 'Générer' à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
     
     def getLineEditValue(self, lineedit):
@@ -333,8 +333,28 @@ class frontEnd:
             modelMessageBox.exec_()
             downloadData(self.model)
         
+        if os.path.isfile(self.filepaths[2]):
+            assert FileExistsError
+
+            numMatMessageBox = QMessageBox()
+            numMatMessageBox.setIcon(QMessageBox.Information)
+            numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichier Existant Trouvé")
+            numMatMessageBox.setStyleSheet(STYLES["message_box"])
+            numMatMessageBox.setText(f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}")
+            buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
+            buttonOpen.setText("Oui")
+            buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
+            buttonIgnore.setText("Non")
+            numMatMessageBox.exec_()
+
+            if numMatMessageBox.clickedButton().text() == "Non":
+                return ConnectionAbortedError
         Document(self.titre, self.soustitre, self.auteur, self.sec,
-        self.matiere, self.numero, self.section, self.model, self.filepaths[2])
+                            self.matiere, self.numero, self.section,
+                            self.model, self.filepaths[2])
+
+
+        
 
     def matGenTab(self):
         def isChecked(selection):
