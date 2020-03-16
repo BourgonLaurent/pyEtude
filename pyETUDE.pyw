@@ -240,7 +240,7 @@ class frontEnd:
 
             # Lit le document de configuration et assigne:
             # self.auteur, self.sec, self.matieres
-            self.readJSON(FILES["config"])
+            self.readJSON()
             # Asssigne les matières selon le fichier de configuration dans le tableau
             self.setMatieres(self.matieres)
 
@@ -276,22 +276,26 @@ class frontEnd:
             self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))
             self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))
     
-    def readJSON(self, config_file):
-        # Sauve le fichier de configuration
-        with open(config_file) as json_f:
+    def readJSON(self):
+        """## Lit le fichier de configuration .json et lui attribue les informations contenues"""
+        # Prends le dictionnaire du fichier de configuration
+        with open(FILES["config"]) as json_f:
             jsonData = json.load(json_f)
-        
+        # Attribue l'auteur et le secondaire
         self.auteur = jsonData["auteur"]
         self.sec = jsonData["secondaire"]
+        # Vérifie si des matières personnalisées exsitent
         if not jsonData["matieres"]:
             self.matieres = self.matieresDefault
         else:
             self.matieres = jsonData["matieres"]
 
     def genTab(self):
+        # Mise en place du menu pour les matières et le numéro
         self.matGenTab()
         self.numGenTab()
 
+        # Met le nom de l'auteur et du secondaire selon le fichier de configuration
         self.ui.auteurPersoLabel.setText(self.auteur)
         self.ui.secPersoLabel.setText(self.sec)
 
@@ -358,7 +362,6 @@ class frontEnd:
         matActionGroup = QActionGroup(matMenu)
         matActionGroup.setExclusive(True)
 
-
         matMenu.setStyleSheet(STYLES["menu"])
 
         for mat in sorted(self.matieres, key=locale.strxfrm):
@@ -373,45 +376,41 @@ class frontEnd:
         self.defaultFilePaths = self.filepaths
         self.defaultFilePathChanged()
 
-        self.showedMatDialog = False
         self.ui.matLineEdit.textChanged.connect(self.checkNumMat)
 
-    def checkNumMat(self):
-        if not self.showedMatDialog:
+    def checkNumMat(self, connection="", prefix="CHP"):
+        def findFiles(prefix):
             self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
             matpath = self.checkCustomMatNamePath()
-
-            chpfiles = []
+            matched_files = []
             for filename in [f for f in os.listdir(matpath) if os.path.isfile(os.path.join(matpath, f))]:  # Does not look in other folders
-                if filename.startswith(f"{self.matiere}-CHP") and filename.endswith(".docx"):
-                        chpfiles.append(filename)
+                if filename.startswith(f"{self.matiere}-{prefix}") and filename.endswith(".docx"):
+                        matched_files.append(filename)
+            return matched_files
+        
+        matched_files = findFiles(prefix)
+        if matched_files == [] and connection != "":
+            prefix = "MOD"
+            matched_files = findFiles(prefix)
+        
+        if matched_files:
+            new_suggested_file = int(max(matched_files).replace(f"{self.matiere}-{prefix}", "").replace(".docx", "")) + 1
             
-            if chpfiles:
-                newchpfile = int(max(chpfiles).replace(f"{self.matiere}-CHP", "").replace(".docx", "")) + 1
-                
-                numMatMessageBox = QMessageBox()
-                numMatMessageBox.setIcon(QMessageBox.Information)
-                numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
-
-                numMatMessageBox.setStyleSheet(STYLES["message_box"])
-
-                numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-CHP{newchpfile}")
-
-                buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
-                buttonOpen.setText("Oui")
-                buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
-                buttonIgnore.setText("Non")
-
-                numMatMessageBox.exec_()
-                if numMatMessageBox.clickedButton().text() == "Oui":
-                    self.ui.numLineEdit.setEnabled(False)
-                    self.ui.numLineEdit.setText(f"CHP{newchpfile}")
-                else:
-                    assert ConnectionRefusedError
-            
-            self.showedMatDialog = True
-        else:
-            self.showedMatDialog = False
+            numMatMessageBox = QMessageBox()
+            numMatMessageBox.setIcon(QMessageBox.Information)
+            numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
+            numMatMessageBox.setStyleSheet(STYLES["message_box"])
+            numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}")
+            buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
+            buttonOpen.setText("Oui")
+            buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
+            buttonIgnore.setText("Non")
+            numMatMessageBox.exec_()
+            if numMatMessageBox.clickedButton().text() == "Oui":
+                self.ui.numLineEdit.setEnabled(False)
+                self.ui.numLineEdit.setText(f"{prefix}{new_suggested_file}")
+            else:
+                assert ConnectionRefusedError
         
         self.defaultFilePathChanged()
     
@@ -432,9 +431,6 @@ class frontEnd:
         def isChecked(selection):
             if selection.text() == calendarAction.text():
                 calendarView()
-            elif selection.text() == autoNumAction.text():
-                self.showedMatDialog = False
-                self.checkNumMat()
             elif selection.text() == personalizeNumAction.text():
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
@@ -442,6 +438,7 @@ class frontEnd:
             else:
                 self.ui.numLineEdit.setEnabled(False)
                 self.ui.numLineEdit.setText(selection.text())
+                self.checkNumMat(None, selection.text()[:3])
         
         def calendarView():
             self.ui.numLineEdit.setEnabled(False)
@@ -480,8 +477,10 @@ class frontEnd:
         numMenu.setStyleSheet(STYLES["menu"])
         
         chapterButton = numMenu.addMenu("Chapitre")
-        for i in range(20):
-            chapterButton.addAction(numActionGroup.addAction(QAction(f"CHP{str(i)}", checkable=True)))
+        moduleButton = numMenu.addMenu("Module")
+        for short, button in {"CHP":chapterButton, "MOD":moduleButton}.items():
+            for i in range(20):
+                button.addAction(numActionGroup.addAction(QAction(f"{short}{str(i)}", checkable=True)))
         
         calendarAction = numActionGroup.addAction(QAction("Choisir une date", checkable=True))
         numMenu.addAction(calendarAction)
