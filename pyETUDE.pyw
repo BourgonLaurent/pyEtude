@@ -305,9 +305,10 @@ class frontEnd:
         for le in (self.ui.matLineEdit, self.ui.numLineEdit, self.ui.sectionLineEdit, self.ui.soustitreLineEdit, self.ui.titreLineEdit):
             self.esperLimit(le)
         
-        # Mise en place
+        # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
 
+        # Connection du bouton Générer à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
     
     def getLineEditValue(self, lineedit):
@@ -527,18 +528,13 @@ class frontEnd:
             self.updatePathLabel()
         
         def QLActivated():
-            if not self.pathRanOnce:
-                pathMenu.exec(self.ui.pathPathLabel.mapToGlobal(QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())))
-                self.pathRanOnce = True
-            else:
-                self.pathRanOnce = False
+            pathMenu.exec(self.ui.pathPathLabel.mapToGlobal(QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())))
         pathMenu = QMenu("pathMenu")
         pathMenu.triggered.connect(isChecked)
         pathActionGroup = QActionGroup(pathMenu)
 
         pathMenu.setStyleSheet(STYLES["menu"])
 
-        self.pathRanOnce = False
         self.ui.pathPathLabel.linkActivated.connect(QLActivated)
 
         openPathAction = pathActionGroup.addAction(QAction("Ouvrir le dossier sélectionné"))
