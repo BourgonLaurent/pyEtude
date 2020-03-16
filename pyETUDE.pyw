@@ -9,22 +9,48 @@
 ██║        ██║   MIT © Laurent Bourgon 2020
 ╚═╝        ╚═╝   
 """
+# Imports
+## Default packages
 import json, locale, os, sys, zipfile, urllib.request, urllib.error
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import *
+## External packages
+try:
+    from PyQt5 import QtCore, QtGui, QtWidgets, uic
+    from PyQt5.QtWidgets import *
+except ImportError as e:
+    # Crée le message d'erreur
+    error_message = f"""[!] Impossible de continuer:\n\n\t{e.msg}\n\n
+[*] Avez-vous installé {e.name}? Essayez la commande suivante:
+\t\tpip install {e.name}"""
+    # Essaie de montrer un message d'erreur à l'aide d'un GUI par défaut
+    try:
+        from tkinter import messagebox
+        messagebox.showerror("Configuration requise non respectée", error_message)
+    except ImportError: # Le module de GUI n'existe pas
+        print(error_message)
+    # Quitte le programme en indiquant l'erreur
+    sys.exit(e)
 
-os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))  # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
+# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
+os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
 
+# Essaie d'aller dans une langue UTF-8
 try:
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 except:
     assert EnvironmentError
     locale.setlocale(locale.LC_ALL, (None, None))
 
-
+# Paramètres généraux
+## Information de la version actuelle
 VERSION = r'2.4.0~b1'
 DEBUG = True
-
+## Nom de fichiers importants
+FILES = {
+    "debug":"pyEtude.ui", # (ext: *.ui) Nom du fichier QtDesigner
+    "pyuic5":"pyet_ui.py", # (ext: *.py) Nom du fichier .py généré avec pyuic5
+    "config":"pyEtude.json" # (ext: *.json) Nom du fichier .json généré avec le configurateur
+}
+## Assets
 GITHUB_LINK = r'https://raw.githubusercontent.com/BourgonLaurent/pyEtude'
 STYLES = {
     "menu":"""QMenu {
@@ -102,64 +128,96 @@ STYLES = {
     "line_edit":"""QLineEdit {
                         border-top-right-radius: 0px;
                         border-bottom-right-radius: 0px;
-                    }"""
-}
+                    }"""}
+def downloadData(name, create=True):
+    """## Télécharge un fichier du répertoire GitHub raw
+    
+    ### Arguments:\n
+        \tname {str} -- Nom du fichier à prendre
+    ### Keyword Arguments:\n
+        \tcreate {bool} -- Crée un fichier (default: {True})
+    
+    ### Returns:\n
+        \t[str] -- (si create=False): données décodées qui ont été prises
+    """
+    if create:
+        try:
+            urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/{name}", name)
+        except urllib.error.HTTPError:
+            urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/{name}", name)
+    else:
+        try:
+            with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/{name}") as ur:
+                return ur.read().decode()
+        except urllib.error.HTTPError:
+            with urllib.request.urlopen(fr"{GITHUB_LINK}/master/{name}") as ur:
+                return ur.read().decode()
+
 class frontEnd:
+    """## GUI de l'application, s'occupe de montrer à l'utilisateur les options possibles
+
+    ### Méthodes:\n
+        \t__init__ -- Prépare l'environnement de travail selon le mode DEBUG
+        \texecuteGUI -- Génère et lance le GUI
+    """
     def __init__(self):
+        """## Prépare l'environnement de travail selon le mode DEBUG"""
+        # Crée une application vide
+        self.app = QApplication([])
+        # Change les opérations selon le mode DEBUG
         if DEBUG:
-            if not os.path.isfile("pyEtude.ui"):
-                self.downloadData("pyEtude.ui")
-            self.Ui, self.Window = uic.loadUiType("pyEtude.ui")
-            self.app = QApplication([])
+            # Vérifie que le fichier a le format approprié
+            if not FILES["debug"].endswith(".ui"):
+                raise FileNotFoundError
+            # Vérifie si le fichier existe sinon le télécharge en ligne
+            if not os.path.isfile(FILES["debug"]):
+                downloadData(FILES["debug"])
+            
+            # Sauvegarde les paramètres du fichier FILES["debug"]
+            self.Ui, self.Window = uic.loadUiType(FILES["debug"])
+            
+            # Crée des instances de la fenêtre générée avec le fichier FILES["debug"]
             self.window = self.Window()
             self.ui = self.Ui()
         else:
-            if not os.path.isfile("pyet_ui.py"):
-                self.downloadData("pyet_ui.py")
+            # Vérifie que le fichier a le format approprié
+            if not FILES["debug"].endswith(".py"):
+                raise FileNotFoundError
+            # Vérifie si le fichier existe sinon le télécharge en ligne
+            if not os.path.isfile(FILES["pyuic5"]):
+                downloadData(FILES["pyuic5"])
+            
+            # Importe les paramètres du fichier FILES["pyuic5"]
             import pyet_ui
-            self.app = QApplication([])
+
+             # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
             self.window = QtWidgets.QMainWindow()
             self.ui = pyet_ui.Ui_MainWindow()
-            
-        self.ui.setupUi(self.window)
-        self.app.setStyle("Fusion")
-
-        self.firstLaunch()
         
-        if self.configDone:
-            self.genTab()
+        # Associe le design à l'interface graphique
+        self.ui.setupUi(self.window)
+        # Spécifie l'apparence générale universelle de l'interface
+        self.app.setStyle("Fusion")
+        
+    def executeGUI(self):
+        """## Génère et lance le GUI"""
+        # Vérifie si c'est la première fois que le programme est exécuté
+        self.firstLaunch()
+
+        # Mise en place de l'onglet de configuration
         self.configTab()
+        # Mise en place de l'onglet d'information
         self.aboutTab()
 
+        # Assigne le nom de la fenêtre
         self.window.setWindowTitle("pyÉtude - v" + VERSION)
+        # Affiche la fenêtre
         self.window.show()
+        # Lance le fonctionnement en arrière-plan de l'application
         self.app.exec_()
-    
-    def downloadData(self, name, create=True):
-        """## Télécharge un fichier du répertoire GitHub raw
-        
-        ### Arguments:\n
-            \tname {str} -- Nom du fichier à prendre
-        ### Keyword Arguments:\n
-            \tcreate {bool} -- Crée un fichier (default: {True})
-        
-        ### Returns:\n
-            \t[str] -- (Seulement si create=False): données décodées qui ont été prises
-        """
-        if create:
-            try:
-                urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/{name}", name)
-            except urllib.error.HTTPError:
-                urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/{name}", name)
-        else:
-            try:
-                with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/{name}") as ur:
-                    return ur.read().decode()
-            except urllib.error.HTTPError:
-                with urllib.request.urlopen(fr"{GITHUB_LINK}/master/{name}") as ur:
-                    return ur.read().decode()
 
     def firstLaunch(self):
+        # Crée les matières par défaut
         self.matieresDefault = {
             "Anglais": ["ANG", ""],
             "Arts": ["ART", ""],
@@ -172,19 +230,25 @@ class frontEnd:
             "Monde Contemporain": ["MDC", ""],
             "Physique": ["PHY", ""]
             }
-        if os.path.isfile("./pyEtude.json"):
-            self.configDone = True
-            # Donne accès au générateur
+        # Vérifie si la configuration a déjà été faite
+        if os.path.isfile(os.path.join("./", FILES["config"])):
+            # Active l'onglet du générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
             self.ui.tabWidget.setCurrentIndex(0)
             self.ui.matieresConfig.setChecked(True)
 
-            self.readJSON()
+            # Lit le document de configuration et assigne:
+            # self.auteur, self.sec, self.matieres
+            self.readJSON(FILES["config"])
+            # Asssigne les matières selon le fichier de configuration dans le tableau
+            self.setMatieres(self.matieres)
 
+            # Met le nom de l'auteur et du secondaire selon le fichier de configuration
             self.ui.auteurLineEdit.setText(self.auteur)
             self.ui.secLineEdit.setText(self.sec)
-
+        
+            # Configuration terminée, met en place l'onglet de génération
             self.genTab()
         else:
             assert FileNotFoundError
@@ -193,30 +257,36 @@ class frontEnd:
             self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
             self.ui.tabWidget.setCurrentIndex(1)
             
+            # Assigne les matières par défaut dans le tableau
             self.setMatieres(self.matieresDefault)
-            self.configDone = False
 
-    def setMatieres(self, datadict):
-        for i in range(0,self.ui.matiereTableWidget.rowCount()+1):  # Enlève les vieilles données
+    def setMatieres(self, datadict:dict):
+        """## Insère le dictionnaire donné dans le tableau self.ui.matiereTableWidget
+        
+        ### Arguments:\n
+            \tdatadict {dict} -- Dictionnaire des matières
+        """
+        # Supprime toutes les anciennes rangées
+        for i in range(0,self.ui.matiereTableWidget.rowCount()+1):  
             self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
-        for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):  # met les données du dictionnaire
+        # Insère les données du dictionnaire dans le tableau
+        for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):  
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
             self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))
             self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))
             self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))
     
-    def readJSON(self):
-        with open("pyEtude.json") as json_f:
+    def readJSON(self, config_file):
+        # Sauve le fichier de configuration
+        with open(config_file) as json_f:
             jsonData = json.load(json_f)
         
         self.auteur = jsonData["auteur"]
         self.sec = jsonData["secondaire"]
         if not jsonData["matieres"]:
             self.matieres = self.matieresDefault
-            self.setMatieres(self.matieresDefault)
         else:
             self.matieres = jsonData["matieres"]
-            self.setMatieres(self.matieres)
 
     def genTab(self):
         self.matGenTab()
@@ -260,7 +330,7 @@ class frontEnd:
                 modelMessageBox.addButton(QMessageBox.Ok)
                 modelMessageBox.exec_()
 
-                self.downloadData(self.model)
+                downloadData(self.model)
             
             Document(self.titre, self.soustitre, self.auteur, self.sec,
             self.matiere, self.numero, self.section, self.model, self.filepaths[2])
@@ -535,7 +605,7 @@ class frontEnd:
                 for key, value in self.matieres.items():
                     json_data["matieres"][key] = value
             
-            with open("pyEtude.json", "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
+            with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
                 json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
 
         # Empêche l'utilisation des esperluètes "&"
@@ -748,4 +818,5 @@ class Document:
 
 
 if __name__ == "__main__":
-    frontEnd()
+    fe = frontEnd()
+    fe.executeGUI()
