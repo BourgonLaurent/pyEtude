@@ -298,16 +298,16 @@ class frontEnd:
         # Met le nom de l'auteur et du secondaire selon le fichier de configuration
         self.ui.auteurPersoLabel.setText(self.auteur)
         self.ui.secPersoLabel.setText(self.sec)
-
+        # Applique le style à l'entrée de texte
         for le in (self.ui.matLineEdit, self.ui.numLineEdit):
             le.setStyleSheet(STYLES["line_edit"])
-
+        # Empêche l'utilisation de l'esperluète '&' dans les entrées de texte
         for le in (self.ui.matLineEdit, self.ui.numLineEdit, self.ui.sectionLineEdit, self.ui.soustitreLineEdit, self.ui.titreLineEdit):
             self.esperLimit(le)
         
+        # Mise en place
         self.pathGenTab()
 
-        self.createdOnce = False
         self.ui.genPushButton.pressed.connect(self.createDocument)
     
     def getLineEditValue(self, lineedit):
@@ -318,29 +318,22 @@ class frontEnd:
         return value
 
     def createDocument(self):
-        if not self.createdOnce:
-            self.titre = self.getLineEditValue(self.ui.titreLineEdit)
-            self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
-            self.section = self.getLineEditValue(self.ui.sectionLineEdit)
-            
-            self.model = "model.docx"
-
-            if not os.path.isfile(self.model):
-                modelMessageBox = QMessageBox()
-                modelMessageBox.setIcon(QMessageBox.Information)
-                modelMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Modèle")
-
-                modelMessageBox.setText(f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
-                modelMessageBox.addButton(QMessageBox.Ok)
-                modelMessageBox.exec_()
-
-                downloadData(self.model)
-            
-            Document(self.titre, self.soustitre, self.auteur, self.sec,
-            self.matiere, self.numero, self.section, self.model, self.filepaths[2])
-            self.createdOnce = True
-        else:
-            self.createdOnce = False
+        self.titre = self.getLineEditValue(self.ui.titreLineEdit)
+        self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
+        self.section = self.getLineEditValue(self.ui.sectionLineEdit)
+        
+        self.model = "model.docx"
+        if not os.path.isfile(self.model):
+            modelMessageBox = QMessageBox()
+            modelMessageBox.setIcon(QMessageBox.Information)
+            modelMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Modèle")
+            modelMessageBox.setText(f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
+            modelMessageBox.addButton(QMessageBox.Ok)
+            modelMessageBox.exec_()
+            downloadData(self.model)
+        
+        Document(self.titre, self.soustitre, self.auteur, self.sec,
+        self.matiere, self.numero, self.section, self.model, self.filepaths[2])
 
     def matGenTab(self):
         def isChecked(selection):
@@ -764,7 +757,7 @@ class Document:
         docMessageBox.setIcon(QMessageBox.Information)
         docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
 
-        docMessageBox.setStyleSheet(STYLES["menu"])
+        docMessageBox.setStyleSheet(STYLES["message_box"])
 
 
         docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
