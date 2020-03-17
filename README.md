@@ -8,7 +8,7 @@
     ██╔═══╝   ╚██╔╝  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝
     ██║        ██║   MIT © Laurent Bourgon 2020
     ╚═╝        ╚═╝   
-    Ce document est relatif à la version v2.3.2
+    Ce document est relatif à la version v2.4.0
 ---
 <div align="center">
 
@@ -33,6 +33,7 @@ Programme `Python3` qui permet de créer un document `Microsoft Word` pré-confi
 - [Utilisation](#utilisation)
 - [Captures d'écran](#screenshots)
   - [pyÉtude](#pyEtude)
+  - [pyÉtude-notebook](#notebook)
   - [Résultats](#resultats)
   - [Exemple Réel](#exemple_reel)
 - [Foire Aux Questions](#faq)
@@ -41,29 +42,30 @@ Programme `Python3` qui permet de créer un document `Microsoft Word` pré-confi
 - [Licence](#licence)
 <!--- [Reconnaissances](#recon) -->
 
-## 🧐 Problème encontré <a name = "probleme"></a>
+## 🧐 Problème encontré<a name="probleme"></a>
 
 La création d'un document de révision est un outil majeur à l'apprentissage de nouveaux concepts, que ce soit au profil académique ou pour un loisir. Dans un monde idéal, nous n'aurions qu'à taper les informations et cela nous aiderait à les mémoriser. Cependant, les outils de traitement de texte ne permettent pas une telle facilité. Afin d'avoir un document potable pour l'étudier, il faut un modèle précis qui permet l'organisation de sujets peu importe leur champ. La création d'un tel document prend beaucoup de temps et, malheureusement, `Microsoft Word` ne permet aucun moyen efficace pour réutiliser ce modèle (les fichiers modèles `.dotx` ont beaucoup de problèmes). Ce problème réduit le temps qui peut être utilisé au remplissage du document.
 
 Pour régler ce problème, j'ai commencé un projet qui permet de remplir un document modèle en quelques secondes et ce, sans problème de formattage.
 
-## 💡 Solution <a name = "solution"></a>
+## 💡 Solution<a name="solution"></a>
 
 Afin de remplir ce document facilement, le programme va faire ceci:
 
 1. Extraire le fichier modèle dans un dossier temporaire
 2. Remplacer les informations par ce qui a été demandé au niveau du GUI
     - Le programme remplacera des valeurs dans les fichiers `.xml` du document `Word`.
-3. Zipper et compresser le dossier temporaire et le supprimer
-4. Renommer l'extension du fichier créé pour qu'il soit reconnu par `Microsoft Word`
+3. Zipper et compresser le dossier temporaire de manière à ce que les normes et spécifications de `Microsoft Word` soient respectées (indispensable au bon fonctionnement du document dans l'avenir)
+4. Détruire le dossier temporaire
+5. Renommer l'extension du fichier créé pour qu'il soit reconnu par `Microsoft Word`
 
-## ⛓️ Ce qu'il faut et les limites du projet <a name = "limites"></a>
+## ⛓️ Ce qu'il faut et les limites du projet<a name="limites"></a>
 
 - Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). À cause de l'ajout d'un GUI, `pyÉtude` ne fonctionne que sous Windows, macOS et Linux (pour l'instant). Pour les autres périphériques, veuillez utiliser la version (obsolète) qui est en ligne de commande (`pyETUDE_cli.py`)
 - Ce projet utilise un document `Word` manuellement configuré et le modifie à l'intérieur. Pour avoir un modèle différent, il faut modifier ce document avec les bonnes balises.
 - Ce projet n'utilise pas le module `python-docx` puisqu'il était trop compliqué d'avoir un résultat correct et sans problème. De plus, cela enlève un élément à télécharger.
 
-## 🚀 Avenir <a name = "avenir"></a>
+## 🚀 Avenir<a name="avenir"></a>
 
 - [x] Transformer ce programme en GUI pour une utilisation plus facile et rapide
 - [x] Fonctionner sous `Word on iOS/iPadOS` et `LibreOffice` (logiciels qui ne prennent pas en charge les métadonnées)
@@ -71,16 +73,16 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Télécharger le modèle à distance afin de ne faire qu'un seul fichier à télécharger manuellement
 - [x] Mode sombre (pour le bien des yeux!)
 - [x] Matières Intelligentes qui savent quel document créé selon ceux qui ont déjà été créés
+- [x] Transformer ce programme en interface web pour faciliter la tâche (depuis la version `2.4.0`, il existe une version en `Jupyter Notebook`)
 - [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
 - [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [ ] Avoir un configurateur de modèles afin de créer un modèle personnalisé
 - [ ] Avoir plusieurs modèles qui peuvent être choisis.
-- [ ] Transformer ce programme en interface web pour faciliter la tâche
-- [ ] Transformer ce programme en application mobile pour faciliter l'utilisation sur tablettes
+- [ ] Transformer ce programme en application mobile pour faciliter l'utilisation sur tablette
 
-## 🏁 Bien Démarrer <a name = "démarrer"></a>
+## 🏁 Bien Démarrer<a name="démarrer"></a>
 
-### Configuration requise <a name = "configuration"></a>
+### Configuration requise<a name="configuration"></a>
 
 | Catégorie          | Valeur           | Notes additionnelles                                                                            | Installation                                               |
 |--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
@@ -94,7 +96,9 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 |                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
 |                    | `PyQt5`          | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**    | Télécharger avec PyPi `pip install PyQt5` (ou `pip3 install PyQt5`, selon votre environnement)|
 
-### Installation <a name = "installation"></a>
+* Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`pip install notebook ipywidgets`)
+
+### Installation<a name="installation"></a>
 
 1. Assurez-vous que vous respectez la [Configuration requise](#configuration).
 2. Télécharger la version la plus récente de `pyEtude-vX.X.X.pyw` dans les [releases](https://github.com/BourgonLaurent/pyEtude/releases).
@@ -104,23 +108,23 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 Avec le terminal:
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
-$ python pyEtude.pyw
+$ python3 pyEtude.pyw
 ```
 
-## 🎈 Utilisation <a name = "utilisation"></a>
+## 🎈 Utilisation<a name="utilisation"></a>
 
 Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
-$ python pyEtude.pyw
+$ python3 pyEtude.pyw
 ```
 
-- Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
+* Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
 
-## 🖼 Captures d'écran<a name = "screenshots"></a>
+## 🖼 Captures d'écran<a name="screenshots"></a>
 
-### pyÉtude<a name = "pyEtude"></a>
+### pyÉtude<a name="pyEtude"></a>
 
 - Configurateur (premier lancement):
 
@@ -138,7 +142,15 @@ $ python pyEtude.pyw
 
 </div>
 
-### Exemple fictif <a name = "resultats"></a>
+### pyÉtude-notebook<a name="notebook"></a>
+
+<div align="center">
+
+[![Configurateur](assets_readme/notebook.gif)](/assets_readme/notebook.gif)
+
+</div>
+
+### Exemple fictif<a name = "resultats"></a>
 
 | Réglage       | Valeur                   |
 |---------------|--------------------------|
@@ -157,7 +169,7 @@ $ python pyEtude.pyw
   <a href="assets_readme/document.png"><img src="assets_readme/document.png" width="256"></a>
 </p>
 
-### Exemple réel <a name = "exemple_reel"></a>
+### Exemple réel<a name="exemple_reel"></a>
 
 | Réglage       | Valeur                                  |
 |---------------|-----------------------------------------|
@@ -177,7 +189,7 @@ $ python pyEtude.pyw
   <a href="assets_readme/e_doc_2.png"><img src="assets_readme/e_doc_2.png" width="256"></a>
 </p>
 
-## ⁉️ Foire Aux Questions <a name = "faq"></a>
+## ⁉️ Foire Aux Questions<a name="faq"></a>
 
 - `OSError: [WinError 123] La syntaxe du nom de fichier, de répertoire ou de volume est incorrecte`:
     Le nom de matière et le numéro/chapitre ne peuvent pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
@@ -194,15 +206,15 @@ $ python pyEtude.pyw
     Ceci est dû au fait que l'ordinateur pense que `é`, `à`, ... sont des lettres complètement différentes de `e` et `a`: pour résoudre cela, j'utilise un dictionnaire créé par le système d'exploitation au lancement du logiciel. Cependant, quelques systèmes d'exploitation n'ont pas cette fonctionnalité (ex `macOS`). Si vous souhaitez vraiment cette fonctionnalité, veuillez faire un [ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues).
 
 - J'ai l'erreur suivante:
-```python
-    Traceback (most recent call last):
-      File "./pyETUDE.pyw", line 13, in <module>
-      from PyQt5 import QtCore, QtGui, QtWidgets, uic
-    ModuleNotFoundError: No module named 'PyQt5'
-```
 
-Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propre à chaque version.
-&nbsp;
+<div align="center">
+
+[![Erreur PyQt5](assets_readme/pyqt5_error.png)](/assets_readme/pyqt5_error.png)
+
+</div>
+
+Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propres à chaque version.
+
 - Comment puis-je utiliser mon propre modèle? [Voir la documentation](../../wiki/Comment-créer-son-propre-modèle%3F)
 - Comment puis-je personaliser mes matières? [Voir la documentation](../../wiki/Comment-créer-ses-propres-matières%3F)
 - Comment puis-je modifier le chemin par défaut selon la matière choisie? [Voir la documenation](../../wiki/Comment-mettre-des-emplacements-par-défaut-selon-les-matières%3F)
@@ -214,7 +226,7 @@ Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration r
 - Puis-je ajouter moi-même les fonctionnalités/résolution de problèmes?:
     Veuillez faire un `fork` de ce projet, faire les modifications et faire [une demande de fusion](https://github.com/BourgonLaurent/pyEtude/pulls)
 
-## ⛏️ Créé avec <a name = "créé"></a>
+## ⛏️ Créé avec<a name="créé"></a>
 
 - [Visual Studio Code](https://code.visualstudio.com/) pour écrire, modifier et effectuer le déboggage du programme
 - [λ cmder Console Emulator](https://cmder.net/) pour le développement et pour l'invite de commande
@@ -224,13 +236,13 @@ Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration r
 - [Microsoft Word 365](https://products.office.com/fr-ca/word) pour créer le modèle utilisé
 - [GitHub](https://github.com/) pour organiser, publier et sauvegarder ce projet
 
-## ✍️ Contributeurs <a name = "contrib"></a>
+## ✍️ Contributeurs<a name="contrib"></a>
 
-- [@BourgonLaurent](https://github.com/BourgonLaurent) - Idée & Conception du programme en entier
+- [@BourgonLaurent](https://github.com/BourgonLaurent) - Idée & Conception du programme
 
-<!--- ## 🎉 Reconnaissances <a name = "recon"></a> -->
+<!--- ## 🎉 Reconnaissances<a name="recon"></a> -->
 
-## 🔏 Licence <a name = "licence"></a>
+## 🔏 Licence<a name="licence"></a>
 
 Ce projet est sous [licence MIT](https://opensource.org/licenses/MIT).
 

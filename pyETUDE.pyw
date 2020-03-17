@@ -45,7 +45,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r'2.4.0~b5'
+VERSION = r'2.4.0'
 DEBUG = True
 ## Nom de fichiers importants
 FILES = {
