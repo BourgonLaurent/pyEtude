@@ -242,14 +242,14 @@ class frontEnd:
             self.ui.matieresConfig.setChecked(True)
 
             # Lit le document de configuration et assigne:
-            # self.auteur, self.sec, self.matieres
+            # self.auteur, self.niveau, self.matieres
             self.readJSON()
             # Asssigne les matières selon le fichier de configuration dans le tableau
             self.setMatieres(self.matieres)
 
-            # Met le nom de l'auteur et du secondaire selon le fichier de configuration
+            # Met le nom de l'auteur et du niveau selon le fichier de configuration
             self.ui.auteurLineEdit.setText(self.auteur)
-            self.ui.secLineEdit.setText(self.sec)
+            self.ui.niveauLineEdit.setText(self.niveau)
         
             # Configuration terminée, met en place l'onglet de génération
             self.genTab()
@@ -284,9 +284,9 @@ class frontEnd:
         # Prends le dictionnaire du fichier de configuration
         with open(FILES["config"]) as json_f:
             jsonData = json.load(json_f)
-        # Attribue l'auteur et le secondaire
+        # Attribue l'auteur et le niveau
         self.auteur = jsonData["auteur"]
-        self.sec = jsonData["secondaire"]
+        self.niveau = jsonData["niveau"]
         # Vérifie si des matières personnalisées exsitent
         if not jsonData["matieres"]:
             self.matieres = self.matieresDefault
@@ -298,9 +298,9 @@ class frontEnd:
         self.matGenTab()
         self.numGenTab()
 
-        # Met le nom de l'auteur et du secondaire selon le fichier de configuration
+        # Met le nom de l'auteur et du niveau selon le fichier de configuration
         self.ui.auteurPersoLabel.setText(self.auteur)
-        self.ui.secPersoLabel.setText(self.sec)
+        self.ui.niveauPersoLabel.setText(self.niveau)
         # Applique le style à l'entrée de texte
         for le in (self.ui.matLineEdit, self.ui.numLineEdit):
             le.setStyleSheet(STYLES["line_edit"])
@@ -352,7 +352,7 @@ class frontEnd:
 
             if numMatMessageBox.clickedButton().text() == "Non":
                 return ConnectionAbortedError
-        Document(self.titre, self.soustitre, self.auteur, self.sec,
+        Document(self.titre, self.soustitre, self.auteur, self.niveau,
                             self.matiere, self.numero, self.section,
                             self.model, self.filepaths[2])
 
@@ -585,10 +585,10 @@ class frontEnd:
             else:
                 self.auteur = self.ui.auteurLineEdit.placeholderText().replace("&","")
             
-            if self.ui.secLineEdit.text() != "":
-                self.sec = self.ui.secLineEdit.text().replace("&","")
+            if self.ui.niveauLineEdit.text() != "":
+                self.niveau = self.ui.niveauLineEdit.text().replace("&","")
             else:
-                self.sec = self.ui.secLineEdit.placeholderText().replace("&","")
+                self.niveau = self.ui.niveauLineEdit.placeholderText().replace("&","")
             
             self.matieres = {}
 
@@ -609,7 +609,7 @@ class frontEnd:
         def writeJSON():
             json_data = dict()
             json_data["auteur"] = self.auteur
-            json_data["secondaire"] = self.sec
+            json_data["niveau"] = self.niveau
             json_data["matieres"] = dict()
 
             if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
@@ -621,7 +621,7 @@ class frontEnd:
 
         # Empêche l'utilisation des esperluètes "&"
         self.esperLimit(self.ui.auteurLineEdit)
-        self.esperLimit(self.ui.secLineEdit)
+        self.esperLimit(self.ui.niveauLineEdit)
 
         self.ui.configSaveButton.clicked.connect(saveVariable)
 
@@ -664,11 +664,11 @@ class frontEnd:
 
 
 class Document:
-    def __init__(self, titre, soustitre, auteur, secondaire, matiere, numero, section, model, filepath):
+    def __init__(self, titre, soustitre, auteur, niveau, matiere, numero, section, model, filepath):
         self.titre = titre
         self.soustitre = soustitre
         self.auteur = auteur
-        self.secondaire = secondaire
+        self.niveau = niveau
         self.matiere = matiere
         self.numero = numero
         self.section = section
@@ -679,7 +679,7 @@ class Document:
                     "pyETUDE_SousTitre": soustitre,
                     "pyETUDE_Matiere": matiere,
                     "pyETUDE_Auteur": auteur,
-                    "pyETUDE_Sec": secondaire,
+                    "pyETUDE_Niv": niveau,
                     "pyETUDE_Num": numero}
         self.sections = {"sectionpy": section}
 

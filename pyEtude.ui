@@ -2275,7 +2275,7 @@ PlotWidget {
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="secPersoGroupBox">
+      <widget class="QGroupBox" name="niveauPersoGroupBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2287,7 +2287,7 @@ PlotWidget {
        <property name="title">
         <string>Niveau</string>
        </property>
-       <widget class="QLabel" name="secPersoLabel">
+       <widget class="QLabel" name="niveauPersoLabel">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2432,7 +2432,7 @@ PlotWidget {
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="secConfig">
+      <widget class="QGroupBox" name="niveauConfig">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2444,7 +2444,7 @@ PlotWidget {
        <property name="title">
         <string>Niveau</string>
        </property>
-       <widget class="QLineEdit" name="secLineEdit">
+       <widget class="QLineEdit" name="niveauLineEdit">
         <property name="geometry">
          <rect>
           <x>10</x>
