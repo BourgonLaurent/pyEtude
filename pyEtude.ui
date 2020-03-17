@@ -2067,7 +2067,7 @@ PlotWidget {
          <set>Qt::AlignCenter</set>
         </property>
         <property name="placeholderText">
-         <string>0920</string>
+         <string>0624</string>
         </property>
         <property name="clearButtonEnabled">
          <bool>false</bool>

@@ -2206,7 +2206,7 @@ class Ui_MainWindow(object):
         self.matGroupBox.setTitle(_translate("MainWindow", "Matière"))
         self.matLineEdit.setPlaceholderText(_translate("MainWindow", "PHY"))
         self.numGroupBox.setTitle(_translate("MainWindow", "Numéro"))
-        self.numLineEdit.setPlaceholderText(_translate("MainWindow", "0920"))
+        self.numLineEdit.setPlaceholderText(_translate("MainWindow", "0624"))
         self.sectionGroupBox.setTitle(_translate("MainWindow", "Première Section"))
         self.sectionNumLabel.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; text-decoration: underline;\">1.</span></p></body></html>"))
         self.sectionLineEdit.setPlaceholderText(_translate("MainWindow", "La Loi de l\'Inertie"))

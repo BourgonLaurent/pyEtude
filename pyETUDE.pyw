@@ -389,7 +389,7 @@ class frontEnd:
         matMenu.addAction(personalizeMatAction)
 
         self.customMatName = False
-        self.filepaths = [".", "PHY-0920.docx", os.path.join(".","PHY-0920.docx")]
+        self.filepaths = [".", "PHY-0624.docx", os.path.join(".","PHY-0624.docx")]
         self.defaultFilePaths = self.filepaths
         self.defaultFilePathChanged()
 
@@ -444,7 +444,7 @@ class frontEnd:
 
 
     def numGenTab(self):
-        self.numero = "0920"
+        self.numero = "0624"
         def isChecked(selection):
             if selection.text() == calendarAction.text():
                 calendarView()
