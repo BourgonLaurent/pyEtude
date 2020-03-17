@@ -355,8 +355,6 @@ class frontEnd:
         Document(self.titre, self.soustitre, self.auteur, self.niveau,
                             self.matiere, self.numero, self.section,
                             self.model, self.filepaths[2])
-
-
         
 
     def matGenTab(self):

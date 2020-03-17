@@ -148,7 +148,7 @@ $ python pyEtude.pyw
 | Numéro        | 1607                     |
 | Premier titre | La Première Loi          |
 | Auteur        | Laurent Bourgon          |
-| Secondaire    | Secondaire 5 - 2019-2020 |
+| Niveau        | Secondaire 5 - 2019-2020 |
 | Nom du fichier| `PHY-1607.docx`          |
 
 <p align="center">
@@ -167,7 +167,7 @@ $ python pyEtude.pyw
 | Numéro        | CHP1                                    |
 | Premier titre | La nature de la structure de la matière |
 | Auteur        | Laurent Bourgon                         |
-| Secondaire    | Secondaire 4 - 2018-2019                |
+| Niveau        | Secondaire 4 - 2018-2019                |
 | Nom du fichier| `STE-CHP1.docx`                         |
 
 <p align="center">
@@ -237,7 +237,7 @@ Ce projet est sous [licence MIT](https://opensource.org/licenses/MIT).
 Cet extrait provient de [LICENSE](LICENSE):
 > MIT License
 >
-> Copyright © 2019 Laurent Bourgon
+> Copyright © 2020 Laurent Bourgon
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 >
