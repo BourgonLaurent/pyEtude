@@ -103,13 +103,13 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Vscode
-.vscode/*
+# VSCode
+.vscode/
 
 # Project related, general
-DEBUG/*
-releases/*
-tmp/*
+DEBUG/
+releases/
+tmp/
 
 # Project related
 pyEtude.json
