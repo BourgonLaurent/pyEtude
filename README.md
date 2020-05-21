@@ -1,3 +1,11 @@
+<div align="center">
+
+  [![DEV](dev_article/assets/cover-alt.png)](https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea)
+
+</div>
+
+---
+
                      ███████╗████████╗██╗   ██╗██████╗ ███████╗
                      ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝
     ██████╗ ██╗   ██╗█████╗     ██║   ██║   ██║██║  ██║█████╗  
@@ -7,20 +15,12 @@
     ██║        ██║   MIT © Laurent Bourgon 2020
     ╚═╝        ╚═╝   
     Ce document est relatif à la version v2.4.0
----
+
 <div align="center">
 
   [![Releases](https://img.shields.io/github/release/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/releases) [![Languages](https://img.shields.io/github/languages/top/BourgonLaurent/pyEtude)](https://www.python.org/) [![License](https://img.shields.io/github/license/BourgonLaurent/pyEtude)](LICENSE)
 
   [![GitHub Issues](https://img.shields.io/github/issues-raw/BourgonLaurent/pyEtude)](https://img.shields.io/github/issues/BourgonLaurent/pyEtude/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr-raw/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/pulls)
-
-</div>
-
----
-
-<div align="center">
-
-  [![DEV](dev_article/assets/cover-alt.png)](https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea)
 
 </div>
 
