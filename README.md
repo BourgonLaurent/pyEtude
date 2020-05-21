@@ -1,5 +1,3 @@
-# pyÉtude
-
                      ███████╗████████╗██╗   ██╗██████╗ ███████╗
                      ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝
     ██████╗ ██╗   ██╗█████╗     ██║   ██║   ██║██║  ██║█████╗  
@@ -14,9 +12,17 @@
 
   [![Releases](https://img.shields.io/github/release/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/releases) [![Languages](https://img.shields.io/github/languages/top/BourgonLaurent/pyEtude)](https://www.python.org/) [![License](https://img.shields.io/github/license/BourgonLaurent/pyEtude)](LICENSE)
 
-   [![GitHub Issues](https://img.shields.io/github/issues-raw/BourgonLaurent/pyEtude)](https://img.shields.io/github/issues/BourgonLaurent/pyEtude/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr-raw/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/pulls)
+  [![GitHub Issues](https://img.shields.io/github/issues-raw/BourgonLaurent/pyEtude)](https://img.shields.io/github/issues/BourgonLaurent/pyEtude/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr-raw/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/pulls)
 
-Programme `Python3` qui permet de créer un document `Microsoft Word` pré-configuré afin de réaliser un Document de Révision.
+  <a href="https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea">
+     <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="45px">
+      <path  fill="#000000" d="M120.12 208.29c-3.88-2.9-7.77-4.35-11.65-4.35H91.03v104.47h17.45c3.88 0 7.77-1.45 11.65-4.35 3.88-2.9 5.82-7.25 5.82-13.06v-69.65c-.01-5.8-1.96-10.16-5.83-13.06zM404.1 32H43.9C19.7 32 .06 51.59 0 75.8v360.4C.06 460.41 19.7 480 43.9 480h360.2c24.21 0 43.84-19.59 43.9-43.8V75.8c-.06-24.21-19.7-43.8-43.9-43.8zM154.2 291.19c0 18.81-11.61 47.31-48.36 47.25h-46.4V172.98h47.38c35.44 0 47.36 28.46 47.37 47.28l.01 70.93zm100.68-88.66H201.6v38.42h32.57v29.57H201.6v38.41h53.29v29.57h-62.18c-11.16.29-20.44-8.53-20.72-19.69V193.7c-.27-11.15 8.56-20.41 19.71-20.69h63.19l-.01 29.52zm103.64 115.29c-13.2 30.75-36.85 24.63-47.44 0l-38.53-144.8h32.57l29.71 113.72 29.57-113.72h32.58l-38.46 144.8z"></path>
+      </svg>
+
+*Un article DEV existe pour ce projet (anglais seulement)*
+  </a>
+
+
 </div>
 
 ---
@@ -84,19 +90,19 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 
 ### Configuration requise<a name="configuration"></a>
 
-| Catégorie          | Valeur           | Notes additionnelles                                                                            | Installation                                               |
-|--------------------|------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| OS:                | N'importe lequel |                                                                                                 |                                                            |
-| Python:            | `Python 3`       | Développé sous Python 3.8.2, veuillez mettre à jour votre version si vous avez des problèmes    | [Télécharger `Python3`](https://www.python.org/downloads/) |
-| Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `urllib`         | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer |                                                                                               |
-|                    | `PyQt5`          | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**    | Télécharger avec PyPi `pip install PyQt5` (ou `pip3 install PyQt5`, selon votre environnement)|
+| Catégorie          | Valeur           | Notes additionnelles                                                                         | Installation                                                                                   |
+| ------------------ | ---------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| OS:                | N'importe lequel |                                                                                              |                                                                                                |
+| Python:            | `Python 3`       | Développé sous Python 3.8.2, veuillez mettre à jour votre version si vous avez des problèmes | [Télécharger `Python3`](https://www.python.org/downloads/)                                     |
+| Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
+|                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
+|                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
+|                    | `urllib`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
+|                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
+|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
+|                    | `PyQt5`          | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `pip install PyQt5` (ou `pip3 install PyQt5`, selon votre environnement) |
 
-* Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`pip install notebook ipywidgets`)
+- Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`pip install notebook ipywidgets`)
 
 ### Installation<a name="installation"></a>
 
@@ -106,6 +112,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 4. Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 Avec le terminal:
+
 ```bash
 $ cd Users/Laurent/Documents/GitHub/pyEtude
 $ python3 pyEtude.pyw
@@ -120,7 +127,7 @@ $ cd Users/Laurent/Documents/GitHub/pyEtude
 $ python3 pyEtude.pyw
 ```
 
-* Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
+- Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
 
 ## 🖼 Captures d'écran<a name="screenshots"></a>
 
@@ -152,16 +159,16 @@ $ python3 pyEtude.pyw
 
 ### Exemple fictif<a name = "resultats"></a>
 
-| Réglage       | Valeur                   |
-|---------------|--------------------------|
-| Titre         | Chapitre 5               |
-| Sous-Titre    | Les Lois de Newton       |
-| Matière       | PHY                      |
-| Numéro        | 1607                     |
-| Premier titre | La Première Loi          |
-| Auteur        | Laurent Bourgon          |
-| Niveau        | Secondaire 5 - 2019-2020 |
-| Nom du fichier| `PHY-1607.docx`          |
+| Réglage        | Valeur                   |
+| -------------- | ------------------------ |
+| Titre          | Chapitre 5               |
+| Sous-Titre     | Les Lois de Newton       |
+| Matière        | PHY                      |
+| Numéro         | 1607                     |
+| Premier titre  | La Première Loi          |
+| Auteur         | Laurent Bourgon          |
+| Niveau         | Secondaire 5 - 2019-2020 |
+| Nom du fichier | `PHY-1607.docx`          |
 
 <p align="center">
   <a href="assets_readme/page_de_garde.png"><img src="assets_readme/page_de_garde.png" width="256"></a>
@@ -171,16 +178,16 @@ $ python3 pyEtude.pyw
 
 ### Exemple réel<a name="exemple_reel"></a>
 
-| Réglage       | Valeur                                  |
-|---------------|-----------------------------------------|
-| Titre         | Chapitre 1                              |
-| Sous-Titre    | La Structure de la Matière              |
-| Matière       | STE                                     |
-| Numéro        | CHP1                                    |
-| Premier titre | La nature de la structure de la matière |
-| Auteur        | Laurent Bourgon                         |
-| Niveau        | Secondaire 4 - 2018-2019                |
-| Nom du fichier| `STE-CHP1.docx`                         |
+| Réglage        | Valeur                                  |
+| -------------- | --------------------------------------- |
+| Titre          | Chapitre 1                              |
+| Sous-Titre     | La Structure de la Matière              |
+| Matière        | STE                                     |
+| Numéro         | CHP1                                    |
+| Premier titre  | La nature de la structure de la matière |
+| Auteur         | Laurent Bourgon                         |
+| Niveau         | Secondaire 4 - 2018-2019                |
+| Nom du fichier | `STE-CHP1.docx`                         |
 
 <p align="center">
   <a href="assets_readme/e_page_de_garde.png"><img src="assets_readme/e_page_de_garde.png" width="256"></a>
