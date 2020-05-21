@@ -45,7 +45,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r'2.4.0'
+VERSION = r'2.4.1'
 DEBUG = True
 ## Nom de fichiers importants
 FILES = {
@@ -145,15 +145,15 @@ def downloadData(name, create=True):
     """
     if create:
         try:
-            urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/{name}", name)
+            urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/src/{name}", name)
         except urllib.error.HTTPError:
-            urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/{name}", name)
+            urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/src/{name}", name)
     else:
         try:
-            with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/{name}") as ur:
+            with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/src/{name}") as ur:
                 return ur.read().decode()
         except urllib.error.HTTPError:
-            with urllib.request.urlopen(fr"{GITHUB_LINK}/master/{name}") as ur:
+            with urllib.request.urlopen(fr"{GITHUB_LINK}/master/src/{name}") as ur:
                 return ur.read().decode()
 
 class frontEnd:
