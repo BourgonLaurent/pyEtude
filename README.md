@@ -1,6 +1,6 @@
 <div align="center">
 
-  [![DEV](dev_article/assets/cover-alt.png)](https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea)
+  [![DEV](DEV/assets/cover-alt.png)](https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea)
 
 </div>
 
