@@ -683,17 +683,24 @@ class frontEnd:
             self.ui.modelListMinus.setEnabled(True)
         
         def add_row_menu():
-            text_entered, pressed_ok = QInputDialog.getText(self.window, 'Nouveau', 'Nom du modèle:')
-		
-            if pressed_ok and text_entered != "":
+            dialog = QInputDialog(self.window)
+
+            dialog.setWindowTitle("Nouveau")
+            dialog.setLabelText("Nom du modèle:")
+            dialog.setCancelButtonText("Annuler")
+
+            # Code de sortie (1=OK), texte
+            ok, text_entered = dialog.exec_(), dialog.textValue()
+
+            # 
+            if ok and text_entered != "":
                 if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
                     self.ui.modelListWidget.addItem(str(text_entered))
                 else:
-                    error_message = QMessageBox()
+                    error_message = QMessageBox(self.window)
                     error_message.setIcon(QMessageBox.Warning)
-                    error_message.setStyleSheet(STYLES["message_box"])
 
-                    error_message.setWindowTitle("Création")
+                    error_message.setWindowTitle("Nouveau")
                     error_message.setText("Nom de modèle déjà existant")
                     error_message.setStandardButtons(QMessageBox.Ok)
 
