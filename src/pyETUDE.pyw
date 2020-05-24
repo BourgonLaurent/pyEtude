@@ -16,6 +16,8 @@ import json, locale, os, sys, zipfile, urllib.request, urllib.error
 try:
     from PyQt5 import QtCore, QtGui, QtWidgets, uic
     from PyQt5.QtWidgets import *
+    
+    from docxtpl import DocxTemplate
 except ImportError as e:
     # Crée le message d'erreur
     error_message = f"""[!] Impossible de continuer:\n\n\t{e.msg}\n\n
@@ -326,7 +328,7 @@ class frontEnd:
         self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
         self.section = self.getLineEditValue(self.ui.sectionLineEdit)
         
-        self.model = "model.docx"
+        self.model = "modaler.docx"
         if not os.path.isfile(self.model):
             modelMessageBox = QMessageBox()
             modelMessageBox.setIcon(QMessageBox.Information)
@@ -673,101 +675,27 @@ class Document:
         self.model = model
         self.filepath = filepath
 
-        self.options = {"pyETUDE_Titre": titre,
-                    "pyETUDE_SousTitre": soustitre,
-                    "pyETUDE_Matiere": matiere,
-                    "pyETUDE_Auteur": auteur,
-                    "pyETUDE_Niv": niveau,
-                    "pyETUDE_Num": numero}
-        self.sections = {"sectionpy": section}
+        self.options = {"titre": titre,
+                    "soustitre": soustitre,
+                    "mat": matiere,
+                    "auteur": auteur,
+                    "niveau": niveau,
+                    "num": numero,
+                    "section": section
+                    }
 
-        self.folder = f"{matiere}-{numero}_tmpyETUDE"
+        self.new_main()
 
-        self.main()
+    def new_main(self):
+        doc = DocxTemplate(self.model)
+        doc.render(self.options)
+        doc.save(self.filepath)
 
-    def main(self):
-        self.exportWord(self.model, self.folder)
+    def packWord(self):
+        doc = DocxTemplate(self.model)
+        doc.render(self.options)
+        doc.save(self.filepath)
 
-        self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.options)
-        self.modifyOptions(os.path.join(self.folder, "word", "header1.xml"), self.options)
-        self.modifyOptions(os.path.join(self.folder, "word", "footer1.xml"), self.options)
-
-        self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.sections)
-
-        self.packWord(self.folder, self.filepath)
-        self.cleanTemp(self.folder)
-
-    def exportWord(self, model:str, folder:str) -> str:
-        """## Extract the specified `.zip` file
-
-        ### Arguments:\n
-            \tmodel {str} -- file that will be extracted (Do not forget the .docx!)
-            \tfolder {str} -- folder that will receive the extracted file
-
-        ### Returns:\n
-            \tstr -- the name of the folder where it was extracted
-        """
-
-        with zipfile.ZipFile(model, "r") as model_file:
-            model_file.extractall(folder)
-            model_file.close()
-        return folder
-
-    def modifyOptions(self, path:str, info:dict) -> str:
-        """## Send command to {self.searchAndReplace} for all values in a dictionnary
-        
-        ### Arguments:\n
-            \tpath {str} -- The path of the file to be modified
-            \tinfo {dict} -- A dictionnary in this format {"to search":"to replace"}
-        
-        ### Returns:\n
-            \tstr -- Returns the name of the file modified
-        """
-        for search, replace in info.items():
-            self.searchAndReplace(path, search, replace)
-        return path
-
-    def searchAndReplace(self, infile:str, search:str, replace:str) -> str:
-        """## Search the specified file with the keyword given and replaces it with the third argument
-        
-        ### Arguments:\n
-            \tinfile {str} -- The file to change
-            \tsearch {str} -- The word to replace
-            \treplace {str} -- The word that will be replaced by {search}
-
-        ### Returns:\n
-            \tstr -- Returns the name of the file modified
-        """
-        if os.path.isfile(infile):
-            with open(infile, "r", encoding="utf8") as in_f:
-                data_f = in_f.read()
-                with open(infile, "w", encoding='utf8') as out_f:
-                    out_f.write(data_f.replace(search, replace))
-        else:
-            raise FileNotFoundError
-        return infile
-
-
-    def packWord(self, folder:str, final:str) -> str:
-        """## Zip the folder specified
-        This will only zip the contents of the folder, not the base folder
-
-        ### Arguments:\n
-            \tfolder {str} -- the folder that will be zipped
-            \tfinal {str} -- the name of the archive (Do not forget the .docx!)
-
-        ### Returns:\n
-            \tstr -- the name of the zip file that was created
-        """
-        locale.setlocale(locale.LC_ALL, (None, None))  # Fix compatibility with locale
-        with zipfile.ZipFile(final, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-            for root, dirs, files in os.walk(folder):  # pylint: disable=unused-variable
-                # zip_file.write(os.path.join(root, "."))
-
-                for File in files:
-                    filePath = os.path.join(root, File)
-                    inZipPath = filePath.replace(folder, "", 1).lstrip("\\/")
-                    zip_file.write(filePath, inZipPath)
         print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
         
         docMessageBox = QMessageBox()
@@ -797,33 +725,6 @@ class Document:
                 os.system(fr'open {self.filepath}')
         else:
             assert ConnectionRefusedError
-
-        return final
-
-    def cleanTemp(self, folder:str) -> str:
-        """## Clean the temporary folder
-        DANGEROUS: THIS WILL DELETE ALL THE FILES IN THE SPECIFIED FOLDER!!
-        
-        ### Arguments:\n
-            \tfolder {str} -- The folder that will be deleted
-        
-        ### Raises:\n
-            \tNotADirectoryError: The specified folder is not a folder
-        
-        ### Returns:\n
-            \tstr -- Returns the name of the folder deleted
-        """
-        if os.path.isdir(folder):
-            for root, dirs, files in os.walk(folder, topdown=False):
-                for File in files:
-                    os.remove(os.path.join(root, File))
-                for Dir in dirs:
-                    os.rmdir(os.path.join(root, Dir))
-            os.rmdir(folder)
-        else:
-            raise NotADirectoryError
-        
-        return folder
 
 
 if __name__ == "__main__":
