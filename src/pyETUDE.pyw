@@ -48,7 +48,7 @@ except:
 # Paramètres généraux
 ## Information de la version actuelle
 VERSION = r'2.4.1'
-DEBUG = True
+DEBUG = False
 ## Nom de fichiers importants
 FILES = {
     "debug":"pyEtude.ui", # (ext: *.ui) Nom du fichier QtDesigner
@@ -221,6 +221,9 @@ class frontEnd:
         # Lance le fonctionnement en arrière-plan de l'application
         self.app.exec_()
 
+    def esperLimit(self, lineedit):
+        lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
+
     def firstLaunch(self):
         # Crée les matières par défaut
         self.matieresDefault = {
@@ -312,6 +315,9 @@ class frontEnd:
         
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
+
+        # Connection du bouton "Changer le modèle..." à sa fonction
+        self.ui.modelPushButton.pressed.connect(self.modelDialog)
 
         # Connection du bouton 'Générer' à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
@@ -659,8 +665,8 @@ class frontEnd:
     def aboutTab(self):
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
     
-    def esperLimit(self, lineedit):
-        lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
+    def modelDialog(self):
+        pass
 
 
 class Document:
@@ -684,12 +690,7 @@ class Document:
                     "section": section
                     }
 
-        self.new_main()
-
-    def new_main(self):
-        doc = DocxTemplate(self.model)
-        doc.render(self.options)
-        doc.save(self.filepath)
+        self.packWord()
 
     def packWord(self):
         doc = DocxTemplate(self.model)
