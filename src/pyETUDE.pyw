@@ -243,8 +243,14 @@ class frontEnd:
             # Active l'onglet du générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
-            self.ui.tabWidget.setCurrentIndex(0)
-            self.ui.matieresConfig.setChecked(True)
+
+
+            # DEBUG ONLY
+            # PLEASE CHANGE AFTER MODEL FINISHED
+            # DEBUG ONLY
+            self.ui.tabWidget.setCurrentIndex(2)
+
+            # self.ui.matieresConfig.setChecked(True)
 
             # Lit le document de configuration et assigne:
             # self.auteur, self.niveau, self.matieres
@@ -258,11 +264,18 @@ class frontEnd:
         
             # Configuration terminée, met en place l'onglet de génération
             self.genTab()
+
+            # Configuration terminée, met en place l'onglet de modèles
+            self.modelTab()
+
         else:
             assert FileNotFoundError
             # Empêche l'accès au générateur
             self.ui.tabWidget.setTabEnabled(0, False)
             self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
+            self.ui.tabWidget.setTabEnabled(2, False)
+            self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
+
             self.ui.tabWidget.setCurrentIndex(1)
             
             # Assigne les matières par défaut dans le tableau
@@ -317,7 +330,7 @@ class frontEnd:
         self.pathGenTab()
 
         # Connection du bouton "Changer le modèle..." à sa fonction
-        self.ui.modelPushButton.pressed.connect(self.modelDialog)
+        # self.ui.modelToolButton.pressed.connect(self.model)
 
         # Connection du bouton 'Générer' à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
@@ -665,8 +678,34 @@ class frontEnd:
     def aboutTab(self):
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
     
-    def modelDialog(self):
-        pass
+    def modelTab(self):
+        def model_selection_changed(row):
+            self.ui.modelListMinus.setEnabled(True)
+        
+        def add_row_menu():
+            text_entered, pressed_ok = QInputDialog.getText(self.window, 'Nouveau', 'Nom du modèle:')
+		
+            if pressed_ok and text_entered != "":
+                if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
+                    self.ui.modelListWidget.addItem(str(text_entered))
+                else:
+                    error_message = QMessageBox()
+                    error_message.setIcon(QMessageBox.Warning)
+                    error_message.setStyleSheet(STYLES["message_box"])
+
+                    error_message.setWindowTitle("Création")
+                    error_message.setText("Nom de modèle déjà existant")
+                    error_message.setStandardButtons(QMessageBox.Ok)
+
+                    error_message.exec_()
+
+        def remove_row():
+            self.ui.modelListWidget.takeItem(self.ui.modelListWidget.currentRow())
+
+        self.ui.modelListWidget.currentRowChanged.connect(model_selection_changed)
+
+        self.ui.modelListPlus.pressed.connect(add_row_menu)
+        self.ui.modelListMinus.pressed.connect(remove_row)
 
 
 class Document:
