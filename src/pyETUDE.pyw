@@ -679,9 +679,16 @@ class frontEnd:
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
     
     def modelTab(self):
-        def model_selection_changed(row):
-            self.ui.modelListMinus.setEnabled(True)
-        
+        modelForm = {
+            "titre": [ self.ui.titreModelCheckBox, self.ui.titreModelLineEdit ],
+            "soustitre": [ self.ui.soustitreModelCheckBox, self.ui.soustitreModelLineEdit ],
+            "matiere": [ self.ui.matiereModelCheckBox, self.ui.matiereModelLineEdit ],
+            "numero": [ self.ui.numeroModelCheckBox, self.ui.numeroModelLineEdit ],
+            "section": [ self.ui.sectionModelCheckBox, self.ui.sectionModelLineEdit ],
+            "auteur": [ self.ui.auteurModelCheckBox, self.ui.auteurModelLineEdit ],
+            "niveau": [ self.ui.niveauModelCheckBox, self.ui.niveauModelLineEdit ]
+        }
+
         def add_row_menu():
             dialog = QInputDialog(self.window)
 
@@ -692,7 +699,6 @@ class frontEnd:
             # Code de sortie (1=OK), texte
             ok, text_entered = dialog.exec_(), dialog.textValue()
 
-            # 
             if ok and text_entered != "":
                 if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
                     self.ui.modelListWidget.addItem(str(text_entered))
@@ -708,11 +714,50 @@ class frontEnd:
 
         def remove_row():
             self.ui.modelListWidget.takeItem(self.ui.modelListWidget.currentRow())
+        
+        def model_selection_changed(row):
+            # Désactive tout si rien n'est sélectionné
+            state = row != -1
 
-        self.ui.modelListWidget.currentRowChanged.connect(model_selection_changed)
+            # Active quand qqchose est sélectionné
+
+            for component in (self.ui.modelListMinus, self.ui.modelValuesGroupBox, self.ui.modelPathsGroupBox, self.ui.modelDefaultPushButton):
+                component.setEnabled(state)
+
+            for checkBox, lineEdit in modelForm.values():
+                checkBox.setChecked(state)
+                lineEdit.setEnabled(state)
+                lineEdit.clear()
+
+        def check_box_state_changed(response):
+            for checkBox, lineEdit in modelForm.values():
+                lineEdit.setEnabled(checkBox.isChecked())
+
+        def model_choose_path():
+            # Prend le nom du fichier et le nettoie
+            model_filename = " > ".join(
+                os.path.normpath(
+                    QFileDialog.getOpenFileName(
+                        self.window,
+                        "Open File",
+                        os.getcwd(),
+                        "Microsoft Word (*.docx)")[0]
+                ).split(os.path.sep)
+            )
+
+            if model_filename != ".":
+                self.ui.modelPathModelLabel.setText(model_filename)  # Met le nom du fichier
+
 
         self.ui.modelListPlus.pressed.connect(add_row_menu)
         self.ui.modelListMinus.pressed.connect(remove_row)
+
+        self.ui.modelListWidget.currentRowChanged.connect(model_selection_changed)
+
+        for line in modelForm.values():
+            line[0].stateChanged.connect(check_box_state_changed)
+
+        self.ui.modelPathPushButton.pressed.connect(model_choose_path)
 
 
 class Document:

@@ -2857,7 +2857,9 @@ PlotWidget {
        <string notr="true">QListView::item{
   padding-top: 10px;
   padding-bottom:10px;
-  border-radius: 5px;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 QListView::item:selected {
@@ -2951,10 +2953,10 @@ QListView::item:selected:hover {
      <widget class="QLabel" name="modelWikiLink">
       <property name="geometry">
        <rect>
-        <x>220</x>
-        <y>410</y>
+        <x>16</x>
+        <y>409</y>
         <width>280</width>
-        <height>40</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
@@ -2998,6 +3000,9 @@ QListView::item:selected:hover {
       </property>
      </widget>
      <widget class="QGroupBox" name="modelValuesGroupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -3020,25 +3025,49 @@ QListView::item:selected:hover {
        </property>
        <layout class="QFormLayout" name="modelValuesFormLayout">
         <item row="0" column="1">
-         <widget class="QLineEdit" name="titreLineEdit_2"/>
+         <widget class="QLineEdit" name="titreModelLineEdit">
+          <property name="placeholderText">
+           <string>Titre</string>
+          </property>
+         </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="soustitreLineEdit_2"/>
+         <widget class="QLineEdit" name="soustitreModelLineEdit">
+          <property name="placeholderText">
+           <string>Sous-Titre</string>
+          </property>
+         </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="matiereLineEdit"/>
+         <widget class="QLineEdit" name="matiereModelLineEdit">
+          <property name="placeholderText">
+           <string>Matière</string>
+          </property>
+         </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="numeroLineEdit"/>
+         <widget class="QLineEdit" name="numeroModelLineEdit">
+          <property name="placeholderText">
+           <string>Numéro</string>
+          </property>
+         </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="sectionLineEdit_2"/>
+         <widget class="QLineEdit" name="sectionModelLineEdit">
+          <property name="placeholderText">
+           <string>Section</string>
+          </property>
+         </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="auteurModelLineEdit"/>
+         <widget class="QLineEdit" name="auteurModelLineEdit">
+          <property name="placeholderText">
+           <string>Auteur</string>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QCheckBox" name="titreCheckBox">
+         <widget class="QCheckBox" name="titreModelCheckBox">
           <property name="font">
            <font>
             <family>Consolas</family>
@@ -3053,7 +3082,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QCheckBox" name="soustitreCheckBox">
+         <widget class="QCheckBox" name="soustitreModelCheckBox">
           <property name="font">
            <font>
             <family>Consolas</family>
@@ -3068,7 +3097,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QCheckBox" name="matiereCheckBox">
+         <widget class="QCheckBox" name="matiereModelCheckBox">
           <property name="font">
            <font>
             <family>Consolas</family>
@@ -3083,7 +3112,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QCheckBox" name="numeroCheckBox">
+         <widget class="QCheckBox" name="numeroModelCheckBox">
           <property name="font">
            <font>
             <family>Consolas</family>
@@ -3098,7 +3127,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QCheckBox" name="sectionCheckBox">
+         <widget class="QCheckBox" name="sectionModelCheckBox">
           <property name="font">
            <font>
             <family>Consolas</family>
@@ -3148,7 +3177,10 @@ QListView::item:selected:hover {
         <item row="6" column="1">
          <widget class="QLineEdit" name="niveauModelLineEdit">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
+          </property>
+          <property name="placeholderText">
+           <string>Niveau</string>
           </property>
          </widget>
         </item>
@@ -3156,13 +3188,19 @@ QListView::item:selected:hover {
       </widget>
      </widget>
      <widget class="QGroupBox" name="modelPathsGroupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>220</x>
         <y>240</y>
         <width>451</width>
-        <height>81</height>
+        <height>121</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="title">
        <string>Emplacements</string>
@@ -3173,32 +3211,13 @@ QListView::item:selected:hover {
          <x>10</x>
          <y>30</y>
          <width>431</width>
-         <height>47</height>
+         <height>81</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="modelPathsLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="modelChooseModelLabel">
-          <property name="font">
-           <font>
-            <underline>true</underline>
-           </font>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="text">
-           <string>Fichier modèle</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="modelPathModelLabel">
-          <property name="text">
-           <string>Aucun fichier sélectionné</string>
-          </property>
-         </widget>
-        </item>
+        <property name="formAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
         <item row="1" column="0">
          <widget class="QLabel" name="modelDestinationLabel">
           <property name="text">
@@ -3209,19 +3228,84 @@ QListView::item:selected:hover {
         <item row="1" column="1">
          <widget class="QLineEdit" name="modelDestinationLineEdit"/>
         </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="modelPathModelLabel">
+          <property name="font">
+           <font>
+            <family>Consolas</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Aucun fichier sélectionné</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="modelPathPushButton">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: none;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 4px;
+    padding: 3px;
+    outline: none;
+    text-decoration: underline;
+}
+
+QPushButton:disabled {
+    background-color: none;
+    border: none;
+    color: #787878;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+QPushButton:pressed {
+    background-color: none;
+}
+
+QPushButton:pressed:hover {
+    background-color: none;
+}
+
+QPushButton:hover {
+    background-color: none;
+}
+
+QPushButton:selected {
+    background: none;
+    color: #32414B;
+    border: none;
+}</string>
+          </property>
+          <property name="text">
+           <string>Fichier Modèle</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
      <widget class="QPushButton" name="modelDefaultPushButton">
       <property name="enabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>330</y>
+        <y>370</y>
         <width>111</width>
-        <height>31</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="cursor">
@@ -3238,7 +3322,7 @@ QListView::item:selected:hover {
       <property name="geometry">
        <rect>
         <x>480</x>
-        <y>330</y>
+        <y>370</y>
         <width>191</width>
         <height>61</height>
        </rect>
