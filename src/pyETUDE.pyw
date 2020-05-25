@@ -679,7 +679,7 @@ class frontEnd:
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
     
     def modelTab(self):
-        modelForm = {
+        self.modelForm = {
             "titre": [ self.ui.titreModelCheckBox, self.ui.titreModelLineEdit ],
             "soustitre": [ self.ui.soustitreModelCheckBox, self.ui.soustitreModelLineEdit ],
             "matiere": [ self.ui.matiereModelCheckBox, self.ui.matiereModelLineEdit ],
@@ -687,6 +687,12 @@ class frontEnd:
             "section": [ self.ui.sectionModelCheckBox, self.ui.sectionModelLineEdit ],
             "auteur": [ self.ui.auteurModelCheckBox, self.ui.auteurModelLineEdit ],
             "niveau": [ self.ui.niveauModelCheckBox, self.ui.niveauModelLineEdit ]
+        }
+
+        self.modelConfig = {
+            "default": None,
+            "models": {},
+            "default_models": {}
         }
 
         def add_row_menu():
@@ -697,11 +703,13 @@ class frontEnd:
             dialog.setCancelButtonText("Annuler")
 
             # Code de sortie (1=OK), texte
-            ok, text_entered = dialog.exec_(), dialog.textValue()
+            ok, text_entered = dialog.exec_(), str(dialog.textValue())
 
             if ok and text_entered != "":
                 if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
-                    self.ui.modelListWidget.addItem(str(text_entered))
+                    self.ui.modelListWidget.addItem(text_entered)
+
+                    self.modelConfig["models"][text_entered] = {}
                 else:
                     error_message = QMessageBox(self.window)
                     error_message.setIcon(QMessageBox.Warning)
@@ -713,25 +721,38 @@ class frontEnd:
                     error_message.exec_()
 
         def remove_row():
+            self.modelConfig["models"].pop(self.ui.modelListWidget.currentItem().text())
             self.ui.modelListWidget.takeItem(self.ui.modelListWidget.currentRow())
+
+        def reset_rows():
+            print(self.modelConfig)
         
         def model_selection_changed(row):
             # Désactive tout si rien n'est sélectionné
             state = row != -1
 
             # Active quand qqchose est sélectionné
-
             for component in (self.ui.modelListMinus, self.ui.modelValuesGroupBox, self.ui.modelPathsGroupBox, self.ui.modelDefaultPushButton):
                 component.setEnabled(state)
 
-            for checkBox, lineEdit in modelForm.values():
+            for checkBox, lineEdit in self.modelForm.values():
                 checkBox.setChecked(state)
                 lineEdit.setEnabled(state)
                 lineEdit.clear()
 
-        def check_box_state_changed(response):
-            for checkBox, lineEdit in modelForm.values():
+        def value_form_changed():
+            if self.ui.modelListWidget.currentRow() < 0:
+                return
+            for checkBox, lineEdit in self.modelForm.values():
+                text = lineEdit.text()
                 lineEdit.setEnabled(checkBox.isChecked())
+
+                if not checkBox.isChecked():
+                    text = None
+                elif text == "":
+                    text = lineEdit.placeholderText()
+                
+                self.modelConfig["models"][self.ui.modelListWidget.currentItem().text()][checkBox.text()] = text
 
         def model_choose_path():
             # Prend le nom du fichier et le nettoie
@@ -748,16 +769,37 @@ class frontEnd:
             if model_filename != ".":
                 self.ui.modelPathModelLabel.setText(model_filename)  # Met le nom du fichier
 
+        def set_default_model(item):
+            # Clean
+            for index in range(self.ui.modelListWidget.count()):
+                self.ui.modelListWidget.item(index).setFont(QtGui.QFont())
+            
+            # Add to config & GUI
+            self.modelConfig["default"] = item.text()
+            item.setFont(QtGui.QFont("Consolas"))
+
+            # Remove access to default button
+            self.ui.modelDefaultPushButton.setEnabled(False)
+
 
         self.ui.modelListPlus.pressed.connect(add_row_menu)
         self.ui.modelListMinus.pressed.connect(remove_row)
+        self.ui.modelListReset.pressed.connect(reset_rows)
 
         self.ui.modelListWidget.currentRowChanged.connect(model_selection_changed)
 
-        for line in modelForm.values():
-            line[0].stateChanged.connect(check_box_state_changed)
+        for line in self.modelForm.values():
+            line[0].stateChanged.connect(value_form_changed)
+            line[1].editingFinished.connect(value_form_changed)
 
         self.ui.modelPathPushButton.pressed.connect(model_choose_path)
+
+        for index in range(self.ui.modelListWidget.count()):
+            if not self.modelConfig["default"]:
+                set_default_model(self.ui.modelListWidget.item(index))
+            self.modelConfig["models"][self.ui.modelListWidget.item(index).text()] = {}
+
+        self.ui.modelDefaultPushButton.pressed.connect(lambda: set_default_model(self.ui.modelListWidget.currentItem()))
 
 
 class Document:
