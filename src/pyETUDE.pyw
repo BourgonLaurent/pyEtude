@@ -315,6 +315,23 @@ class frontEnd:
         if jsonData["modeles"]:
             self.modelConfig = jsonData["modeles"]
 
+    def writeJSON(self):
+        json_data = dict()
+        json_data["auteur"] = self.auteur
+        json_data["niveau"] = self.niveau
+        json_data["matieres"] = dict()
+        if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
+            for key, value in self.matieres.items():
+                json_data["matieres"][key] = value
+        
+        json_data["modeles"] = self.modelConfig
+        with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
+            json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
+        
+        QMessageBox.information(self.window,
+                                "Configuration sauvegardée",
+                                "Vos paramètres ont été exportés avec succès")
+
     def genTab(self):
         # Mise en place du menu pour les matières et le numéro
         self.matGenTab()
@@ -353,12 +370,8 @@ class frontEnd:
         
         self.model = "modaler.docx"
         if not os.path.isfile(self.model):
-            modelMessageBox = QMessageBox()
-            modelMessageBox.setIcon(QMessageBox.Information)
-            modelMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Modèle")
-            modelMessageBox.setText(f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
-            modelMessageBox.addButton(QMessageBox.Ok)
-            modelMessageBox.exec_()
+            QMessageBox.information(f"pyÉtude - {VERSION} - Modèle",
+                                    f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
             downloadData(self.model)
         
         if os.path.isfile(self.filepaths[2]):
@@ -626,21 +639,8 @@ class frontEnd:
                         else:
                             path_text = path.text().replace("&","")
                         self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path_text]
-            writeJSON()
+            self.writeJSON()
             self.firstLaunch()
-        
-        def writeJSON():
-            json_data = dict()
-            json_data["auteur"] = self.auteur
-            json_data["niveau"] = self.niveau
-            json_data["matieres"] = dict()
-
-            if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
-                for key, value in self.matieres.items():
-                    json_data["matieres"][key] = value
-            
-            with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
-                json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
 
         # Empêche l'utilisation des esperluètes "&"
         self.esperLimit(self.ui.auteurLineEdit)
@@ -718,14 +718,9 @@ class frontEnd:
                     self.modelConfig["models"][text_entered] = {}
                     self.modelConfig["models"][text_entered]["values"] = {}
                 else:
-                    error_message = QMessageBox(self.window)
-                    error_message.setIcon(QMessageBox.Warning)
-
-                    error_message.setWindowTitle("Nouveau")
-                    error_message.setText("Nom de modèle déjà existant")
-                    error_message.setStandardButtons(QMessageBox.Ok)
-
-                    error_message.exec_()
+                    QMessageBox.critical(self.window,
+                                        "Nouveau",
+                                        "Il existe déjà un modèle avec ce nom")
 
         def remove_row():
             self.modelConfig["models"].pop(self.ui.modelListWidget.currentItem().text())
@@ -832,21 +827,6 @@ class frontEnd:
             # Remove access to default button
             self.ui.modelDefaultPushButton.setEnabled(False)
 
-        def save_models():
-            json_data = dict()
-            json_data["auteur"] = self.auteur
-            json_data["niveau"] = self.niveau
-            json_data["matieres"] = dict()
-
-            if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
-                for key, value in self.matieres.items():
-                    json_data["matieres"][key] = value
-            
-            json_data["modeles"] = self.modelConfig
-
-            with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
-                json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
-        
         if not self.modelConfig:
             self.modelConfig = {
                 "default": None,
@@ -896,7 +876,7 @@ class frontEnd:
         self.ui.modelPathPushButton.pressed.connect(model_choose_path)
         self.ui.modelDefaultPushButton.pressed.connect(lambda: set_default_model(self.ui.modelListWidget.currentItem()))
 
-        self.ui.modelApplyPushButton.pressed.connect(save_models)
+        self.ui.modelApplyPushButton.pressed.connect(self.writeJSON)
 
 
 class Document:
