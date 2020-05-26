@@ -2896,21 +2896,6 @@ QListView::item:selected:hover {
       <property name="sortingEnabled">
        <bool>true</bool>
       </property>
-      <item>
-       <property name="text">
-        <string>Document de Révision</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Page de Présentation</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Présentation Orale</string>
-       </property>
-      </item>
      </widget>
      <widget class="QPushButton" name="modelListPlus">
       <property name="enabled">
@@ -3321,9 +3306,9 @@ QPushButton:selected {
       </property>
       <property name="geometry">
        <rect>
-        <x>480</x>
+        <x>470</x>
         <y>370</y>
-        <width>191</width>
+        <width>201</width>
         <height>61</height>
        </rect>
       </property>

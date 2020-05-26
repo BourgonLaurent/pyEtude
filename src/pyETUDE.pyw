@@ -310,6 +310,10 @@ class frontEnd:
             self.matieres = self.matieresDefault
         else:
             self.matieres = jsonData["matieres"]
+        
+        # Vérifie si les modèles existent
+        if jsonData["modeles"]:
+            self.modelConfig = jsonData["modeles"]
 
     def genTab(self):
         # Mise en place du menu pour les matières et le numéro
@@ -689,11 +693,13 @@ class frontEnd:
             "niveau": [ self.ui.niveauModelCheckBox, self.ui.niveauModelLineEdit ]
         }
 
-        self.modelConfig = {
-            "default": None,
-            "models": {},
-            "default_models": {}
+        self.modelPathForm = {
+            "model_file": self.ui.modelPathModelLabel,
+            "destination": self.ui.modelDestinationLineEdit
         }
+
+
+        self.modelStopSaving = False
 
         def add_row_menu():
             dialog = QInputDialog(self.window)
@@ -710,6 +716,7 @@ class frontEnd:
                     self.ui.modelListWidget.addItem(text_entered)
 
                     self.modelConfig["models"][text_entered] = {}
+                    self.modelConfig["models"][text_entered]["values"] = {}
                 else:
                     error_message = QMessageBox(self.window)
                     error_message.setIcon(QMessageBox.Warning)
@@ -726,23 +733,60 @@ class frontEnd:
 
         def reset_rows():
             print(self.modelConfig)
+            print(self)
         
         def model_selection_changed(row):
             # Désactive tout si rien n'est sélectionné
             state = row != -1
 
-            # Active quand qqchose est sélectionné
-            for component in (self.ui.modelListMinus, self.ui.modelValuesGroupBox, self.ui.modelPathsGroupBox, self.ui.modelDefaultPushButton):
+            for component in (self.ui.modelListMinus, self.ui.modelValuesGroupBox,
+                                self.ui.modelPathsGroupBox, self.ui.modelDefaultPushButton):
                 component.setEnabled(state)
-
             for checkBox, lineEdit in self.modelForm.values():
                 checkBox.setChecked(state)
                 lineEdit.setEnabled(state)
                 lineEdit.clear()
 
+            model = self.ui.modelListWidget.item(row).text()
+            model_config = self.modelConfig["models"][model]
+
+            self.modelStopSaving = True
+
+            if model_config["values"]:
+                for form_value in self.modelForm:
+                    if model_config["values"][form_value]:
+                        self.modelForm[form_value][0].setChecked(True)
+                        self.modelForm[form_value][1].setEnabled(True)
+                        self.modelForm[form_value][1].setText(model_config["values"][form_value])
+                    else:
+                        self.modelForm[form_value][0].setChecked(False)
+                        self.modelForm[form_value][1].setEnabled(False)
+                        self.modelForm[form_value][1].clear()
+                
+                self.modelPathForm["model_file"].setText(" > ".join(
+                    os.path.normpath(model_config["filepath"]).split(os.path.sep)
+                ))
+
+                self.modelPathForm["destination"].setText(model_config["folderpath"])
+
+            else: # Rien n'est enregistré
+                self.modelPathForm["model_file"].setText(" > ".join(
+                    os.path.normpath(
+                        os.path.join(os.getcwd(), f"{model}.docx")
+                        ).split(os.path.sep)
+                    ))
+                self.modelPathForm["destination"].setPlaceholderText(model)
+            
+            self.modelStopSaving = False
+
         def value_form_changed():
+            if self.modelStopSaving:
+                return
             if self.ui.modelListWidget.currentRow() < 0:
                 return
+
+            model = self.ui.modelListWidget.currentItem().text()
+
             for checkBox, lineEdit in self.modelForm.values():
                 text = lineEdit.text()
                 lineEdit.setEnabled(checkBox.isChecked())
@@ -752,7 +796,12 @@ class frontEnd:
                 elif text == "":
                     text = lineEdit.placeholderText()
                 
-                self.modelConfig["models"][self.ui.modelListWidget.currentItem().text()][checkBox.text()] = text
+                self.modelConfig["models"][model]["values"][checkBox.text()] = text
+            
+            self.modelConfig["models"][model]["filepath"] = os.path.normpath(self.ui.modelPathModelLabel.text().replace(" > ", os.path.sep))
+
+            self.modelConfig["models"][model]["folderpath"] = self.ui.modelDestinationLineEdit.text() or self.ui.modelDestinationLineEdit.placeholderText()
+
 
         def model_choose_path():
             # Prend le nom du fichier et le nettoie
@@ -768,6 +817,8 @@ class frontEnd:
 
             if model_filename != ".":
                 self.ui.modelPathModelLabel.setText(model_filename)  # Met le nom du fichier
+            
+            value_form_changed()
 
         def set_default_model(item):
             # Clean
@@ -781,6 +832,55 @@ class frontEnd:
             # Remove access to default button
             self.ui.modelDefaultPushButton.setEnabled(False)
 
+        def save_models():
+            json_data = dict()
+            json_data["auteur"] = self.auteur
+            json_data["niveau"] = self.niveau
+            json_data["matieres"] = dict()
+
+            if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
+                for key, value in self.matieres.items():
+                    json_data["matieres"][key] = value
+            
+            json_data["modeles"] = self.modelConfig
+
+            with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
+                json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
+        
+        if not self.modelConfig:
+            self.modelConfig = {
+                "default": None,
+                "models": {},
+                "default_models": {
+                    "Documents de Révision": {
+                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+                        "folderpath": "Documents de Révision",
+                        "values": {
+                            "auteur": "Auteur",
+                            "matiere": "Matière",
+                            "niveau": "Niveau",
+                            "numero": "Numéro",
+                            "section": "Section",
+                            "soustitre": "Sous-Titre",
+                            "titre": "Titre"
+                        }
+                    }
+                }
+            }
+        # CHECK DEFAULT MODELS
+        if not self.modelConfig["models"]:
+            self.modelConfig["models"] = self.modelConfig["default_models"]
+
+        for model in self.modelConfig["models"]:
+            self.ui.modelListWidget.addItem(model)
+
+        for index in range(self.ui.modelListWidget.count()):
+            if self.modelConfig["default"] == self.ui.modelListWidget.item(index).text() or not self.modelConfig["default"]:
+                set_default_model(self.ui.modelListWidget.item(index))
+        
+        
+
+        ## CONNECTIONS
 
         self.ui.modelListPlus.pressed.connect(add_row_menu)
         self.ui.modelListMinus.pressed.connect(remove_row)
@@ -791,15 +891,12 @@ class frontEnd:
         for line in self.modelForm.values():
             line[0].stateChanged.connect(value_form_changed)
             line[1].editingFinished.connect(value_form_changed)
+        self.ui.modelDestinationLineEdit.editingFinished.connect(value_form_changed)
 
         self.ui.modelPathPushButton.pressed.connect(model_choose_path)
-
-        for index in range(self.ui.modelListWidget.count()):
-            if not self.modelConfig["default"]:
-                set_default_model(self.ui.modelListWidget.item(index))
-            self.modelConfig["models"][self.ui.modelListWidget.item(index).text()] = {}
-
         self.ui.modelDefaultPushButton.pressed.connect(lambda: set_default_model(self.ui.modelListWidget.currentItem()))
+
+        self.ui.modelApplyPushButton.pressed.connect(save_models)
 
 
 class Document:
