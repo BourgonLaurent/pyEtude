@@ -58,25 +58,6 @@ FILES = {
 ## Assets
 GITHUB_LINK = r'https://raw.githubusercontent.com/BourgonLaurent/pyEtude'
 STYLES = {
-    "menu":"""QMenu {
-                  border: 0.5px solid #787878;
-                  color: #F0F0F0;
-                  margin: 0px;
-                }
-                QMenu::separator {
-                  height: 1px;
-                  background-color: #444444;
-                }
-                QMenu::item {
-                  background-color: #262626;
-                  padding: 4px 4px 4px 4px;
-                  /* Reserve space for selection border */
-                  border: 1px transparent #32414B;
-                }
-                QMenu::item:selected {
-                  color: #F0F0F0;
-                  background-color: #605e5c;
-                }""",
     "message_box":"""QWidget {
                       background-color: #262626;
                       border: 0px solid #32414B;
@@ -104,31 +85,6 @@ STYLES = {
                     }
                     QPushButton:hover {
                       background-color: #605e5c;
-                    }""",
-    "calendar":"""QAbstractItemView {
-                      alternate-background-color: #484644;
-                      color: #F0F0F0;
-                      border: 1px solid #32414B;
-                      border-radius: 4px;
-                    }
-                    QWidget {
-                      background-color: #262626;
-                      border: 0px solid #444444;
-                      padding: 0px;
-                      color: #FFFFFF;
-                      selection-background-color: #444444;
-                      selection-color: #FFFFFF;
-                    }
-                    QWidget::item:selected {
-                      background-color: #1464A0;
-                    }
-                    QWidget::item:hover {
-                      background-color: #148CD2;
-                      color: #32414B;
-                    }
-                    QCalendarWidget {
-                      border: 1px solid #32414B;
-                      border-radius: 4px;
                     }""",
     "line_edit":"""QLineEdit {
                         border-top-right-radius: 0px;
@@ -243,12 +199,7 @@ class frontEnd:
             # Active l'onglet du générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
-
-
-            # DEBUG ONLY
-            # PLEASE CHANGE AFTER MODEL FINISHED
-            # DEBUG ONLY
-            self.ui.tabWidget.setCurrentIndex(2)
+            self.ui.tabWidget.setCurrentIndex(0)
 
             # self.ui.matieresConfig.setChecked(True)
 
@@ -331,8 +282,21 @@ class frontEnd:
         QMessageBox.information(self.window,
                                 "Configuration sauvegardée",
                                 "Vos paramètres ont été exportés avec succès")
+        
+        self.modelGenTab()
+        
 
     def genTab(self):
+        self.genGroupBox = {
+            "titre": self.ui.titreGroupBox,
+            "soustitre": self.ui.soustitreGroupBox,
+            "matiere": self.ui.matGroupBox,
+            "numero": self.ui.numGroupBox,
+            "section": self.ui.sectionGroupBox,
+            "auteur": self.ui.auteurPersoGroupBox,
+            "niveau": self.ui.niveauPersoGroupBox
+        }
+
         # Mise en place du menu pour les matières et le numéro
         self.matGenTab()
         self.numGenTab()
@@ -350,8 +314,8 @@ class frontEnd:
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
 
-        # Connection du bouton "Changer le modèle..." à sa fonction
-        # self.ui.modelToolButton.pressed.connect(self.model)
+        # Gestion des modèles 
+        self.modelGenTab()
 
         # Connection du bouton 'Générer' à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
@@ -368,19 +332,19 @@ class frontEnd:
         self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
         self.section = self.getLineEditValue(self.ui.sectionLineEdit)
         
-        self.model = "modaler.docx"
+        self.model = "model.docx"
         if not os.path.isfile(self.model):
-            QMessageBox.information(f"pyÉtude - {VERSION} - Modèle",
+            QMessageBox.information(self.window,
+                                    f"pyÉtude - {VERSION} - Modèle",
                                     f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
             downloadData(self.model)
         
         if os.path.isfile(self.filepaths[2]):
             assert FileExistsError
 
-            numMatMessageBox = QMessageBox()
+            numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichier Existant Trouvé")
-            numMatMessageBox.setStyleSheet(STYLES["message_box"])
             numMatMessageBox.setText(f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}")
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
@@ -391,8 +355,9 @@ class frontEnd:
             if numMatMessageBox.clickedButton().text() == "Non":
                 return ConnectionAbortedError
         Document(self.titre, self.soustitre, self.auteur, self.niveau,
-                            self.matiere, self.numero, self.section,
-                            self.model, self.filepaths[2])
+                    self.matiere, self.numero, self.section,
+                    self.model, self.filepaths[2],
+                    self.window)
         
 
     def matGenTab(self):
@@ -409,13 +374,12 @@ class frontEnd:
         
         self.matiere = "PHY"
 
-        matMenu = QMenu("matMenu")
+        matMenu = QMenu("matMenu", self.window)
         matMenu.triggered.connect(isChecked)
         self.ui.matToolButton.setMenu(matMenu)
         matActionGroup = QActionGroup(matMenu)
         matActionGroup.setExclusive(True)
 
-        matMenu.setStyleSheet(STYLES["menu"])
 
         for mat in sorted(self.matieres, key=locale.strxfrm):
             matMenu.addAction(matActionGroup.addAction(QAction(f"{mat}", checkable=True)))
@@ -449,10 +413,9 @@ class frontEnd:
         if matched_files:
             new_suggested_file = int(max(matched_files).replace(f"{self.matiere}-{prefix}", "").replace(".docx", "")) + 1
             
-            numMatMessageBox = QMessageBox()
+            numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
-            numMatMessageBox.setStyleSheet(STYLES["message_box"])
             numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}")
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
@@ -495,7 +458,7 @@ class frontEnd:
         
         def calendarView():
             self.ui.numLineEdit.setEnabled(False)
-            calendarView = QDialog()
+            calendarView = QDialog(self.window)
             calendarView.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.MSWindowsFixedSizeDialogHint | QtCore.Qt.WindowMinimizeButtonHint)
 
             calendar = QCalendarWidget(calendarView)
@@ -504,8 +467,6 @@ class frontEnd:
             calendar.setGridVisible(True)
             calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
             calendar.setObjectName("numCalendarWidget")
-
-            calendarView.setStyleSheet(STYLES["calendar"])
 
             calwe_format = QtGui.QTextCharFormat()
             calwe_format.setForeground(QtGui.QColor("#148CD2"))
@@ -521,13 +482,12 @@ class frontEnd:
             calendarView.setWindowTitle("Veuillez choisir une date")
             calendarView.exec_()
         
-        numMenu = QMenu("numMenu")
+        numMenu = QMenu("numMenu", self.window)
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
         numActionGroup = QActionGroup(numMenu)
         numActionGroup.setExclusive(True)
 
-        numMenu.setStyleSheet(STYLES["menu"])
         
         chapterButton = numMenu.addMenu("Chapitre")
         moduleButton = numMenu.addMenu("Module")
@@ -588,11 +548,10 @@ class frontEnd:
         
         def QLActivated():
             pathMenu.exec(self.ui.pathPathLabel.mapToGlobal(QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())))
-        pathMenu = QMenu("pathMenu")
+        pathMenu = QMenu("pathMenu", self.window)
         pathMenu.triggered.connect(isChecked)
         pathActionGroup = QActionGroup(pathMenu)
 
-        pathMenu.setStyleSheet(STYLES["menu"])
 
         self.ui.pathPathLabel.linkActivated.connect(QLActivated)
 
@@ -758,6 +717,9 @@ class frontEnd:
                         self.modelForm[form_value][1].setEnabled(False)
                         self.modelForm[form_value][1].clear()
                 
+                if model == self.modelConfig["default"]:
+                    self.ui.modelDefaultPushButton.setEnabled(False)
+                
                 self.modelPathForm["model_file"].setText(" > ".join(
                     os.path.normpath(model_config["filepath"]).split(os.path.sep)
                 ))
@@ -847,6 +809,7 @@ class frontEnd:
                     }
                 }
             }
+        
         # CHECK DEFAULT MODELS
         if not self.modelConfig["models"]:
             self.modelConfig["models"] = self.modelConfig["default_models"]
@@ -855,7 +818,10 @@ class frontEnd:
             self.ui.modelListWidget.addItem(model)
 
         for index in range(self.ui.modelListWidget.count()):
-            if self.modelConfig["default"] == self.ui.modelListWidget.item(index).text() or not self.modelConfig["default"]:
+            if not self.modelConfig["default"] or not self.modelConfig["default"] in self.modelConfig["models"]:
+                set_default_model(self.ui.modelListWidget.item(index))
+                self.writeJSON()
+            if self.modelConfig["default"] == self.ui.modelListWidget.item(index).text():
                 set_default_model(self.ui.modelListWidget.item(index))
         
         
@@ -878,9 +844,31 @@ class frontEnd:
 
         self.ui.modelApplyPushButton.pressed.connect(self.writeJSON)
 
+    def switchModel(self, model):
+        model_config = self.modelConfig["models"][model]
+
+        self.ui.modelLineEdit.setText(model)
+
+        for groupbox in self.genGroupBox:
+            self.genGroupBox[groupbox].setEnabled(bool(model_config["values"][groupbox]))
+    
+    def modelGenTab(self):        
+        modelMenu = QMenu("modelMenu", self.window)
+        modelMenu.triggered.connect(lambda selection: self.switchModel(selection.text()))
+        self.ui.modelToolButton.setMenu(modelMenu)
+
+        modelActionGroup = QActionGroup(modelMenu)
+        modelActionGroup.setExclusive(True)
+
+
+        for model in sorted(self.modelConfig["models"], key=locale.strxfrm):
+            if model == self.modelConfig["default"]:
+                self.switchModel(model)
+            modelMenu.addAction(modelActionGroup.addAction(QAction(f"{model}", checkable=True)))
+
 
 class Document:
-    def __init__(self, titre, soustitre, auteur, niveau, matiere, numero, section, model, filepath):
+    def __init__(self, titre, soustitre, auteur, niveau, matiere, numero, section, model, filepath, window=""):
         self.titre = titre
         self.soustitre = soustitre
         self.auteur = auteur
@@ -890,6 +878,7 @@ class Document:
         self.section = section
         self.model = model
         self.filepath = filepath
+        self.window = window
 
         self.options = {"titre": titre,
                     "soustitre": soustitre,
@@ -909,33 +898,31 @@ class Document:
 
         print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
         
-        docMessageBox = QMessageBox()
-        docMessageBox.setIcon(QMessageBox.Information)
-        docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
+        if self.window:
+            docMessageBox = QMessageBox(self.window)
+            docMessageBox.setIcon(QMessageBox.Information)
+            docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
 
-        docMessageBox.setStyleSheet(STYLES["message_box"])
+            docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
 
+            buttonOpen = docMessageBox.addButton(QMessageBox.Open)
+            buttonOpen.setText("Ouvrir le fichier")
 
-        docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
+            buttonIgnore = docMessageBox.addButton(QMessageBox.No)
+            buttonIgnore.setText("Non")
 
-        buttonOpen = docMessageBox.addButton(QMessageBox.Open)
-        buttonOpen.setText("Ouvrir le fichier")
+            docMessageBox.exec_()
 
-        buttonIgnore = docMessageBox.addButton(QMessageBox.No)
-        buttonIgnore.setText("Non")
-
-        docMessageBox.exec_()
-
-        if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
-            if sys.platform == "win32":
-                    try:
-                        os.startfile(self.filepath)
-                    except:
-                        pass
+            if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
+                if sys.platform == "win32":
+                        try:
+                            os.startfile(self.filepath)
+                        except:
+                            pass
+                else:
+                    os.system(fr'open {self.filepath}')
             else:
-                os.system(fr'open {self.filepath}')
-        else:
-            assert ConnectionRefusedError
+                assert ConnectionRefusedError
 
 
 if __name__ == "__main__":

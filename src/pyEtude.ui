@@ -323,78 +323,26 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qmenu
 
 --------------------------------------------------------------------------- */
 QMenu {
-  border: 0px solid #32414B;
-  color: #F0F0F0;
-  margin: 0px;
+    border: 0.5px solid #787878;
+    color: #F0F0F0;
+    margin: 0px;
 }
 
 QMenu::separator {
-  height: 1px;
-  background-color: #505F69;
-  color: #F0F0F0;
-}
-
-QMenu::icon {
-  margin: 0px;
-  padding-left: 4px;
+    height: 1px;
+    background-color: #444444;
 }
 
 QMenu::item {
-  background-color: #32414B;
-  padding: 4px 24px 4px 24px;
-  /* Reserve space for selection border */
-  border: 1px transparent #32414B;
+    background-color: #262626;
+    padding: 4px 4px 4px 4px;
+    /* Reserve space for selection border */
+    border: 1px transparent #32414B;
 }
 
 QMenu::item:selected {
-  color: #F0F0F0;
-}
-
-QMenu::indicator {
-  width: 12px;
-  height: 12px;
-  padding-left: 6px;
-  /* non-exclusive indicator = check box style indicator (see QActionGroup::setExclusive) */
-  /* exclusive indicator = radio button style indicator (see QActionGroup::setExclusive) */
-}
-
-QMenu::indicator:non-exclusive:unchecked {
-  image: url(&quot;:/qss_icons/rc/checkbox_unchecked.png&quot;);
-}
-
-QMenu::indicator:non-exclusive:unchecked:selected {
-  image: url(&quot;:/qss_icons/rc/checkbox_unchecked_disabled.png&quot;);
-}
-
-QMenu::indicator:non-exclusive:checked {
-  image: url(&quot;:/qss_icons/rc/checkbox_checked.png&quot;);
-}
-
-QMenu::indicator:non-exclusive:checked:selected {
-  image: url(&quot;:/qss_icons/rc/checkbox_checked_disabled.png&quot;);
-}
-
-QMenu::indicator:exclusive:unchecked {
-  image: url(&quot;:/qss_icons/rc/radio_unchecked.png&quot;);
-}
-
-QMenu::indicator:exclusive:unchecked:selected {
-  image: url(&quot;:/qss_icons/rc/radio_unchecked_disabled.png&quot;);
-}
-
-QMenu::indicator:exclusive:checked {
-  image: url(&quot;:/qss_icons/rc/radio_checked.png&quot;);
-}
-
-QMenu::indicator:exclusive:checked:selected {
-  image: url(&quot;:/qss_icons/rc/radio_checked_disabled.png&quot;);
-}
-
-QMenu::right-arrow {
-  margin: 5px;
-  image: url(&quot;:/qss_icons/rc/arrow_right.png&quot;);
-  height: 12px;
-  width: 12px;
+    color: #F0F0F0;
+    background-color: #605e5c;
 }
 
 /* QAbstractItemView ------------------------------------------------------
@@ -759,14 +707,34 @@ QGraphicsView:hover, QGraphicsView:!hover, QGraphicsView::selected, QGraphicsVie
 /* QCalendarWidget --------------------------------------------------------
 
 --------------------------------------------------------------------------- */
-QCalendarWidget {
-  border: 1px solid #32414B;
-  border-radius: 4px;
+QCalendarWidget QAbstractItemView {
+    alternate-background-color: #484644;
+    color: #F0F0F0;
+    border: 1px solid #32414B;
+    border-radius: 4px;
 }
 
-QCalendarWidget:disabled {
-  background-color: #19232D;
-  color: #787878;
+QCalendarWidget QWidget {
+    background-color: #262626;
+    border: 0px solid #444444;
+    padding: 0px;
+    color: #FFFFFF;
+    selection-background-color: #444444;
+    selection-color: #FFFFFF;
+}
+
+QCalendarWidget QWidget::item:selected {
+    background-color: #1464A0;
+}
+
+QCalendarWidget QWidget::item:hover {
+    background-color: #148CD2;
+    color: #32414B;
+}
+
+QCalendarWidget {
+    border: 1px solid #32414B;
+    border-radius: 4px;
 }
 
 /* QLCDNumber -------------------------------------------------------------
@@ -1194,9 +1162,6 @@ QLineEdit:disabled {
   background-color: #323130;
   color: #787878;
   border: 1px solid #444444;
-  border-right: 0px solid;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
 }
 
 QLineEdit:hover {
@@ -1808,7 +1773,7 @@ PlotWidget {
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -1874,6 +1839,9 @@ PlotWidget {
        </widget>
       </widget>
       <widget class="QGroupBox" name="soustitreGroupBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2381,7 +2349,7 @@ PlotWidget {
         <set>Qt::AlignCenter</set>
        </property>
        <property name="placeholderText">
-        <string>Document de Révision</string>
+        <string/>
        </property>
        <property name="clearButtonEnabled">
         <bool>false</bool>
