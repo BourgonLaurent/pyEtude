@@ -47,7 +47,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r'3.0.0~b25'
+VERSION = r'3.0.0b30'
 DEBUG = True
 ## Nom de fichiers importants
 FILES = {
@@ -56,7 +56,7 @@ FILES = {
     "config":"pyEtude.json" # (ext: *.json) Nom du fichier .json généré avec le configurateur
 }
 ## Assets
-GITHUB_LINK = r'https://raw.githubusercontent.com/BourgonLaurent/pyEtude'
+GITHUB_REPO = r'BourgonLaurent/pyEtude'
 STYLES = {
     "message_box":"""QWidget {
                       background-color: #262626;
@@ -89,7 +89,12 @@ STYLES = {
     "line_edit":"""QLineEdit {
                         border-top-right-radius: 0px;
                         border-bottom-right-radius: 0px;
-                    }"""}
+                    }"""
+}
+
+
+
+## GENERAL FUNCTIONS
 def downloadData(name, create=True):
     """## Télécharge un fichier du répertoire GitHub raw
     
@@ -103,16 +108,40 @@ def downloadData(name, create=True):
     """
     if create:
         try:
-            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&'), name)
+            urllib.request.urlretrieve(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}", safe='/:?=&'), name)
         except urllib.error.HTTPError:
-            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&'), name)
+            urllib.request.urlretrieve(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}", safe='/:?=&'), name)
     else:
         try:
-            with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
+            with urllib.request.urlopen(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
                 return ur.read().decode()
         except urllib.error.HTTPError:
-            with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&')) as ur:
+            with urllib.request.urlopen(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}", safe='/:?=&')) as ur:
                 return ur.read().decode()
+
+def checkUpdates(window):
+    """## Vérifie les nouvelles versions du logiciek
+    
+    ### Arguments:\n
+        \twindow {PyQt5.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
+    """
+    with urllib.request.urlopen(urllib.parse.quote(fr'https://api.github.com/repos/BourgonLaurent/pyEtude/releases/latest', safe='/:?=&')) as ur:
+        content = json.loads(ur.read().decode('utf-8'))
+    
+    if content["tag_name"] < f"v{VERSION}":
+        alert = QMessageBox(window)
+        alert.setIcon(QMessageBox.Warning)
+
+        alert.setWindowTitle(f"pyÉtude - v{VERSION} - Nouvelle version")
+
+        alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
+        alert.setInformativeText(f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/BourgonLaurent/pyEtude'>Téléchargez-la sur GitHub</a>")
+        
+        alert.exec_()
+
+    
+
+
 
 class frontEnd:
     """## GUI de l'application, s'occupe de montrer à l'utilisateur les options possibles
@@ -159,6 +188,8 @@ class frontEnd:
         self.ui.setupUi(self.window)
         # Spécifie l'apparence générale universelle de l'interface
         self.app.setStyle("Fusion")
+
+        checkUpdates(self.window)
         
     def executeGUI(self):
         """## Génère et lance le GUI"""
@@ -928,8 +959,6 @@ class Document:
         doc = DocxTemplate(self.model)
         doc.render(self.values)
         doc.save(self.filepath)
-
-        print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
         
         if self.window:
             docMessageBox = QMessageBox(self.window)
@@ -956,6 +985,8 @@ class Document:
                     os.system(fr'open {self.filepath}')
             else:
                 assert ConnectionRefusedError
+        else:
+            print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
 
 
 if __name__ == "__main__":
