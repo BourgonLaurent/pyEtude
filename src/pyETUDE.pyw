@@ -420,7 +420,10 @@ class frontEnd:
 
         values = {i:values[i] for i in values if model_config["values"][i]}
 
-        Document(values, self.model + ".docx", self.filepaths[2], self.window)
+        document = Document(values, self.model + ".docx", self.filepaths[2], self.window)
+        document.packWord()
+        document.sendAlert()
+        
         
 
     def matGenTab(self):
@@ -953,13 +956,12 @@ class Document:
         self.filepath = filepath
         self.window = window
 
-        self.packWord()
-
     def packWord(self):
         doc = DocxTemplate(self.model)
         doc.render(self.values)
         doc.save(self.filepath)
-        
+    
+    def sendAlert(self):
         if self.window:
             docMessageBox = QMessageBox(self.window)
             docMessageBox.setIcon(QMessageBox.Information)
