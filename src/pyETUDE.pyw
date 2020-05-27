@@ -105,7 +105,7 @@ def downloadData(name, create=True):
         try:
             urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&'), name)
         except urllib.error.HTTPError:
-            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/models/src/{name}", safe='/:?=&'), name)
+            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&'), name)
     else:
         try:
             with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
