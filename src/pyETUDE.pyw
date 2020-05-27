@@ -101,21 +101,18 @@ def downloadData(name, create=True):
     ### Returns:\n
         \t[str] -- (si create=False): données décodées qui ont été prises
     """
-    try:
-        if create:
-            try:
-                urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}" + name, safe='/:?=&'))
-            except urllib.error.HTTPError:
-                urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}" + name, safe='/:?=&'))
-        else:
-            try:
-                with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
-                    return ur.read().decode()
-            except urllib.error.HTTPError:
-                with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&')) as ur:
-                    return ur.read().decode()
-    except urllib.error.HTTPError:
-        return
+    if create:
+        try:
+            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&'), name)
+        except urllib.error.HTTPError:
+            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/models/src/{name}", safe='/:?=&'), name)
+    else:
+        try:
+            with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
+                return ur.read().decode()
+        except urllib.error.HTTPError:
+            with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&')) as ur:
+                return ur.read().decode()
 
 class frontEnd:
     """## GUI de l'application, s'occupe de montrer à l'utilisateur les options possibles
@@ -308,15 +305,15 @@ class frontEnd:
             for key, value in self.matieres.items():
                 json_data["matieres"][key] = value
         
-        json_data["modeles"] = self.modelConfig
+        if hasattr(self, 'modelConfig'):
+            json_data["modeles"] = self.modelConfig
+            
         with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
             json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
         
         QMessageBox.information(self.window,
                                 "Configuration sauvegardée",
                                 "Vos paramètres ont été exportés avec succès")
-        
-        self.modelGenTab()
         
 
     def genTab(self):
@@ -712,8 +709,19 @@ class frontEnd:
                 if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
                     self.ui.modelListWidget.addItem(text_entered)
 
-                    self.modelConfig["models"][text_entered] = {}
-                    self.modelConfig["models"][text_entered]["values"] = {}
+                    self.modelConfig["models"][text_entered] = {
+                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+                        "folderpath": "Documents de Révision",
+                        "values": {
+                            "auteur": "Auteur",
+                            "matiere": "Matière",
+                            "niveau": "Niveau",
+                            "numero": "Numéro",
+                            "section": "Section",
+                            "soustitre": "Sous-Titre",
+                            "titre": "Titre"
+                        }
+                    }
                 else:
                     QMessageBox.critical(self.window,
                                         "Nouveau",
@@ -724,8 +732,11 @@ class frontEnd:
             self.ui.modelListWidget.takeItem(self.ui.modelListWidget.currentRow())
 
         def reset_rows():
-            print(self.modelConfig)
-            print(self)
+            self.ui.modelListWidget.clear()
+            self.modelConfig["models"] = self.modelConfig["default_models"]
+
+            for model in self.modelConfig["models"]:
+                self.ui.modelListWidget.addItem(model)
         
         def model_selection_changed(row):
             # Désactive tout si rien n'est sélectionné
@@ -738,6 +749,9 @@ class frontEnd:
                 checkBox.setChecked(state)
                 lineEdit.setEnabled(state)
                 lineEdit.clear()
+
+            if not state:
+                return
 
             model = self.ui.modelListWidget.item(row).text()
             model_config = self.modelConfig["models"][model]
@@ -827,6 +841,10 @@ class frontEnd:
             # Remove access to default button
             self.ui.modelDefaultPushButton.setEnabled(False)
         
+        def save_write_values():
+            self.writeJSON()
+            self.modelGenTab()
+
         # CHECK DEFAULT MODELS
         if not self.modelConfig["models"]:
             self.modelConfig["models"] = self.modelConfig["default_models"]
@@ -846,6 +864,7 @@ class frontEnd:
             if not self.modelConfig["default"] or not self.modelConfig["default"] in self.modelConfig["models"]:
                 set_default_model(self.ui.modelListWidget.item(index))
                 self.writeJSON()
+                self.modelGenTab()
             if self.modelConfig["default"] == self.ui.modelListWidget.item(index).text():
                 set_default_model(self.ui.modelListWidget.item(index))
         
@@ -867,7 +886,7 @@ class frontEnd:
         self.ui.modelPathPushButton.pressed.connect(model_choose_path)
         self.ui.modelDefaultPushButton.pressed.connect(lambda: set_default_model(self.ui.modelListWidget.currentItem()))
 
-        self.ui.modelApplyPushButton.pressed.connect(self.writeJSON)
+        self.ui.modelApplyPushButton.pressed.connect(save_write_values)
 
     def switchModel(self, model):
         model_config = self.modelConfig["models"][model]
