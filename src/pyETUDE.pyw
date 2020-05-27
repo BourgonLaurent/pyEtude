@@ -47,7 +47,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r'2.4.1'
+VERSION = r'3.0.0~b25'
 DEBUG = True
 ## Nom de fichiers importants
 FILES = {
@@ -320,6 +320,9 @@ class frontEnd:
         
 
     def genTab(self):
+        # Gestion des modèles 
+        self.modelGenTab()
+
         # Mise en place du menu pour les matières et le numéro
         self.matGenTab()
         self.numGenTab()
@@ -336,9 +339,6 @@ class frontEnd:
         
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
-
-        # Gestion des modèles 
-        self.modelGenTab()
 
         # Connection du bouton 'Générer' à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
@@ -548,7 +548,10 @@ class frontEnd:
         self.numero = self.getLineEditValue(self.ui.numLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
         
         matpath = self.checkCustomMatNamePath()
-        self.defaultFilePaths = [matpath, f"{self.matiere}-{self.numero}.docx", os.path.join(matpath, f"{self.matiere}-{self.numero}.docx")] # Chemin, fichier, chemin complet
+        self.defaultFilePaths = [os.path.join(matpath, self.modelConfig["models"][self.getLineEditValue(self.ui.modelLineEdit)]["folderpath"]), # Chemin
+            f"{self.matiere}-{self.numero}.docx"] # Fichier
+
+        self.defaultFilePaths.append(os.path.join(self.defaultFilePaths[0], self.defaultFilePaths[1])) # Chemin complet
 
         self.filepaths = self.defaultFilePaths
         self.updatePathLabel()
@@ -874,9 +877,13 @@ class frontEnd:
         for groupbox in self.genGroupBox:
             self.genGroupBox[groupbox].setEnabled(bool(model_config["values"][groupbox]))
     
-    def modelGenTab(self):        
+    def modelGenTab(self):
+        def model_menu_connection(selection):
+            self.switchModel(selection.text())
+            self.defaultFilePathChanged()
+
         modelMenu = QMenu("modelMenu", self.window)
-        modelMenu.triggered.connect(lambda selection: self.switchModel(selection.text()))
+        modelMenu.triggered.connect(model_menu_connection)
         self.ui.modelToolButton.setMenu(modelMenu)
 
         modelActionGroup = QActionGroup(modelMenu)
