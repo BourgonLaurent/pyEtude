@@ -16,6 +16,8 @@ import json, locale, os, sys, zipfile, urllib.request, urllib.error
 try:
     from PyQt5 import QtCore, QtGui, QtWidgets, uic
     from PyQt5.QtWidgets import *
+    
+    from docxtpl import DocxTemplate
 except ImportError as e:
     # Crée le message d'erreur
     error_message = f"""[!] Impossible de continuer:\n\n\t{e.msg}\n\n
@@ -45,7 +47,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r'2.4.1'
+VERSION = r'3.0.0~b25'
 DEBUG = True
 ## Nom de fichiers importants
 FILES = {
@@ -56,25 +58,6 @@ FILES = {
 ## Assets
 GITHUB_LINK = r'https://raw.githubusercontent.com/BourgonLaurent/pyEtude'
 STYLES = {
-    "menu":"""QMenu {
-                  border: 0.5px solid #787878;
-                  color: #F0F0F0;
-                  margin: 0px;
-                }
-                QMenu::separator {
-                  height: 1px;
-                  background-color: #444444;
-                }
-                QMenu::item {
-                  background-color: #262626;
-                  padding: 4px 4px 4px 4px;
-                  /* Reserve space for selection border */
-                  border: 1px transparent #32414B;
-                }
-                QMenu::item:selected {
-                  color: #F0F0F0;
-                  background-color: #605e5c;
-                }""",
     "message_box":"""QWidget {
                       background-color: #262626;
                       border: 0px solid #32414B;
@@ -103,31 +86,6 @@ STYLES = {
                     QPushButton:hover {
                       background-color: #605e5c;
                     }""",
-    "calendar":"""QAbstractItemView {
-                      alternate-background-color: #484644;
-                      color: #F0F0F0;
-                      border: 1px solid #32414B;
-                      border-radius: 4px;
-                    }
-                    QWidget {
-                      background-color: #262626;
-                      border: 0px solid #444444;
-                      padding: 0px;
-                      color: #FFFFFF;
-                      selection-background-color: #444444;
-                      selection-color: #FFFFFF;
-                    }
-                    QWidget::item:selected {
-                      background-color: #1464A0;
-                    }
-                    QWidget::item:hover {
-                      background-color: #148CD2;
-                      color: #32414B;
-                    }
-                    QCalendarWidget {
-                      border: 1px solid #32414B;
-                      border-radius: 4px;
-                    }""",
     "line_edit":"""QLineEdit {
                         border-top-right-radius: 0px;
                         border-bottom-right-radius: 0px;
@@ -145,15 +103,15 @@ def downloadData(name, create=True):
     """
     if create:
         try:
-            urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/src/{name}", name)
+            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&'), name)
         except urllib.error.HTTPError:
-            urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/src/{name}", name)
+            urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/models/src/{name}", safe='/:?=&'), name)
     else:
         try:
-            with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/src/{name}") as ur:
+            with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
                 return ur.read().decode()
         except urllib.error.HTTPError:
-            with urllib.request.urlopen(fr"{GITHUB_LINK}/master/src/{name}") as ur:
+            with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&')) as ur:
                 return ur.read().decode()
 
 class frontEnd:
@@ -219,6 +177,9 @@ class frontEnd:
         # Lance le fonctionnement en arrière-plan de l'application
         self.app.exec_()
 
+    def esperLimit(self, lineedit):
+        lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
+
     def firstLaunch(self):
         # Crée les matières par défaut
         self.matieresDefault = {
@@ -239,7 +200,8 @@ class frontEnd:
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
             self.ui.tabWidget.setCurrentIndex(0)
-            self.ui.matieresConfig.setChecked(True)
+
+            # self.ui.matieresConfig.setChecked(True)
 
             # Lit le document de configuration et assigne:
             # self.auteur, self.niveau, self.matieres
@@ -250,14 +212,31 @@ class frontEnd:
             # Met le nom de l'auteur et du niveau selon le fichier de configuration
             self.ui.auteurLineEdit.setText(self.auteur)
             self.ui.niveauLineEdit.setText(self.niveau)
-        
+            
+            self.genGroupBox = {
+                "titre": self.ui.titreGroupBox,
+                "soustitre": self.ui.soustitreGroupBox,
+                "matiere": self.ui.matGroupBox,
+                "numero": self.ui.numGroupBox,
+                "section": self.ui.sectionGroupBox,
+                "auteur": self.ui.auteurPersoGroupBox,
+                "niveau": self.ui.niveauPersoGroupBox
+            }
+
+            # Configuration terminée, met en place l'onglet de modèles
+            self.modelTab()
+
             # Configuration terminée, met en place l'onglet de génération
             self.genTab()
+
         else:
             assert FileNotFoundError
             # Empêche l'accès au générateur
             self.ui.tabWidget.setTabEnabled(0, False)
             self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
+            self.ui.tabWidget.setTabEnabled(2, False)
+            self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
+
             self.ui.tabWidget.setCurrentIndex(1)
             
             # Assigne les matières par défaut dans le tableau
@@ -288,12 +267,59 @@ class frontEnd:
         self.auteur = jsonData["auteur"]
         self.niveau = jsonData["niveau"]
         # Vérifie si des matières personnalisées exsitent
-        if not jsonData["matieres"]:
+        if not "matieres" in jsonData:
             self.matieres = self.matieresDefault
         else:
             self.matieres = jsonData["matieres"]
+        
+        # Vérifie si les modèles existent
+        if "modeles" in jsonData:
+            self.modelConfig = jsonData["modeles"]
+        else:
+            self.modelConfig = {
+                "default": None,
+                "models": {},
+                "default_models": {
+                    "Documents de Révision": {
+                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+                        "folderpath": "Documents de Révision",
+                        "values": {
+                            "auteur": "Auteur",
+                            "matiere": "Matière",
+                            "niveau": "Niveau",
+                            "numero": "Numéro",
+                            "section": "Section",
+                            "soustitre": "Sous-Titre",
+                            "titre": "Titre"
+                        }
+                    }
+                }
+            }
+
+    def writeJSON(self):
+        json_data = dict()
+        json_data["auteur"] = self.auteur
+        json_data["niveau"] = self.niveau
+        json_data["matieres"] = dict()
+        if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
+            for key, value in self.matieres.items():
+                json_data["matieres"][key] = value
+        
+        if hasattr(self, 'modelConfig'):
+            json_data["modeles"] = self.modelConfig
+            
+        with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
+            json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
+        
+        QMessageBox.information(self.window,
+                                "Configuration sauvegardée",
+                                "Vos paramètres ont été exportés avec succès")
+        
 
     def genTab(self):
+        # Gestion des modèles 
+        self.modelGenTab()
+
         # Mise en place du menu pour les matières et le numéro
         self.matGenTab()
         self.numGenTab()
@@ -322,27 +348,25 @@ class frontEnd:
         return value
 
     def createDocument(self):
-        self.titre = self.getLineEditValue(self.ui.titreLineEdit)
-        self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
-        self.section = self.getLineEditValue(self.ui.sectionLineEdit)
-        
-        self.model = "model.docx"
-        if not os.path.isfile(self.model):
-            modelMessageBox = QMessageBox()
-            modelMessageBox.setIcon(QMessageBox.Information)
-            modelMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Modèle")
-            modelMessageBox.setText(f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
-            modelMessageBox.addButton(QMessageBox.Ok)
-            modelMessageBox.exec_()
-            downloadData(self.model)
-        
-        if os.path.isfile(self.filepaths[2]):
-            assert FileExistsError
+        self.model = self.getLineEditValue(self.ui.modelLineEdit)
+        model_config = self.modelConfig["models"][self.model]
 
-            numMatMessageBox = QMessageBox()
+        if not self.model:
+            QMessageBox.critical(self.window,
+                                f"pyÉtude - {VERSION} - Générateur",
+                                "Aucun modèle n'est sélectionné")
+            return FileNotFoundError
+
+        if not os.path.isfile(model_config["filepath"]):
+            QMessageBox.critical(self.window,
+                                    f"pyÉtude - {VERSION} - Modèle",
+                                    f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné")
+            return FileNotFoundError
+
+        if os.path.isfile(self.filepaths[2]):
+            numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichier Existant Trouvé")
-            numMatMessageBox.setStyleSheet(STYLES["message_box"])
             numMatMessageBox.setText(f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}")
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
@@ -351,10 +375,21 @@ class frontEnd:
             numMatMessageBox.exec_()
 
             if numMatMessageBox.clickedButton().text() == "Non":
-                return ConnectionAbortedError
-        Document(self.titre, self.soustitre, self.auteur, self.niveau,
-                            self.matiere, self.numero, self.section,
-                            self.model, self.filepaths[2])
+                return FileExistsError
+    
+        values = {
+            "titre": self.getLineEditValue(self.ui.titreLineEdit),
+            "soustitre": self.getLineEditValue(self.ui.soustitreLineEdit),
+            "matiere": self.matiere,
+            "numero": self.numero,
+            "section": self.getLineEditValue(self.ui.sectionLineEdit),
+            "auteur": self.auteur,
+            "niveau": self.niveau
+        }
+
+        values = {i:values[i] for i in values if model_config["values"][i]}
+
+        Document(values, self.model + ".docx", self.filepaths[2], self.window)
         
 
     def matGenTab(self):
@@ -371,13 +406,12 @@ class frontEnd:
         
         self.matiere = "PHY"
 
-        matMenu = QMenu("matMenu")
+        matMenu = QMenu("matMenu", self.window)
         matMenu.triggered.connect(isChecked)
         self.ui.matToolButton.setMenu(matMenu)
         matActionGroup = QActionGroup(matMenu)
         matActionGroup.setExclusive(True)
 
-        matMenu.setStyleSheet(STYLES["menu"])
 
         for mat in sorted(self.matieres, key=locale.strxfrm):
             matMenu.addAction(matActionGroup.addAction(QAction(f"{mat}", checkable=True)))
@@ -411,10 +445,9 @@ class frontEnd:
         if matched_files:
             new_suggested_file = int(max(matched_files).replace(f"{self.matiere}-{prefix}", "").replace(".docx", "")) + 1
             
-            numMatMessageBox = QMessageBox()
+            numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
-            numMatMessageBox.setStyleSheet(STYLES["message_box"])
             numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}")
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
@@ -457,7 +490,7 @@ class frontEnd:
         
         def calendarView():
             self.ui.numLineEdit.setEnabled(False)
-            calendarView = QDialog()
+            calendarView = QDialog(self.window)
             calendarView.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.MSWindowsFixedSizeDialogHint | QtCore.Qt.WindowMinimizeButtonHint)
 
             calendar = QCalendarWidget(calendarView)
@@ -466,8 +499,6 @@ class frontEnd:
             calendar.setGridVisible(True)
             calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
             calendar.setObjectName("numCalendarWidget")
-
-            calendarView.setStyleSheet(STYLES["calendar"])
 
             calwe_format = QtGui.QTextCharFormat()
             calwe_format.setForeground(QtGui.QColor("#148CD2"))
@@ -483,13 +514,12 @@ class frontEnd:
             calendarView.setWindowTitle("Veuillez choisir une date")
             calendarView.exec_()
         
-        numMenu = QMenu("numMenu")
+        numMenu = QMenu("numMenu", self.window)
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
         numActionGroup = QActionGroup(numMenu)
         numActionGroup.setExclusive(True)
 
-        numMenu.setStyleSheet(STYLES["menu"])
         
         chapterButton = numMenu.addMenu("Chapitre")
         moduleButton = numMenu.addMenu("Module")
@@ -515,7 +545,10 @@ class frontEnd:
         self.numero = self.getLineEditValue(self.ui.numLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
         
         matpath = self.checkCustomMatNamePath()
-        self.defaultFilePaths = [matpath, f"{self.matiere}-{self.numero}.docx", os.path.join(matpath, f"{self.matiere}-{self.numero}.docx")] # Chemin, fichier, chemin complet
+        self.defaultFilePaths = [os.path.join(matpath, self.modelConfig["models"][self.getLineEditValue(self.ui.modelLineEdit)]["folderpath"]), # Chemin
+            f"{self.matiere}-{self.numero}.docx"] # Fichier
+
+        self.defaultFilePaths.append(os.path.join(self.defaultFilePaths[0], self.defaultFilePaths[1])) # Chemin complet
 
         self.filepaths = self.defaultFilePaths
         self.updatePathLabel()
@@ -550,11 +583,10 @@ class frontEnd:
         
         def QLActivated():
             pathMenu.exec(self.ui.pathPathLabel.mapToGlobal(QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())))
-        pathMenu = QMenu("pathMenu")
+        pathMenu = QMenu("pathMenu", self.window)
         pathMenu.triggered.connect(isChecked)
         pathActionGroup = QActionGroup(pathMenu)
 
-        pathMenu.setStyleSheet(STYLES["menu"])
 
         self.ui.pathPathLabel.linkActivated.connect(QLActivated)
 
@@ -601,21 +633,8 @@ class frontEnd:
                         else:
                             path_text = path.text().replace("&","")
                         self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path_text]
-            writeJSON()
+            self.writeJSON()
             self.firstLaunch()
-        
-        def writeJSON():
-            json_data = dict()
-            json_data["auteur"] = self.auteur
-            json_data["niveau"] = self.niveau
-            json_data["matieres"] = dict()
-
-            if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
-                for key, value in self.matieres.items():
-                    json_data["matieres"][key] = value
-            
-            with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
-                json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
 
         # Empêche l'utilisation des esperluètes "&"
         self.esperLimit(self.ui.auteurLineEdit)
@@ -657,173 +676,286 @@ class frontEnd:
     def aboutTab(self):
         self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
     
-    def esperLimit(self, lineedit):
-        lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
+    def modelTab(self):
+        self.modelForm = {
+            "titre": [ self.ui.titreModelCheckBox, self.ui.titreModelLineEdit ],
+            "soustitre": [ self.ui.soustitreModelCheckBox, self.ui.soustitreModelLineEdit ],
+            "matiere": [ self.ui.matiereModelCheckBox, self.ui.matiereModelLineEdit ],
+            "numero": [ self.ui.numeroModelCheckBox, self.ui.numeroModelLineEdit ],
+            "section": [ self.ui.sectionModelCheckBox, self.ui.sectionModelLineEdit ],
+            "auteur": [ self.ui.auteurModelCheckBox, self.ui.auteurModelLineEdit ],
+            "niveau": [ self.ui.niveauModelCheckBox, self.ui.niveauModelLineEdit ]
+        }
+
+        self.modelPathForm = {
+            "model_file": self.ui.modelPathModelLabel,
+            "destination": self.ui.modelDestinationLineEdit
+        }
+
+
+        self.modelStopSaving = False
+
+        def add_row_menu():
+            dialog = QInputDialog(self.window)
+
+            dialog.setWindowTitle("Nouveau")
+            dialog.setLabelText("Nom du modèle:")
+            dialog.setCancelButtonText("Annuler")
+
+            # Code de sortie (1=OK), texte
+            ok, text_entered = dialog.exec_(), str(dialog.textValue())
+
+            if ok and text_entered != "":
+                if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
+                    self.ui.modelListWidget.addItem(text_entered)
+
+                    self.modelConfig["models"][text_entered] = {
+                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+                        "folderpath": "Documents de Révision",
+                        "values": {
+                            "auteur": "Auteur",
+                            "matiere": "Matière",
+                            "niveau": "Niveau",
+                            "numero": "Numéro",
+                            "section": "Section",
+                            "soustitre": "Sous-Titre",
+                            "titre": "Titre"
+                        }
+                    }
+                else:
+                    QMessageBox.critical(self.window,
+                                        "Nouveau",
+                                        "Il existe déjà un modèle avec ce nom")
+
+        def remove_row():
+            self.modelConfig["models"].pop(self.ui.modelListWidget.currentItem().text())
+            self.ui.modelListWidget.takeItem(self.ui.modelListWidget.currentRow())
+
+        def reset_rows():
+            self.ui.modelListWidget.clear()
+            self.modelConfig["models"] = self.modelConfig["default_models"]
+
+            for model in self.modelConfig["models"]:
+                self.ui.modelListWidget.addItem(model)
+        
+        def model_selection_changed(row):
+            # Désactive tout si rien n'est sélectionné
+            state = row != -1
+
+            for component in (self.ui.modelListMinus, self.ui.modelValuesGroupBox,
+                                self.ui.modelPathsGroupBox, self.ui.modelDefaultPushButton):
+                component.setEnabled(state)
+            for checkBox, lineEdit in self.modelForm.values():
+                checkBox.setChecked(state)
+                lineEdit.setEnabled(state)
+                lineEdit.clear()
+
+            if not state:
+                return
+
+            model = self.ui.modelListWidget.item(row).text()
+            model_config = self.modelConfig["models"][model]
+
+            self.modelStopSaving = True
+
+            if model_config["values"]:
+                for form_value in self.modelForm:
+                    if model_config["values"][form_value]:
+                        self.modelForm[form_value][0].setChecked(True)
+                        self.modelForm[form_value][1].setEnabled(True)
+                        self.modelForm[form_value][1].setText(model_config["values"][form_value])
+                    else:
+                        self.modelForm[form_value][0].setChecked(False)
+                        self.modelForm[form_value][1].setEnabled(False)
+                        self.modelForm[form_value][1].clear()
+                
+                if model == self.modelConfig["default"]:
+                    self.ui.modelDefaultPushButton.setEnabled(False)
+                
+                self.modelPathForm["model_file"].setText(" > ".join(
+                    os.path.normpath(model_config["filepath"]).split(os.path.sep)
+                ))
+
+                self.modelPathForm["destination"].setText(model_config["folderpath"])
+
+            else: # Rien n'est enregistré
+                self.modelPathForm["model_file"].setText(" > ".join(
+                    os.path.normpath(
+                        os.path.join(os.getcwd(), f"{model}.docx")
+                        ).split(os.path.sep)
+                    ))
+                self.modelPathForm["destination"].setPlaceholderText(model)
+            
+            self.modelStopSaving = False
+
+        def value_form_changed():
+            if self.modelStopSaving:
+                return
+            if self.ui.modelListWidget.currentRow() < 0:
+                return
+
+            model = self.ui.modelListWidget.currentItem().text()
+
+            for checkBox, lineEdit in self.modelForm.values():
+                text = lineEdit.text()
+                lineEdit.setEnabled(checkBox.isChecked())
+
+                if not checkBox.isChecked():
+                    text = None
+                elif text == "":
+                    text = lineEdit.placeholderText()
+                
+                self.modelConfig["models"][model]["values"][checkBox.text()] = text
+            
+            self.modelConfig["models"][model]["filepath"] = os.path.normpath(self.ui.modelPathModelLabel.text().replace(" > ", os.path.sep))
+
+            self.modelConfig["models"][model]["folderpath"] = self.ui.modelDestinationLineEdit.text() or self.ui.modelDestinationLineEdit.placeholderText()
+
+
+        def model_choose_path():
+            # Prend le nom du fichier et le nettoie
+            model_filename = " > ".join(
+                os.path.normpath(
+                    QFileDialog.getOpenFileName(
+                        self.window,
+                        "Open File",
+                        os.getcwd(),
+                        "Microsoft Word (*.docx)")[0]
+                ).split(os.path.sep)
+            )
+
+            if model_filename != ".":
+                self.ui.modelPathModelLabel.setText(model_filename)  # Met le nom du fichier
+            
+            value_form_changed()
+
+        def set_default_model(item):
+            # Clean
+            for index in range(self.ui.modelListWidget.count()):
+                self.ui.modelListWidget.item(index).setFont(QtGui.QFont())
+            
+            # Add to config & GUI
+            self.modelConfig["default"] = item.text()
+            item.setFont(QtGui.QFont("Consolas"))
+
+            # Remove access to default button
+            self.ui.modelDefaultPushButton.setEnabled(False)
+        
+        def save_write_values():
+            self.writeJSON()
+            self.modelGenTab()
+
+        # CHECK DEFAULT MODELS
+        if not self.modelConfig["models"]:
+            self.modelConfig["models"] = self.modelConfig["default_models"]
+            QMessageBox.information(self.window,
+                                    f"pyÉtude - {VERSION} - Modèles par défaut",
+                                    "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.")
+            
+            for model in self.modelConfig["default_models"]:
+                if not os.path.isfile(f"{model}.docx"):
+                    downloadData(f"{model}.docx")
+            
+
+        for model in self.modelConfig["models"]:
+            self.ui.modelListWidget.addItem(model)
+
+        for index in range(self.ui.modelListWidget.count()):
+            if not self.modelConfig["default"] or not self.modelConfig["default"] in self.modelConfig["models"]:
+                set_default_model(self.ui.modelListWidget.item(index))
+                self.writeJSON()
+                self.modelGenTab()
+            if self.modelConfig["default"] == self.ui.modelListWidget.item(index).text():
+                set_default_model(self.ui.modelListWidget.item(index))
+        
+        
+
+        ## CONNECTIONS
+
+        self.ui.modelListPlus.pressed.connect(add_row_menu)
+        self.ui.modelListMinus.pressed.connect(remove_row)
+        self.ui.modelListReset.pressed.connect(reset_rows)
+
+        self.ui.modelListWidget.currentRowChanged.connect(model_selection_changed)
+
+        for line in self.modelForm.values():
+            line[0].stateChanged.connect(value_form_changed)
+            line[1].editingFinished.connect(value_form_changed)
+        self.ui.modelDestinationLineEdit.editingFinished.connect(value_form_changed)
+
+        self.ui.modelPathPushButton.pressed.connect(model_choose_path)
+        self.ui.modelDefaultPushButton.pressed.connect(lambda: set_default_model(self.ui.modelListWidget.currentItem()))
+
+        self.ui.modelApplyPushButton.pressed.connect(save_write_values)
+
+    def switchModel(self, model):
+        model_config = self.modelConfig["models"][model]
+
+        self.ui.modelLineEdit.setText(model)
+
+        for groupbox in self.genGroupBox:
+            self.genGroupBox[groupbox].setEnabled(bool(model_config["values"][groupbox]))
+    
+    def modelGenTab(self):
+        def model_menu_connection(selection):
+            self.switchModel(selection.text())
+            self.defaultFilePathChanged()
+
+        modelMenu = QMenu("modelMenu", self.window)
+        modelMenu.triggered.connect(model_menu_connection)
+        self.ui.modelToolButton.setMenu(modelMenu)
+
+        modelActionGroup = QActionGroup(modelMenu)
+        modelActionGroup.setExclusive(True)
+
+
+        for model in sorted(self.modelConfig["models"], key=locale.strxfrm):
+            if model == self.modelConfig["default"]:
+                self.switchModel(model)
+            modelMenu.addAction(modelActionGroup.addAction(QAction(f"{model}", checkable=True)))
 
 
 class Document:
-    def __init__(self, titre, soustitre, auteur, niveau, matiere, numero, section, model, filepath):
-        self.titre = titre
-        self.soustitre = soustitre
-        self.auteur = auteur
-        self.niveau = niveau
-        self.matiere = matiere
-        self.numero = numero
-        self.section = section
+    def __init__(self, values, model, filepath, window=""):
+        self.values = values
         self.model = model
         self.filepath = filepath
+        self.window = window
 
-        self.options = {"pyETUDE_Titre": titre,
-                    "pyETUDE_SousTitre": soustitre,
-                    "pyETUDE_Matiere": matiere,
-                    "pyETUDE_Auteur": auteur,
-                    "pyETUDE_Niv": niveau,
-                    "pyETUDE_Num": numero}
-        self.sections = {"sectionpy": section}
+        self.packWord()
 
-        self.folder = f"{matiere}-{numero}_tmpyETUDE"
+    def packWord(self):
+        doc = DocxTemplate(self.model)
+        doc.render(self.values)
+        doc.save(self.filepath)
 
-        self.main()
-
-    def main(self):
-        self.exportWord(self.model, self.folder)
-
-        self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.options)
-        self.modifyOptions(os.path.join(self.folder, "word", "header1.xml"), self.options)
-        self.modifyOptions(os.path.join(self.folder, "word", "footer1.xml"), self.options)
-
-        self.modifyOptions(os.path.join(self.folder, "word", "document.xml"), self.sections)
-
-        self.packWord(self.folder, self.filepath)
-        self.cleanTemp(self.folder)
-
-    def exportWord(self, model:str, folder:str) -> str:
-        """## Extract the specified `.zip` file
-
-        ### Arguments:\n
-            \tmodel {str} -- file that will be extracted (Do not forget the .docx!)
-            \tfolder {str} -- folder that will receive the extracted file
-
-        ### Returns:\n
-            \tstr -- the name of the folder where it was extracted
-        """
-
-        with zipfile.ZipFile(model, "r") as model_file:
-            model_file.extractall(folder)
-            model_file.close()
-        return folder
-
-    def modifyOptions(self, path:str, info:dict) -> str:
-        """## Send command to {self.searchAndReplace} for all values in a dictionnary
-        
-        ### Arguments:\n
-            \tpath {str} -- The path of the file to be modified
-            \tinfo {dict} -- A dictionnary in this format {"to search":"to replace"}
-        
-        ### Returns:\n
-            \tstr -- Returns the name of the file modified
-        """
-        for search, replace in info.items():
-            self.searchAndReplace(path, search, replace)
-        return path
-
-    def searchAndReplace(self, infile:str, search:str, replace:str) -> str:
-        """## Search the specified file with the keyword given and replaces it with the third argument
-        
-        ### Arguments:\n
-            \tinfile {str} -- The file to change
-            \tsearch {str} -- The word to replace
-            \treplace {str} -- The word that will be replaced by {search}
-
-        ### Returns:\n
-            \tstr -- Returns the name of the file modified
-        """
-        if os.path.isfile(infile):
-            with open(infile, "r", encoding="utf8") as in_f:
-                data_f = in_f.read()
-                with open(infile, "w", encoding='utf8') as out_f:
-                    out_f.write(data_f.replace(search, replace))
-        else:
-            raise FileNotFoundError
-        return infile
-
-
-    def packWord(self, folder:str, final:str) -> str:
-        """## Zip the folder specified
-        This will only zip the contents of the folder, not the base folder
-
-        ### Arguments:\n
-            \tfolder {str} -- the folder that will be zipped
-            \tfinal {str} -- the name of the archive (Do not forget the .docx!)
-
-        ### Returns:\n
-            \tstr -- the name of the zip file that was created
-        """
-        locale.setlocale(locale.LC_ALL, (None, None))  # Fix compatibility with locale
-        with zipfile.ZipFile(final, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-            for root, dirs, files in os.walk(folder):  # pylint: disable=unused-variable
-                # zip_file.write(os.path.join(root, "."))
-
-                for File in files:
-                    filePath = os.path.join(root, File)
-                    inZipPath = filePath.replace(folder, "", 1).lstrip("\\/")
-                    zip_file.write(filePath, inZipPath)
         print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
         
-        docMessageBox = QMessageBox()
-        docMessageBox.setIcon(QMessageBox.Information)
-        docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
+        if self.window:
+            docMessageBox = QMessageBox(self.window)
+            docMessageBox.setIcon(QMessageBox.Information)
+            docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
 
-        docMessageBox.setStyleSheet(STYLES["message_box"])
+            docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
 
+            buttonOpen = docMessageBox.addButton(QMessageBox.Open)
+            buttonOpen.setText("Ouvrir le fichier")
 
-        docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
+            buttonIgnore = docMessageBox.addButton(QMessageBox.No)
+            buttonIgnore.setText("Non")
 
-        buttonOpen = docMessageBox.addButton(QMessageBox.Open)
-        buttonOpen.setText("Ouvrir le fichier")
+            docMessageBox.exec_()
 
-        buttonIgnore = docMessageBox.addButton(QMessageBox.No)
-        buttonIgnore.setText("Non")
-
-        docMessageBox.exec_()
-
-        if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
-            if sys.platform == "win32":
-                    try:
-                        os.startfile(self.filepath)
-                    except:
-                        pass
+            if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
+                if sys.platform == "win32":
+                        try:
+                            os.startfile(self.filepath)
+                        except:
+                            pass
+                else:
+                    os.system(fr'open {self.filepath}')
             else:
-                os.system(fr'open {self.filepath}')
-        else:
-            assert ConnectionRefusedError
-
-        return final
-
-    def cleanTemp(self, folder:str) -> str:
-        """## Clean the temporary folder
-        DANGEROUS: THIS WILL DELETE ALL THE FILES IN THE SPECIFIED FOLDER!!
-        
-        ### Arguments:\n
-            \tfolder {str} -- The folder that will be deleted
-        
-        ### Raises:\n
-            \tNotADirectoryError: The specified folder is not a folder
-        
-        ### Returns:\n
-            \tstr -- Returns the name of the folder deleted
-        """
-        if os.path.isdir(folder):
-            for root, dirs, files in os.walk(folder, topdown=False):
-                for File in files:
-                    os.remove(os.path.join(root, File))
-                for Dir in dirs:
-                    os.rmdir(os.path.join(root, Dir))
-            os.rmdir(folder)
-        else:
-            raise NotADirectoryError
-        
-        return folder
+                assert ConnectionRefusedError
 
 
 if __name__ == "__main__":
