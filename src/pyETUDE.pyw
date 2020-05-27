@@ -101,18 +101,21 @@ def downloadData(name, create=True):
     ### Returns:\n
         \t[str] -- (si create=False): données décodées qui ont été prises
     """
-    if create:
-        try:
-            urllib.request.urlretrieve(fr"{GITHUB_LINK}/{VERSION}/src/{name}", name)
-        except urllib.error.HTTPError:
-            urllib.request.urlretrieve(fr"{GITHUB_LINK}/master/src/{name}", name)
-    else:
-        try:
-            with urllib.request.urlopen(fr"{GITHUB_LINK}/{VERSION}/src/{name}") as ur:
-                return ur.read().decode()
-        except urllib.error.HTTPError:
-            with urllib.request.urlopen(fr"{GITHUB_LINK}/master/src/{name}") as ur:
-                return ur.read().decode()
+    try:
+        if create:
+            try:
+                urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}" + name, safe='/:?=&'))
+            except urllib.error.HTTPError:
+                urllib.request.urlretrieve(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}" + name, safe='/:?=&'))
+        else:
+            try:
+                with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
+                    return ur.read().decode()
+            except urllib.error.HTTPError:
+                with urllib.request.urlopen(urllib.parse.quote(fr"{GITHUB_LINK}/master/src/{name}", safe='/:?=&')) as ur:
+                    return ur.read().decode()
+    except urllib.error.HTTPError:
+        return
 
 class frontEnd:
     """## GUI de l'application, s'occupe de montrer à l'utilisateur les options possibles
@@ -212,12 +215,22 @@ class frontEnd:
             # Met le nom de l'auteur et du niveau selon le fichier de configuration
             self.ui.auteurLineEdit.setText(self.auteur)
             self.ui.niveauLineEdit.setText(self.niveau)
-        
-            # Configuration terminée, met en place l'onglet de génération
-            self.genTab()
+            
+            self.genGroupBox = {
+                "titre": self.ui.titreGroupBox,
+                "soustitre": self.ui.soustitreGroupBox,
+                "matiere": self.ui.matGroupBox,
+                "numero": self.ui.numGroupBox,
+                "section": self.ui.sectionGroupBox,
+                "auteur": self.ui.auteurPersoGroupBox,
+                "niveau": self.ui.niveauPersoGroupBox
+            }
 
             # Configuration terminée, met en place l'onglet de modèles
             self.modelTab()
+
+            # Configuration terminée, met en place l'onglet de génération
+            self.genTab()
 
         else:
             assert FileNotFoundError
@@ -257,14 +270,34 @@ class frontEnd:
         self.auteur = jsonData["auteur"]
         self.niveau = jsonData["niveau"]
         # Vérifie si des matières personnalisées exsitent
-        if not jsonData["matieres"]:
+        if not "matieres" in jsonData:
             self.matieres = self.matieresDefault
         else:
             self.matieres = jsonData["matieres"]
         
         # Vérifie si les modèles existent
-        if jsonData["modeles"]:
+        if "modeles" in jsonData:
             self.modelConfig = jsonData["modeles"]
+        else:
+            self.modelConfig = {
+                "default": None,
+                "models": {},
+                "default_models": {
+                    "Documents de Révision": {
+                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+                        "folderpath": "Documents de Révision",
+                        "values": {
+                            "auteur": "Auteur",
+                            "matiere": "Matière",
+                            "niveau": "Niveau",
+                            "numero": "Numéro",
+                            "section": "Section",
+                            "soustitre": "Sous-Titre",
+                            "titre": "Titre"
+                        }
+                    }
+                }
+            }
 
     def writeJSON(self):
         json_data = dict()
@@ -287,16 +320,6 @@ class frontEnd:
         
 
     def genTab(self):
-        self.genGroupBox = {
-            "titre": self.ui.titreGroupBox,
-            "soustitre": self.ui.soustitreGroupBox,
-            "matiere": self.ui.matGroupBox,
-            "numero": self.ui.numGroupBox,
-            "section": self.ui.sectionGroupBox,
-            "auteur": self.ui.auteurPersoGroupBox,
-            "niveau": self.ui.niveauPersoGroupBox
-        }
-
         # Mise en place du menu pour les matières et le numéro
         self.matGenTab()
         self.numGenTab()
@@ -328,20 +351,22 @@ class frontEnd:
         return value
 
     def createDocument(self):
-        self.titre = self.getLineEditValue(self.ui.titreLineEdit)
-        self.soustitre = self.getLineEditValue(self.ui.soustitreLineEdit)
-        self.section = self.getLineEditValue(self.ui.sectionLineEdit)
-        
-        self.model = "model.docx"
-        if not os.path.isfile(self.model):
-            QMessageBox.information(self.window,
-                                    f"pyÉtude - {VERSION} - Modèle",
-                                    f"Le modèle: {self.model} n'a pas été trouvé.\nIl sera téléchargé automatiquement.")
-            downloadData(self.model)
-        
-        if os.path.isfile(self.filepaths[2]):
-            assert FileExistsError
+        self.model = self.getLineEditValue(self.ui.modelLineEdit)
+        model_config = self.modelConfig["models"][self.model]
 
+        if not self.model:
+            QMessageBox.critical(self.window,
+                                f"pyÉtude - {VERSION} - Générateur",
+                                "Aucun modèle n'est sélectionné")
+            return FileNotFoundError
+
+        if not os.path.isfile(model_config["filepath"]):
+            QMessageBox.critical(self.window,
+                                    f"pyÉtude - {VERSION} - Modèle",
+                                    f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné")
+            return FileNotFoundError
+
+        if os.path.isfile(self.filepaths[2]):
             numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichier Existant Trouvé")
@@ -353,11 +378,21 @@ class frontEnd:
             numMatMessageBox.exec_()
 
             if numMatMessageBox.clickedButton().text() == "Non":
-                return ConnectionAbortedError
-        Document(self.titre, self.soustitre, self.auteur, self.niveau,
-                    self.matiere, self.numero, self.section,
-                    self.model, self.filepaths[2],
-                    self.window)
+                return FileExistsError
+    
+        values = {
+            "titre": self.getLineEditValue(self.ui.titreLineEdit),
+            "soustitre": self.getLineEditValue(self.ui.soustitreLineEdit),
+            "matiere": self.matiere,
+            "numero": self.numero,
+            "section": self.getLineEditValue(self.ui.sectionLineEdit),
+            "auteur": self.auteur,
+            "niveau": self.niveau
+        }
+
+        values = {i:values[i] for i in values if model_config["values"][i]}
+
+        Document(values, self.model + ".docx", self.filepaths[2], self.window)
         
 
     def matGenTab(self):
@@ -788,31 +823,18 @@ class frontEnd:
 
             # Remove access to default button
             self.ui.modelDefaultPushButton.setEnabled(False)
-
-        if not self.modelConfig:
-            self.modelConfig = {
-                "default": None,
-                "models": {},
-                "default_models": {
-                    "Documents de Révision": {
-                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
-                        "folderpath": "Documents de Révision",
-                        "values": {
-                            "auteur": "Auteur",
-                            "matiere": "Matière",
-                            "niveau": "Niveau",
-                            "numero": "Numéro",
-                            "section": "Section",
-                            "soustitre": "Sous-Titre",
-                            "titre": "Titre"
-                        }
-                    }
-                }
-            }
         
         # CHECK DEFAULT MODELS
         if not self.modelConfig["models"]:
             self.modelConfig["models"] = self.modelConfig["default_models"]
+            QMessageBox.information(self.window,
+                                    f"pyÉtude - {VERSION} - Modèles par défaut",
+                                    "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.")
+            
+            for model in self.modelConfig["default_models"]:
+                if not os.path.isfile(f"{model}.docx"):
+                    downloadData(f"{model}.docx")
+            
 
         for model in self.modelConfig["models"]:
             self.ui.modelListWidget.addItem(model)
@@ -868,32 +890,17 @@ class frontEnd:
 
 
 class Document:
-    def __init__(self, titre, soustitre, auteur, niveau, matiere, numero, section, model, filepath, window=""):
-        self.titre = titre
-        self.soustitre = soustitre
-        self.auteur = auteur
-        self.niveau = niveau
-        self.matiere = matiere
-        self.numero = numero
-        self.section = section
+    def __init__(self, values, model, filepath, window=""):
+        self.values = values
         self.model = model
         self.filepath = filepath
         self.window = window
-
-        self.options = {"titre": titre,
-                    "soustitre": soustitre,
-                    "mat": matiere,
-                    "auteur": auteur,
-                    "niveau": niveau,
-                    "num": numero,
-                    "section": section
-                    }
 
         self.packWord()
 
     def packWord(self):
         doc = DocxTemplate(self.model)
-        doc.render(self.options)
+        doc.render(self.values)
         doc.save(self.filepath)
 
         print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
