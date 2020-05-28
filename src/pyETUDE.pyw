@@ -128,7 +128,7 @@ def checkUpdates(window):
     with urllib.request.urlopen(urllib.parse.quote(fr'https://api.github.com/repos/BourgonLaurent/pyEtude/releases/latest', safe='/:?=&')) as ur:
         content = json.loads(ur.read().decode('utf-8'))
     
-    if content["tag_name"] < f"v{VERSION}":
+    if content["tag_name"] > f"v{VERSION}":
         alert = QMessageBox(window)
         alert.setIcon(QMessageBox.Warning)
 
