@@ -79,11 +79,11 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Mode sombre (pour le bien des yeux!)
 - [x] Matières Intelligentes qui savent quel document créé selon ceux qui ont déjà été créés
 - [x] Transformer ce programme en interface web pour faciliter la tâche (depuis la version `2.4.0`, il existe une version en `Jupyter Notebook`)
+- [x] Avoir un configurateur de modèles afin de créer un modèle personnalisé
+- [x] Avoir plusieurs modèles qui peuvent être choisis.
+- [x] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
-- [ ] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
-- [ ] Avoir un configurateur de modèles afin de créer un modèle personnalisé
-- [ ] Avoir plusieurs modèles qui peuvent être choisis.
-- [ ] Transformer ce programme en application mobile pour faciliter l'utilisation sur tablette
+- [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
 
 ## 🏁 Bien Démarrer<a name="démarrer"></a>
 
