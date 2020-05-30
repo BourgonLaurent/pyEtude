@@ -2921,7 +2921,7 @@ QListView::item:selected:hover {
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Comment créer vos propres modèles?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude/wiki/Comment-cr%C3%A9er-son-propre-mod%C3%A8le&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Comment créer vos propres modèles?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::RichText</enum>
