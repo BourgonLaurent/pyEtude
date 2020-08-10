@@ -91,7 +91,26 @@ STYLES = {
                         border-bottom-right-radius: 0px;
                     }"""
 }
-
+## CONFIGURATIONS
+MODEL_DEFAULT_CONFIG = {
+    "default": None,
+    "models": {},
+    "default_models": {
+        "Documents de Révision": {
+            "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+            "folderpath": "Documents de Révision",
+            "values": {
+                "auteur": "Auteur",
+                "matiere": "Matière",
+                "niveau": "Niveau",
+                "numero": "Numéro",
+                "section": "Section",
+                "soustitre": "Sous-Titre",
+                "titre": "Titre"
+            }
+        }
+    }
+}
 
 
 ## GENERAL FUNCTIONS
@@ -297,35 +316,12 @@ class frontEnd:
         # Attribue l'auteur et le niveau
         self.auteur = jsonData["auteur"]
         self.niveau = jsonData["niveau"]
+
         # Vérifie si des matières personnalisées exsitent
-        if not "matieres" in jsonData:
-            self.matieres = self.matieresDefault
-        else:
-            self.matieres = jsonData["matieres"]
+        self.matieres = jsonData.get("matieres", self.matieresDefault)
         
         # Vérifie si les modèles existent
-        if "modeles" in jsonData:
-            self.modelConfig = jsonData["modeles"]
-        else:
-            self.modelConfig = {
-                "default": None,
-                "models": {},
-                "default_models": {
-                    "Documents de Révision": {
-                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
-                        "folderpath": "Documents de Révision",
-                        "values": {
-                            "auteur": "Auteur",
-                            "matiere": "Matière",
-                            "niveau": "Niveau",
-                            "numero": "Numéro",
-                            "section": "Section",
-                            "soustitre": "Sous-Titre",
-                            "titre": "Titre"
-                        }
-                    }
-                }
-            }
+        self.modelConfig = jsonData.get("modeles", MODEL_DEFAULT_CONFIG)
 
     def writeJSON(self):
         json_data = dict()
@@ -372,11 +368,7 @@ class frontEnd:
         self.ui.genPushButton.pressed.connect(self.createDocument)
     
     def getLineEditValue(self, lineedit):
-        value = lineedit.text()
-        if value == "":
-            value = lineedit.placeholderText()
-        
-        return value
+        return lineedit.text() or lineedit.placeholderText()
 
     def createDocument(self):
         self.model = self.getLineEditValue(self.ui.modelLineEdit)
@@ -604,15 +596,16 @@ class frontEnd:
                 getSaveFilePath.setNameFilters(["Microsoft Word (*.docx)"])
                 getSaveFilePath.setAcceptMode(QFileDialog.AcceptSave)
                 getSaveFilePath.exec_()
-                if getSaveFilePath.selectedFiles() != []:
+                if getSaveFilePath.selectedFiles():
                     self.filepaths = [getSaveFilePath.directory().path(), getSaveFilePath.selectedFiles()[0].replace(getSaveFilePath.directory().path(), ""),getSaveFilePath.selectedFiles()[0]]
             elif selection.text() == customDirectoryAction.text():
                 filepath = QFileDialog.getExistingDirectory()
-                if filepath != "":
+                if filepath:
                     self.filepaths = [filepath, f"/{self.matiere}-{self.numero}.docx", os.path.join(filepath, f"{self.matiere}-{self.numero}.docx")]
             
             elif selection.text() == defaultPathAction.text():
                 self.filepaths = self.defaultFilePaths
+            
             self.updatePathLabel()
         
         def QLActivated():
@@ -644,15 +637,9 @@ class frontEnd:
 
     def configTab(self):
         def saveVariable():
-            if self.ui.auteurLineEdit.text() != "":
-                self.auteur = self.ui.auteurLineEdit.text().replace("&","")
-            else:
-                self.auteur = self.ui.auteurLineEdit.placeholderText().replace("&","")
-            
-            if self.ui.niveauLineEdit.text() != "":
-                self.niveau = self.ui.niveauLineEdit.text().replace("&","")
-            else:
-                self.niveau = self.ui.niveauLineEdit.placeholderText().replace("&","")
+            self.auteur = self.ui.auteurLineEdit.text().replace("&","") or self.ui.auteurLineEdit.placeholderText().replace("&","")
+
+            self.niveau = self.ui.niveauLineEdit.text().replace("&","") or self.ui.niveauLineEdit.placeholderText().replace("&","")
             
             self.matieres = {}
 
@@ -660,13 +647,11 @@ class frontEnd:
                 matiere = self.ui.matiereTableWidget.item(row, 0)
                 mat = self.ui.matiereTableWidget.item(row, 1)
                 path = self.ui.matiereTableWidget.item(row, 2)
-                if matiere != None and mat != None:
-                    if matiere.text() != "" and mat.text() != "":
-                        if path == None:
-                            path_text = ""
-                        else:
-                            path_text = path.text().replace("&","")
+                if matiere and mat:
+                    if matiere.text() and mat.text():
+                        path_text = path.text().replace("&","") if path else ""
                         self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path_text]
+            
             self.writeJSON()
             self.firstLaunch()
 
@@ -682,18 +667,14 @@ class frontEnd:
         def addRow():
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
         def delRow():
-            if self.ui.matiereTableWidget.currentRow() == -1:  # if no row is selected
-                self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
-            else:
-                self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.currentRow())
+            self.ui.matiereTableWidget.removeRow((self.ui.matiereTableWidget.rowCount()-1 if self.ui.matiereTableWidget.currentRow() == -1 else self.ui.matiereTableWidget.currentRow()))
+
         def resetRows():
             self.setMatieres(self.matieresDefault)
         
         def checkBrowse():
-            if self.ui.matiereTableWidget.currentColumn() == 2:
-                self.ui.matiereTableBrowse.setEnabled(True)
-            else:
-                self.ui.matiereTableBrowse.setEnabled(False)
+            self.ui.matiereTableBrowse.setEnabled(self.ui.matiereTableWidget.currentColumn() == 2)
+
         def browseDirectory():
             if self.ui.matiereTableWidget.currentColumn() == 2:
                 filename = QFileDialog.getExistingDirectory()
@@ -739,7 +720,7 @@ class frontEnd:
             # Code de sortie (1=OK), texte
             ok, text_entered = dialog.exec_(), str(dialog.textValue())
 
-            if ok and text_entered != "":
+            if ok and text_entered:
                 if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
                     self.ui.modelListWidget.addItem(text_entered)
 
@@ -831,13 +812,12 @@ class frontEnd:
             model = self.ui.modelListWidget.currentItem().text()
 
             for checkBox, lineEdit in self.modelForm.values():
-                text = lineEdit.text()
+                text = lineEdit.text() or lineEdit.placeholderText()
                 lineEdit.setEnabled(checkBox.isChecked())
 
                 if not checkBox.isChecked():
                     text = None
-                elif text == "":
-                    text = lineEdit.placeholderText()
+                    
                 
                 self.modelConfig["models"][model]["values"][checkBox.text()] = text
             
@@ -928,7 +908,11 @@ class frontEnd:
         self.ui.modelLineEdit.setText(model)
 
         for groupbox in self.genGroupBox:
+            if model_config["values"][groupbox]:
+                self.genGroupBox[groupbox].setTitle(model_config["values"][groupbox])
+            
             self.genGroupBox[groupbox].setEnabled(bool(model_config["values"][groupbox]))
+            
     
     def modelGenTab(self):
         def model_menu_connection(selection):
