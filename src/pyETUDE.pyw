@@ -48,8 +48,8 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r"3.0.0b30"
-DEBUG = True
+VERSION = r"3.0.0"
+DEBUG = False
 ## Nom de fichiers importants
 FILES = {
     "debug": "pyEtude.ui",  # (ext: *.ui) Nom du fichier QtDesigner
