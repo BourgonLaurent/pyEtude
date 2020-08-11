@@ -454,6 +454,11 @@ class frontEnd:
             if numMatMessageBox.clickedButton().text() == "Non":
                 return FileExistsError
 
+        if not os.path.isdir(self.filepaths[0]) and not os.path.exists(
+            self.filepaths[0]
+        ):
+            os.mkdir(self.filepaths[0])
+
         values = {
             "titre": self.getLineEditValue(self.ui.titreLineEdit),
             "soustitre": self.getLineEditValue(self.ui.soustitreLineEdit),
