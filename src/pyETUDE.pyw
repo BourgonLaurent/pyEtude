@@ -471,9 +471,7 @@ class frontEnd:
 
         values = {i: values[i] for i in values if model_config["values"][i]}
 
-        document = Document(
-            values, self.model + ".docx", self.filepaths[2], self.window
-        )
+        document = Document(values, f"{self.model}.docx", self.filepaths[2], self.window)
         document.packWord()
         document.sendAlert()
 
