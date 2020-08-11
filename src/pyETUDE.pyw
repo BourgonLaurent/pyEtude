@@ -48,7 +48,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r"3.0.0"
+VERSION = r"3.0.1"
 DEBUG = False
 ## Nom de fichiers importants
 FILES = {
@@ -518,9 +518,12 @@ class frontEnd:
     def checkNumMat(self, connection="", prefix="CHP"):
         def findFiles(prefix):
             self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
-                {ord(i): None for i in '\\/:*?"<>|'}
+                {ord(i): None for i in r'\/:*?"<>|'}
             )
-            matpath = self.checkCustomMatNamePath()
+            matpath = os.path.join(
+                self.checkCustomMatNamePath(),
+                self.getLineEditValue(self.ui.modelLineEdit),
+            )
             matched_files = []
             for filename in [
                 f
