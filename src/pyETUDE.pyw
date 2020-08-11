@@ -471,7 +471,9 @@ class frontEnd:
 
         values = {i: values[i] for i in values if model_config["values"][i]}
 
-        document = Document(values, f"{self.model}.docx", self.filepaths[2], self.window)
+        document = Document(
+            values, f"{self.model}.docx", self.filepaths[2], self.window
+        )
         document.packWord()
         document.sendAlert()
 
@@ -766,13 +768,8 @@ class frontEnd:
 
     def configTab(self):
         def saveVariable():
-            self.auteur = self.ui.auteurLineEdit.text().replace(
-                "&", ""
-            ) or self.ui.auteurLineEdit.placeholderText().replace("&", "")
-
-            self.niveau = self.ui.niveauLineEdit.text().replace(
-                "&", ""
-            ) or self.ui.niveauLineEdit.placeholderText().replace("&", "")
+            self.auteur = self.getLineEditValue(self.ui.auteurLineEdit).replace("&", "")
+            self.niveau = self.getLineEditValue(self.ui.niveauLineEdit).replace("&", "")
 
             self.matieres = {}
 
@@ -982,7 +979,7 @@ class frontEnd:
             model = self.ui.modelListWidget.currentItem().text()
 
             for checkBox, lineEdit in self.modelForm.values():
-                text = lineEdit.text() or lineEdit.placeholderText()
+                text = self.getLineEditValue(lineEdit)
                 lineEdit.setEnabled(checkBox.isChecked())
 
                 if not checkBox.isChecked():
@@ -994,9 +991,8 @@ class frontEnd:
                 self.ui.modelPathModelLabel.text().replace(" > ", os.path.sep)
             )
 
-            self.modelConfig["models"][model]["folderpath"] = (
-                self.ui.modelDestinationLineEdit.text()
-                or self.ui.modelDestinationLineEdit.placeholderText()
+            self.modelConfig["models"][model]["folderpath"] = self.getLineEditValue(
+                self.ui.modelDestinationLineEdit
             )
 
         def model_choose_path():
