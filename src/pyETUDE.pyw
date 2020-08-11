@@ -219,7 +219,7 @@ class frontEnd:
             self.ui = self.Ui()
         else:
             # Vérifie que le fichier a le format approprié
-            if not FILES["debug"].endswith(".py"):
+            if not FILES["pyuic5"].endswith(".py"):
                 raise FileNotFoundError
             # Vérifie si le fichier existe sinon le télécharge en ligne
             if not os.path.isfile(FILES["pyuic5"]):
