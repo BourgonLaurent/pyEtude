@@ -1823,7 +1823,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
          </font>
         </property>
@@ -1870,7 +1870,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
          </font>
         </property>
@@ -1923,7 +1923,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
          </font>
         </property>
@@ -1994,7 +1994,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
          </font>
         </property>
@@ -2053,7 +2053,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>14</pointsize>
           <underline>true</underline>
          </font>
@@ -2082,7 +2082,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
           <underline>true</underline>
          </font>
@@ -2194,7 +2194,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>18</pointsize>
           <italic>true</italic>
          </font>
@@ -2236,7 +2236,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>17</pointsize>
           <italic>true</italic>
          </font>
@@ -2338,7 +2338,7 @@ PlotWidget {
        </property>
        <property name="font">
         <font>
-         <family>Garamond</family>
+         <family>Times New Roman</family>
          <pointsize>12</pointsize>
         </font>
        </property>
@@ -2423,7 +2423,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
          </font>
         </property>
@@ -2467,7 +2467,7 @@ PlotWidget {
         </property>
         <property name="font">
          <font>
-          <family>Garamond</family>
+          <family>Times New Roman</family>
           <pointsize>12</pointsize>
          </font>
         </property>

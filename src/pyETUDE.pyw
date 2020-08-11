@@ -12,11 +12,12 @@
 # Imports
 ## Default packages
 import json, locale, os, sys, zipfile, urllib.request, urllib.error
+
 ## External packages
 try:
     from PyQt5 import QtCore, QtGui, QtWidgets, uic
     from PyQt5.QtWidgets import *
-    
+
     from docxtpl import DocxTemplate
 except ImportError as e:
     # Crée le message d'erreur
@@ -30,7 +31,7 @@ except ImportError as e:
 
         Tk().withdraw()
         showerror("pyÉtude - Configuration requise non respectée", error_message)
-    except ImportError: # Le module de GUI n'existe pas
+    except ImportError:  # Le module de GUI n'existe pas
         print(error_message)
     # Quitte le programme en indiquant l'erreur
     sys.exit(e)
@@ -47,18 +48,18 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r'3.0.0b30'
+VERSION = r"3.0.0b30"
 DEBUG = True
 ## Nom de fichiers importants
 FILES = {
-    "debug":"pyEtude.ui", # (ext: *.ui) Nom du fichier QtDesigner
-    "pyuic5":"pyet_ui.py", # (ext: *.py) Nom du fichier .py généré avec pyuic5
-    "config":"pyEtude.json" # (ext: *.json) Nom du fichier .json généré avec le configurateur
+    "debug": "pyEtude.ui",  # (ext: *.ui) Nom du fichier QtDesigner
+    "pyuic5": "pyet_ui.py",  # (ext: *.py) Nom du fichier .py généré avec pyuic5
+    "config": "pyEtude.json",  # (ext: *.json) Nom du fichier .json généré avec le configurateur
 }
 ## Assets
-GITHUB_REPO = r'BourgonLaurent/pyEtude'
+GITHUB_REPO = r"BourgonLaurent/pyEtude"
 STYLES = {
-    "message_box":"""QWidget {
+    "message_box": """QWidget {
                       background-color: #262626;
                       border: 0px solid #32414B;
                       padding: 0px;
@@ -86,10 +87,10 @@ STYLES = {
                     QPushButton:hover {
                       background-color: #605e5c;
                     }""",
-    "line_edit":"""QLineEdit {
+    "line_edit": """QLineEdit {
                         border-top-right-radius: 0px;
                         border-bottom-right-radius: 0px;
-                    }"""
+                    }""",
 }
 ## CONFIGURATIONS
 MODEL_DEFAULT_CONFIG = {
@@ -106,10 +107,10 @@ MODEL_DEFAULT_CONFIG = {
                 "numero": "Numéro",
                 "section": "Section",
                 "soustitre": "Sous-Titre",
-                "titre": "Titre"
-            }
+                "titre": "Titre",
+            },
         }
-    }
+    },
 }
 
 
@@ -127,16 +128,39 @@ def downloadData(name, create=True):
     """
     if create:
         try:
-            urllib.request.urlretrieve(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}", safe='/:?=&'), name)
+            urllib.request.urlretrieve(
+                urllib.parse.quote(
+                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}",
+                    safe="/:?=&",
+                ),
+                name,
+            )
         except urllib.error.HTTPError:
-            urllib.request.urlretrieve(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}", safe='/:?=&'), name)
+            urllib.request.urlretrieve(
+                urllib.parse.quote(
+                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}",
+                    safe="/:?=&",
+                ),
+                name,
+            )
     else:
         try:
-            with urllib.request.urlopen(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}", safe='/:?=&')) as ur:
+            with urllib.request.urlopen(
+                urllib.parse.quote(
+                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}",
+                    safe="/:?=&",
+                )
+            ) as ur:
                 return ur.read().decode()
         except urllib.error.HTTPError:
-            with urllib.request.urlopen(urllib.parse.quote(fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}", safe='/:?=&')) as ur:
+            with urllib.request.urlopen(
+                urllib.parse.quote(
+                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}",
+                    safe="/:?=&",
+                )
+            ) as ur:
                 return ur.read().decode()
+
 
 def checkUpdates(window):
     """## Vérifie les nouvelles versions du logiciek
@@ -144,9 +168,14 @@ def checkUpdates(window):
     ### Arguments:\n
         \twindow {PyQt5.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
     """
-    with urllib.request.urlopen(urllib.parse.quote(fr'https://api.github.com/repos/BourgonLaurent/pyEtude/releases/latest', safe='/:?=&')) as ur:
-        content = json.loads(ur.read().decode('utf-8'))
-    
+    with urllib.request.urlopen(
+        urllib.parse.quote(
+            fr"https://api.github.com/repos/BourgonLaurent/pyEtude/releases/latest",
+            safe="/:?=&",
+        )
+    ) as ur:
+        content = json.loads(ur.read().decode("utf-8"))
+
     if content["tag_name"] > f"v{VERSION}":
         alert = QMessageBox(window)
         alert.setIcon(QMessageBox.Warning)
@@ -154,12 +183,11 @@ def checkUpdates(window):
         alert.setWindowTitle(f"pyÉtude - v{VERSION} - Nouvelle version")
 
         alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
-        alert.setInformativeText(f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/BourgonLaurent/pyEtude'>Téléchargez-la sur GitHub</a>")
-        
+        alert.setInformativeText(
+            f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/BourgonLaurent/pyEtude'>Téléchargez-la sur GitHub</a>"
+        )
+
         alert.exec_()
-
-    
-
 
 
 class frontEnd:
@@ -169,6 +197,7 @@ class frontEnd:
         \t__init__ -- Prépare l'environnement de travail selon le mode DEBUG
         \texecuteGUI -- Génère et lance le GUI
     """
+
     def __init__(self):
         """## Prépare l'environnement de travail selon le mode DEBUG"""
         # Crée une application vide
@@ -181,10 +210,10 @@ class frontEnd:
             # Vérifie si le fichier existe sinon le télécharge en ligne
             if not os.path.isfile(FILES["debug"]):
                 downloadData(FILES["debug"])
-            
+
             # Sauvegarde les paramètres du fichier FILES["debug"]
             self.Ui, self.Window = uic.loadUiType(FILES["debug"])
-            
+
             # Crée des instances de la fenêtre générée avec le fichier FILES["debug"]
             self.window = self.Window()
             self.ui = self.Ui()
@@ -195,21 +224,21 @@ class frontEnd:
             # Vérifie si le fichier existe sinon le télécharge en ligne
             if not os.path.isfile(FILES["pyuic5"]):
                 downloadData(FILES["pyuic5"])
-            
+
             # Importe les paramètres du fichier FILES["pyuic5"]
             import pyet_ui
 
-             # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
+            # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
             self.window = QtWidgets.QMainWindow()
             self.ui = pyet_ui.Ui_MainWindow()
-        
+
         # Associe le design à l'interface graphique
         self.ui.setupUi(self.window)
         # Spécifie l'apparence générale universelle de l'interface
         self.app.setStyle("Fusion")
 
         checkUpdates(self.window)
-        
+
     def executeGUI(self):
         """## Génère et lance le GUI"""
         # Vérifie si c'est la première fois que le programme est exécuté
@@ -228,7 +257,9 @@ class frontEnd:
         self.app.exec_()
 
     def esperLimit(self, lineedit):
-        lineedit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)) # Empêche l'utilisation des esperluètes "&"
+        lineedit.setValidator(
+            QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)
+        )  # Empêche l'utilisation des esperluètes "&"
 
     def firstLaunch(self):
         # Crée les matières par défaut
@@ -242,8 +273,8 @@ class frontEnd:
             "Français": ["FRA", ""],
             "Mathématiques": ["MAT", ""],
             "Monde Contemporain": ["MDC", ""],
-            "Physique": ["PHY", ""]
-            }
+            "Physique": ["PHY", ""],
+        }
         # Vérifie si la configuration a déjà été faite
         if os.path.isfile(os.path.join("./", FILES["config"])):
             # Active l'onglet du générateur
@@ -262,7 +293,7 @@ class frontEnd:
             # Met le nom de l'auteur et du niveau selon le fichier de configuration
             self.ui.auteurLineEdit.setText(self.auteur)
             self.ui.niveauLineEdit.setText(self.niveau)
-            
+
             self.genGroupBox = {
                 "titre": self.ui.titreGroupBox,
                 "soustitre": self.ui.soustitreGroupBox,
@@ -270,7 +301,7 @@ class frontEnd:
                 "numero": self.ui.numGroupBox,
                 "section": self.ui.sectionGroupBox,
                 "auteur": self.ui.auteurPersoGroupBox,
-                "niveau": self.ui.niveauPersoGroupBox
+                "niveau": self.ui.niveauPersoGroupBox,
             }
 
             # Configuration terminée, met en place l'onglet de modèles
@@ -288,26 +319,28 @@ class frontEnd:
             self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
 
             self.ui.tabWidget.setCurrentIndex(1)
-            
+
             # Assigne les matières par défaut dans le tableau
             self.setMatieres(self.matieresDefault)
 
-    def setMatieres(self, datadict:dict):
+    def setMatieres(self, datadict: dict):
         """## Insère le dictionnaire donné dans le tableau self.ui.matiereTableWidget
         
         ### Arguments:\n
             \tdatadict {dict} -- Dictionnaire des matières
         """
         # Supprime toutes les anciennes rangées
-        for i in range(0,self.ui.matiereTableWidget.rowCount()+1):  
-            self.ui.matiereTableWidget.removeRow(self.ui.matiereTableWidget.rowCount()-1)
+        for i in range(0, self.ui.matiereTableWidget.rowCount() + 1):
+            self.ui.matiereTableWidget.removeRow(
+                self.ui.matiereTableWidget.rowCount() - 1
+            )
         # Insère les données du dictionnaire dans le tableau
-        for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):  
+        for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
             self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))
             self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))
             self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))
-    
+
     def readJSON(self):
         """## Lit le fichier de configuration .json et lui attribue les informations contenues"""
         # Prends le dictionnaire du fichier de configuration
@@ -319,7 +352,7 @@ class frontEnd:
 
         # Vérifie si des matières personnalisées exsitent
         self.matieres = jsonData.get("matieres", self.matieresDefault)
-        
+
         # Vérifie si les modèles existent
         self.modelConfig = jsonData.get("modeles", MODEL_DEFAULT_CONFIG)
 
@@ -328,23 +361,30 @@ class frontEnd:
         json_data["auteur"] = self.auteur
         json_data["niveau"] = self.niveau
         json_data["matieres"] = dict()
-        if self.ui.matieresConfig.isChecked() == True:  # Vérifie s'il y a des matières personnalisées
+        if (
+            self.ui.matieresConfig.isChecked() == True
+        ):  # Vérifie s'il y a des matières personnalisées
             for key, value in self.matieres.items():
                 json_data["matieres"][key] = value
-        
-        if hasattr(self, 'modelConfig'):
+
+        if hasattr(self, "modelConfig"):
             json_data["modeles"] = self.modelConfig
-            
-        with open(FILES["config"], "w", encoding="utf-8") as json_f:  # Crée le fichier de configuration
-            json.dump(json_data, json_f, sort_keys=True, indent=4)  # Formatte le fichier JSON
-        
-        QMessageBox.information(self.window,
-                                "Configuration sauvegardée",
-                                "Vos paramètres ont été exportés avec succès")
-        
+
+        with open(
+            FILES["config"], "w", encoding="utf-8"
+        ) as json_f:  # Crée le fichier de configuration
+            json.dump(
+                json_data, json_f, sort_keys=True, indent=4
+            )  # Formatte le fichier JSON
+
+        QMessageBox.information(
+            self.window,
+            "Configuration sauvegardée",
+            "Vos paramètres ont été exportés avec succès",
+        )
 
     def genTab(self):
-        # Gestion des modèles 
+        # Gestion des modèles
         self.modelGenTab()
 
         # Mise en place du menu pour les matières et le numéro
@@ -358,15 +398,21 @@ class frontEnd:
         for le in (self.ui.matLineEdit, self.ui.numLineEdit):
             le.setStyleSheet(STYLES["line_edit"])
         # Empêche l'utilisation de l'esperluète '&' dans les entrées de texte
-        for le in (self.ui.matLineEdit, self.ui.numLineEdit, self.ui.sectionLineEdit, self.ui.soustitreLineEdit, self.ui.titreLineEdit):
+        for le in (
+            self.ui.matLineEdit,
+            self.ui.numLineEdit,
+            self.ui.sectionLineEdit,
+            self.ui.soustitreLineEdit,
+            self.ui.titreLineEdit,
+        ):
             self.esperLimit(le)
-        
+
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
 
         # Connection du bouton 'Générer' à sa fonction
         self.ui.genPushButton.pressed.connect(self.createDocument)
-    
+
     def getLineEditValue(self, lineedit):
         return lineedit.text() or lineedit.placeholderText()
 
@@ -375,22 +421,30 @@ class frontEnd:
         model_config = self.modelConfig["models"][self.model]
 
         if not self.model:
-            QMessageBox.critical(self.window,
-                                f"pyÉtude - {VERSION} - Générateur",
-                                "Aucun modèle n'est sélectionné")
+            QMessageBox.critical(
+                self.window,
+                f"pyÉtude - {VERSION} - Générateur",
+                "Aucun modèle n'est sélectionné",
+            )
             return FileNotFoundError
 
         if not os.path.isfile(model_config["filepath"]):
-            QMessageBox.critical(self.window,
-                                    f"pyÉtude - {VERSION} - Modèle",
-                                    f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné")
+            QMessageBox.critical(
+                self.window,
+                f"pyÉtude - {VERSION} - Modèle",
+                f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné",
+            )
             return FileNotFoundError
 
         if os.path.isfile(self.filepaths[2]):
             numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
-            numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichier Existant Trouvé")
-            numMatMessageBox.setText(f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}")
+            numMatMessageBox.setWindowTitle(
+                f"pyÉtude - {VERSION} - Fichier Existant Trouvé"
+            )
+            numMatMessageBox.setText(
+                f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}"
+            )
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
             buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
@@ -399,7 +453,7 @@ class frontEnd:
 
             if numMatMessageBox.clickedButton().text() == "Non":
                 return FileExistsError
-    
+
         values = {
             "titre": self.getLineEditValue(self.ui.titreLineEdit),
             "soustitre": self.getLineEditValue(self.ui.soustitreLineEdit),
@@ -407,16 +461,16 @@ class frontEnd:
             "numero": self.numero,
             "section": self.getLineEditValue(self.ui.sectionLineEdit),
             "auteur": self.auteur,
-            "niveau": self.niveau
+            "niveau": self.niveau,
         }
 
-        values = {i:values[i] for i in values if model_config["values"][i]}
+        values = {i: values[i] for i in values if model_config["values"][i]}
 
-        document = Document(values, self.model + ".docx", self.filepaths[2], self.window)
+        document = Document(
+            values, self.model + ".docx", self.filepaths[2], self.window
+        )
         document.packWord()
         document.sendAlert()
-        
-        
 
     def matGenTab(self):
         def isChecked(selection):
@@ -429,7 +483,7 @@ class frontEnd:
                 self.customMatName = False
                 self.ui.matLineEdit.setEnabled(False)
                 self.ui.matLineEdit.setText(self.matieres[selection.text()][0])
-        
+
         self.matiere = "PHY"
 
         matMenu = QMenu("matMenu", self.window)
@@ -438,16 +492,19 @@ class frontEnd:
         matActionGroup = QActionGroup(matMenu)
         matActionGroup.setExclusive(True)
 
-
         for mat in sorted(self.matieres, key=locale.strxfrm):
-            matMenu.addAction(matActionGroup.addAction(QAction(f"{mat}", checkable=True)))
+            matMenu.addAction(
+                matActionGroup.addAction(QAction(f"{mat}", checkable=True))
+            )
 
         matMenu.addSeparator()
-        personalizeMatAction = matActionGroup.addAction(QAction("Personnaliser", checkable=True))
+        personalizeMatAction = matActionGroup.addAction(
+            QAction("Personnaliser", checkable=True)
+        )
         matMenu.addAction(personalizeMatAction)
 
         self.customMatName = False
-        self.filepaths = [".", "PHY-0624.docx", os.path.join(".","PHY-0624.docx")]
+        self.filepaths = [".", "PHY-0624.docx", os.path.join(".", "PHY-0624.docx")]
         self.defaultFilePaths = self.filepaths
         self.defaultFilePathChanged()
 
@@ -455,26 +512,43 @@ class frontEnd:
 
     def checkNumMat(self, connection="", prefix="CHP"):
         def findFiles(prefix):
-            self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
+            self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
+                {ord(i): None for i in '\\/:*?"<>|'}
+            )
             matpath = self.checkCustomMatNamePath()
             matched_files = []
-            for filename in [f for f in os.listdir(matpath) if os.path.isfile(os.path.join(matpath, f))]:  # Does not look in other folders
-                if filename.startswith(f"{self.matiere}-{prefix}") and filename.endswith(".docx"):
-                        matched_files.append(filename)
+            for filename in [
+                f
+                for f in os.listdir(matpath)
+                if os.path.isfile(os.path.join(matpath, f))
+            ]:  # Does not look in other folders
+                if filename.startswith(
+                    f"{self.matiere}-{prefix}"
+                ) and filename.endswith(".docx"):
+                    matched_files.append(filename)
             return matched_files
-        
+
         matched_files = findFiles(prefix)
         if matched_files == [] and connection != "":
             prefix = "MOD"
             matched_files = findFiles(prefix)
-        
+
         if matched_files:
-            new_suggested_file = int(max(matched_files).replace(f"{self.matiere}-{prefix}", "").replace(".docx", "")) + 1
-            
+            new_suggested_file = (
+                int(
+                    max(matched_files)
+                    .replace(f"{self.matiere}-{prefix}", "")
+                    .replace(".docx", "")
+                )
+                + 1
+            )
+
             numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
-            numMatMessageBox.setText(f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}")
+            numMatMessageBox.setText(
+                f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
+            )
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
             buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
@@ -485,9 +559,9 @@ class frontEnd:
                 self.ui.numLineEdit.setText(f"{prefix}{new_suggested_file}")
             else:
                 assert ConnectionRefusedError
-        
+
         self.defaultFilePathChanged()
-    
+
     def checkCustomMatNamePath(self):
         if self.customMatName:
             return os.getcwd()
@@ -495,13 +569,15 @@ class frontEnd:
             for mat in self.matieres.values():
                 if mat[0] == self.matiere:
                     if mat[1] == "":  # S'il n'y a aucun chemin perso pour cette matière
-                        return os.getcwd()  # Overwrite le chemin perso par le chemin actuel
+                        return (
+                            os.getcwd()
+                        )  # Overwrite le chemin perso par le chemin actuel
                     else:
                         return mat[1]
 
-
     def numGenTab(self):
         self.numero = "0624"
+
         def isChecked(selection):
             if selection.text() == calendarAction.text():
                 calendarView()
@@ -513,11 +589,15 @@ class frontEnd:
                 self.ui.numLineEdit.setEnabled(False)
                 self.ui.numLineEdit.setText(selection.text())
                 self.checkNumMat(None, selection.text()[:3])
-        
+
         def calendarView():
             self.ui.numLineEdit.setEnabled(False)
             calendarView = QDialog(self.window)
-            calendarView.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.MSWindowsFixedSizeDialogHint | QtCore.Qt.WindowMinimizeButtonHint)
+            calendarView.setWindowFlags(
+                QtCore.Qt.Dialog
+                | QtCore.Qt.MSWindowsFixedSizeDialogHint
+                | QtCore.Qt.WindowMinimizeButtonHint
+            )
 
             calendar = QCalendarWidget(calendarView)
             calendar.setGeometry(QtCore.QRect(0, 0, 312, 183))
@@ -530,55 +610,74 @@ class frontEnd:
             calwe_format.setForeground(QtGui.QColor("#148CD2"))
             calendar.setWeekdayTextFormat(QtCore.Qt.Saturday, calwe_format)
             calendar.setWeekdayTextFormat(QtCore.Qt.Sunday, calwe_format)
-        
+
             def qdateToString(qdate):
                 self.numero = qdate.toString("MMdd")
                 self.ui.numLineEdit.setText(self.numero)
                 calendarView.done(0)
-            
+
             calendar.clicked.connect(qdateToString)
             calendarView.setWindowTitle("Veuillez choisir une date")
             calendarView.exec_()
-        
+
         numMenu = QMenu("numMenu", self.window)
         numMenu.triggered.connect(isChecked)
         self.ui.numToolButton.setMenu(numMenu)
         numActionGroup = QActionGroup(numMenu)
         numActionGroup.setExclusive(True)
 
-        
         chapterButton = numMenu.addMenu("Chapitre")
         moduleButton = numMenu.addMenu("Module")
-        for short, button in {"CHP":chapterButton, "MOD":moduleButton}.items():
+        for short, button in {"CHP": chapterButton, "MOD": moduleButton}.items():
             for i in range(20):
-                button.addAction(numActionGroup.addAction(QAction(f"{short}{str(i)}", checkable=True)))
-        
-        calendarAction = numActionGroup.addAction(QAction("Choisir une date", checkable=True))
+                button.addAction(
+                    numActionGroup.addAction(
+                        QAction(f"{short}{str(i)}", checkable=True)
+                    )
+                )
+
+        calendarAction = numActionGroup.addAction(
+            QAction("Choisir une date", checkable=True)
+        )
         numMenu.addAction(calendarAction)
         numMenu.addSeparator()
 
         autoNumAction = numActionGroup.addAction(QAction("Automatique", checkable=True))
         numMenu.addAction(autoNumAction)
 
-        personalizeNumAction = numActionGroup.addAction(QAction("Personnaliser", checkable=True))
+        personalizeNumAction = numActionGroup.addAction(
+            QAction("Personnaliser", checkable=True)
+        )
         numMenu.addAction(personalizeNumAction)
 
         self.ui.numLineEdit.textChanged.connect(self.defaultFilePathChanged)
-    
+
     def defaultFilePathChanged(self):
-        self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
+        self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
+            {ord(i): None for i in '\\/:*?"<>|'}
+        )
 
-        self.numero = self.getLineEditValue(self.ui.numLineEdit).translate({ord(i): None for i in '\\/:*?"<>|'})
-        
+        self.numero = self.getLineEditValue(self.ui.numLineEdit).translate(
+            {ord(i): None for i in '\\/:*?"<>|'}
+        )
+
         matpath = self.checkCustomMatNamePath()
-        self.defaultFilePaths = [os.path.join(matpath, self.modelConfig["models"][self.getLineEditValue(self.ui.modelLineEdit)]["folderpath"]), # Chemin
-            f"{self.matiere}-{self.numero}.docx"] # Fichier
+        self.defaultFilePaths = [
+            os.path.join(
+                matpath,
+                self.modelConfig["models"][
+                    self.getLineEditValue(self.ui.modelLineEdit)
+                ]["folderpath"],
+            ),  # Chemin
+            f"{self.matiere}-{self.numero}.docx",
+        ]  # Fichier
 
-        self.defaultFilePaths.append(os.path.join(self.defaultFilePaths[0], self.defaultFilePaths[1])) # Chemin complet
+        self.defaultFilePaths.append(
+            os.path.join(self.defaultFilePaths[0], self.defaultFilePaths[1])
+        )  # Chemin complet
 
         self.filepaths = self.defaultFilePaths
         self.updatePathLabel()
-        
 
     def pathGenTab(self):
         def isChecked(selection):
@@ -589,58 +688,89 @@ class frontEnd:
                     except:
                         pass
                 else:
-                    os.system(fr'open {self.filepaths[0]}')
-            
+                    os.system(fr"open {self.filepaths[0]}")
+
             elif selection.text() == customPathAction.text():
                 getSaveFilePath = QFileDialog()
                 getSaveFilePath.setNameFilters(["Microsoft Word (*.docx)"])
                 getSaveFilePath.setAcceptMode(QFileDialog.AcceptSave)
                 getSaveFilePath.exec_()
                 if getSaveFilePath.selectedFiles():
-                    self.filepaths = [getSaveFilePath.directory().path(), getSaveFilePath.selectedFiles()[0].replace(getSaveFilePath.directory().path(), ""),getSaveFilePath.selectedFiles()[0]]
+                    self.filepaths = [
+                        getSaveFilePath.directory().path(),
+                        getSaveFilePath.selectedFiles()[0].replace(
+                            getSaveFilePath.directory().path(), ""
+                        ),
+                        getSaveFilePath.selectedFiles()[0],
+                    ]
             elif selection.text() == customDirectoryAction.text():
                 filepath = QFileDialog.getExistingDirectory()
                 if filepath:
-                    self.filepaths = [filepath, f"/{self.matiere}-{self.numero}.docx", os.path.join(filepath, f"{self.matiere}-{self.numero}.docx")]
-            
+                    self.filepaths = [
+                        filepath,
+                        f"/{self.matiere}-{self.numero}.docx",
+                        os.path.join(filepath, f"{self.matiere}-{self.numero}.docx"),
+                    ]
+
             elif selection.text() == defaultPathAction.text():
                 self.filepaths = self.defaultFilePaths
-            
+
             self.updatePathLabel()
-        
+
         def QLActivated():
-            pathMenu.exec(self.ui.pathPathLabel.mapToGlobal(QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())))
+            pathMenu.exec(
+                self.ui.pathPathLabel.mapToGlobal(
+                    QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())
+                )
+            )
+
         pathMenu = QMenu("pathMenu", self.window)
         pathMenu.triggered.connect(isChecked)
         pathActionGroup = QActionGroup(pathMenu)
 
-
         self.ui.pathPathLabel.linkActivated.connect(QLActivated)
 
-        openPathAction = pathActionGroup.addAction(QAction("Ouvrir le dossier sélectionné"))
+        openPathAction = pathActionGroup.addAction(
+            QAction("Ouvrir le dossier sélectionné")
+        )
         pathMenu.addAction(openPathAction)
         pathMenu.addSeparator()
 
         customPathAction = pathActionGroup.addAction(QAction("Enregistrer sous..."))
         pathMenu.addAction(customPathAction)
 
-        customDirectoryAction = pathActionGroup.addAction(QAction("Choisir le dossier de sortie"))
+        customDirectoryAction = pathActionGroup.addAction(
+            QAction("Choisir le dossier de sortie")
+        )
         pathMenu.addAction(customDirectoryAction)
         pathMenu.addSeparator()
 
-        defaultPathAction = pathActionGroup.addAction(QAction("Restaurer la valeur par défaut"))
+        defaultPathAction = pathActionGroup.addAction(
+            QAction("Restaurer la valeur par défaut")
+        )
         pathMenu.addAction(defaultPathAction)
 
     def updatePathLabel(self):
-        fp = self.filepaths[2].replace("/", " > ").replace("\\", " > ")  # Bypass f-string \\ restriction
-        self.ui.pathPathLabel.setText(QtCore.QCoreApplication.translate("MainWindow", fr"""<html><head/><body><p><a href="none"><span style=" font-size:11pt; text-decoration: underline; color:\#f0f0f0;">{fp}</span></a></p></body></html>"""))
+        fp = (
+            self.filepaths[2].replace("/", " > ").replace("\\", " > ")
+        )  # Bypass f-string \\ restriction
+        self.ui.pathPathLabel.setText(
+            QtCore.QCoreApplication.translate(
+                "MainWindow",
+                fr"""<html><head/><body><p><a href="none"><span style=" font-size:11pt; text-decoration: underline; color:\#f0f0f0;">{fp}</span></a></p></body></html>""",
+            )
+        )
 
     def configTab(self):
         def saveVariable():
-            self.auteur = self.ui.auteurLineEdit.text().replace("&","") or self.ui.auteurLineEdit.placeholderText().replace("&","")
+            self.auteur = self.ui.auteurLineEdit.text().replace(
+                "&", ""
+            ) or self.ui.auteurLineEdit.placeholderText().replace("&", "")
 
-            self.niveau = self.ui.niveauLineEdit.text().replace("&","") or self.ui.niveauLineEdit.placeholderText().replace("&","")
-            
+            self.niveau = self.ui.niveauLineEdit.text().replace(
+                "&", ""
+            ) or self.ui.niveauLineEdit.placeholderText().replace("&", "")
+
             self.matieres = {}
 
             for row in range(self.ui.matiereTableWidget.rowCount()):
@@ -649,9 +779,12 @@ class frontEnd:
                 path = self.ui.matiereTableWidget.item(row, 2)
                 if matiere and mat:
                     if matiere.text() and mat.text():
-                        path_text = path.text().replace("&","") if path else ""
-                        self.matieres[matiere.text().replace("&","")] = [mat.text().replace("&",""), path_text]
-            
+                        path_text = path.text().replace("&", "") if path else ""
+                        self.matieres[matiere.text().replace("&", "")] = [
+                            mat.text().replace("&", ""),
+                            path_text,
+                        ]
+
             self.writeJSON()
             self.firstLaunch()
 
@@ -666,19 +799,32 @@ class frontEnd:
     def matieresConfig(self):
         def addRow():
             self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
+
         def delRow():
-            self.ui.matiereTableWidget.removeRow((self.ui.matiereTableWidget.rowCount()-1 if self.ui.matiereTableWidget.currentRow() == -1 else self.ui.matiereTableWidget.currentRow()))
+            self.ui.matiereTableWidget.removeRow(
+                (
+                    self.ui.matiereTableWidget.rowCount() - 1
+                    if self.ui.matiereTableWidget.currentRow() == -1
+                    else self.ui.matiereTableWidget.currentRow()
+                )
+            )
 
         def resetRows():
             self.setMatieres(self.matieresDefault)
-        
+
         def checkBrowse():
-            self.ui.matiereTableBrowse.setEnabled(self.ui.matiereTableWidget.currentColumn() == 2)
+            self.ui.matiereTableBrowse.setEnabled(
+                self.ui.matiereTableWidget.currentColumn() == 2
+            )
 
         def browseDirectory():
             if self.ui.matiereTableWidget.currentColumn() == 2:
                 filename = QFileDialog.getExistingDirectory()
-                self.ui.matiereTableWidget.setItem(self.ui.matiereTableWidget.currentRow(), 2, QTableWidgetItem(filename))
+                self.ui.matiereTableWidget.setItem(
+                    self.ui.matiereTableWidget.currentRow(),
+                    2,
+                    QTableWidgetItem(filename),
+                )
 
         self.ui.matiereTablePlus.clicked.connect(addRow)
         self.ui.matiereTableMinus.clicked.connect(delRow)
@@ -689,24 +835,31 @@ class frontEnd:
         self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
 
     def aboutTab(self):
-        self.ui.varVersionLabel.setText(QtCore.QCoreApplication.translate("MainWindow", f"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">{VERSION}</span></p></body></html>"))
-    
+        self.ui.varVersionLabel.setText(
+            QtCore.QCoreApplication.translate(
+                "MainWindow",
+                f'<html><head/><body><p><span style=" font-size:12pt; font-style:italic;">{VERSION}</span></p></body></html>',
+            )
+        )
+
     def modelTab(self):
         self.modelForm = {
-            "titre": [ self.ui.titreModelCheckBox, self.ui.titreModelLineEdit ],
-            "soustitre": [ self.ui.soustitreModelCheckBox, self.ui.soustitreModelLineEdit ],
-            "matiere": [ self.ui.matiereModelCheckBox, self.ui.matiereModelLineEdit ],
-            "numero": [ self.ui.numeroModelCheckBox, self.ui.numeroModelLineEdit ],
-            "section": [ self.ui.sectionModelCheckBox, self.ui.sectionModelLineEdit ],
-            "auteur": [ self.ui.auteurModelCheckBox, self.ui.auteurModelLineEdit ],
-            "niveau": [ self.ui.niveauModelCheckBox, self.ui.niveauModelLineEdit ]
+            "titre": [self.ui.titreModelCheckBox, self.ui.titreModelLineEdit],
+            "soustitre": [
+                self.ui.soustitreModelCheckBox,
+                self.ui.soustitreModelLineEdit,
+            ],
+            "matiere": [self.ui.matiereModelCheckBox, self.ui.matiereModelLineEdit],
+            "numero": [self.ui.numeroModelCheckBox, self.ui.numeroModelLineEdit],
+            "section": [self.ui.sectionModelCheckBox, self.ui.sectionModelLineEdit],
+            "auteur": [self.ui.auteurModelCheckBox, self.ui.auteurModelLineEdit],
+            "niveau": [self.ui.niveauModelCheckBox, self.ui.niveauModelLineEdit],
         }
 
         self.modelPathForm = {
             "model_file": self.ui.modelPathModelLabel,
-            "destination": self.ui.modelDestinationLineEdit
+            "destination": self.ui.modelDestinationLineEdit,
         }
-
 
         self.modelStopSaving = False
 
@@ -721,11 +874,15 @@ class frontEnd:
             ok, text_entered = dialog.exec_(), str(dialog.textValue())
 
             if ok and text_entered:
-                if not self.ui.modelListWidget.findItems(text_entered, QtCore.Qt.MatchExactly):
+                if not self.ui.modelListWidget.findItems(
+                    text_entered, QtCore.Qt.MatchExactly
+                ):
                     self.ui.modelListWidget.addItem(text_entered)
 
                     self.modelConfig["models"][text_entered] = {
-                        "filepath": os.path.join(os.getcwd(), "Documents de Révision.docx"),
+                        "filepath": os.path.join(
+                            os.getcwd(), "Documents de Révision.docx"
+                        ),
                         "folderpath": "Documents de Révision",
                         "values": {
                             "auteur": "Auteur",
@@ -734,13 +891,13 @@ class frontEnd:
                             "numero": "Numéro",
                             "section": "Section",
                             "soustitre": "Sous-Titre",
-                            "titre": "Titre"
-                        }
+                            "titre": "Titre",
+                        },
                     }
                 else:
-                    QMessageBox.critical(self.window,
-                                        "Nouveau",
-                                        "Il existe déjà un modèle avec ce nom")
+                    QMessageBox.critical(
+                        self.window, "Nouveau", "Il existe déjà un modèle avec ce nom"
+                    )
 
         def remove_row():
             self.modelConfig["models"].pop(self.ui.modelListWidget.currentItem().text())
@@ -752,13 +909,17 @@ class frontEnd:
 
             for model in self.modelConfig["models"]:
                 self.ui.modelListWidget.addItem(model)
-        
+
         def model_selection_changed(row):
             # Désactive tout si rien n'est sélectionné
             state = row != -1
 
-            for component in (self.ui.modelListMinus, self.ui.modelValuesGroupBox,
-                                self.ui.modelPathsGroupBox, self.ui.modelDefaultPushButton):
+            for component in (
+                self.ui.modelListMinus,
+                self.ui.modelValuesGroupBox,
+                self.ui.modelPathsGroupBox,
+                self.ui.modelDefaultPushButton,
+            ):
                 component.setEnabled(state)
             for checkBox, lineEdit in self.modelForm.values():
                 checkBox.setChecked(state)
@@ -778,29 +939,35 @@ class frontEnd:
                     if model_config["values"][form_value]:
                         self.modelForm[form_value][0].setChecked(True)
                         self.modelForm[form_value][1].setEnabled(True)
-                        self.modelForm[form_value][1].setText(model_config["values"][form_value])
+                        self.modelForm[form_value][1].setText(
+                            model_config["values"][form_value]
+                        )
                     else:
                         self.modelForm[form_value][0].setChecked(False)
                         self.modelForm[form_value][1].setEnabled(False)
                         self.modelForm[form_value][1].clear()
-                
+
                 if model == self.modelConfig["default"]:
                     self.ui.modelDefaultPushButton.setEnabled(False)
-                
-                self.modelPathForm["model_file"].setText(" > ".join(
-                    os.path.normpath(model_config["filepath"]).split(os.path.sep)
-                ))
+
+                self.modelPathForm["model_file"].setText(
+                    " > ".join(
+                        os.path.normpath(model_config["filepath"]).split(os.path.sep)
+                    )
+                )
 
                 self.modelPathForm["destination"].setText(model_config["folderpath"])
 
-            else: # Rien n'est enregistré
-                self.modelPathForm["model_file"].setText(" > ".join(
-                    os.path.normpath(
-                        os.path.join(os.getcwd(), f"{model}.docx")
+            else:  # Rien n'est enregistré
+                self.modelPathForm["model_file"].setText(
+                    " > ".join(
+                        os.path.normpath(
+                            os.path.join(os.getcwd(), f"{model}.docx")
                         ).split(os.path.sep)
-                    ))
+                    )
+                )
                 self.modelPathForm["destination"].setPlaceholderText(model)
-            
+
             self.modelStopSaving = False
 
         def value_form_changed():
@@ -817,44 +984,47 @@ class frontEnd:
 
                 if not checkBox.isChecked():
                     text = None
-                    
-                
+
                 self.modelConfig["models"][model]["values"][checkBox.text()] = text
-            
-            self.modelConfig["models"][model]["filepath"] = os.path.normpath(self.ui.modelPathModelLabel.text().replace(" > ", os.path.sep))
 
-            self.modelConfig["models"][model]["folderpath"] = self.ui.modelDestinationLineEdit.text() or self.ui.modelDestinationLineEdit.placeholderText()
+            self.modelConfig["models"][model]["filepath"] = os.path.normpath(
+                self.ui.modelPathModelLabel.text().replace(" > ", os.path.sep)
+            )
 
+            self.modelConfig["models"][model]["folderpath"] = (
+                self.ui.modelDestinationLineEdit.text()
+                or self.ui.modelDestinationLineEdit.placeholderText()
+            )
 
         def model_choose_path():
             # Prend le nom du fichier et le nettoie
             model_filename = " > ".join(
                 os.path.normpath(
                     QFileDialog.getOpenFileName(
-                        self.window,
-                        "Open File",
-                        os.getcwd(),
-                        "Microsoft Word (*.docx)")[0]
+                        self.window, "Open File", os.getcwd(), "Microsoft Word (*.docx)"
+                    )[0]
                 ).split(os.path.sep)
             )
 
             if model_filename != ".":
-                self.ui.modelPathModelLabel.setText(model_filename)  # Met le nom du fichier
-            
+                self.ui.modelPathModelLabel.setText(
+                    model_filename
+                )  # Met le nom du fichier
+
             value_form_changed()
 
         def set_default_model(item):
             # Clean
             for index in range(self.ui.modelListWidget.count()):
                 self.ui.modelListWidget.item(index).setFont(QtGui.QFont())
-            
+
             # Add to config & GUI
             self.modelConfig["default"] = item.text()
             item.setFont(QtGui.QFont("Consolas"))
 
             # Remove access to default button
             self.ui.modelDefaultPushButton.setEnabled(False)
-        
+
         def save_write_values():
             self.writeJSON()
             self.modelGenTab()
@@ -862,27 +1032,32 @@ class frontEnd:
         # CHECK DEFAULT MODELS
         if not self.modelConfig["models"]:
             self.modelConfig["models"] = self.modelConfig["default_models"]
-            QMessageBox.information(self.window,
-                                    f"pyÉtude - {VERSION} - Modèles par défaut",
-                                    "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.")
-            
+            QMessageBox.information(
+                self.window,
+                f"pyÉtude - {VERSION} - Modèles par défaut",
+                "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.",
+            )
+
             for model in self.modelConfig["default_models"]:
                 if not os.path.isfile(f"{model}.docx"):
                     downloadData(f"{model}.docx")
-            
 
         for model in self.modelConfig["models"]:
             self.ui.modelListWidget.addItem(model)
 
         for index in range(self.ui.modelListWidget.count()):
-            if not self.modelConfig["default"] or not self.modelConfig["default"] in self.modelConfig["models"]:
+            if (
+                not self.modelConfig["default"]
+                or not self.modelConfig["default"] in self.modelConfig["models"]
+            ):
                 set_default_model(self.ui.modelListWidget.item(index))
                 self.writeJSON()
                 self.modelGenTab()
-            if self.modelConfig["default"] == self.ui.modelListWidget.item(index).text():
+            if (
+                self.modelConfig["default"]
+                == self.ui.modelListWidget.item(index).text()
+            ):
                 set_default_model(self.ui.modelListWidget.item(index))
-        
-        
 
         ## CONNECTIONS
 
@@ -898,7 +1073,9 @@ class frontEnd:
         self.ui.modelDestinationLineEdit.editingFinished.connect(value_form_changed)
 
         self.ui.modelPathPushButton.pressed.connect(model_choose_path)
-        self.ui.modelDefaultPushButton.pressed.connect(lambda: set_default_model(self.ui.modelListWidget.currentItem()))
+        self.ui.modelDefaultPushButton.pressed.connect(
+            lambda: set_default_model(self.ui.modelListWidget.currentItem())
+        )
 
         self.ui.modelApplyPushButton.pressed.connect(save_write_values)
 
@@ -910,10 +1087,11 @@ class frontEnd:
         for groupbox in self.genGroupBox:
             if model_config["values"][groupbox]:
                 self.genGroupBox[groupbox].setTitle(model_config["values"][groupbox])
-            
-            self.genGroupBox[groupbox].setEnabled(bool(model_config["values"][groupbox]))
-            
-    
+
+            self.genGroupBox[groupbox].setEnabled(
+                bool(model_config["values"][groupbox])
+            )
+
     def modelGenTab(self):
         def model_menu_connection(selection):
             self.switchModel(selection.text())
@@ -926,11 +1104,12 @@ class frontEnd:
         modelActionGroup = QActionGroup(modelMenu)
         modelActionGroup.setExclusive(True)
 
-
         for model in sorted(self.modelConfig["models"], key=locale.strxfrm):
             if model == self.modelConfig["default"]:
                 self.switchModel(model)
-            modelMenu.addAction(modelActionGroup.addAction(QAction(f"{model}", checkable=True)))
+            modelMenu.addAction(
+                modelActionGroup.addAction(QAction(f"{model}", checkable=True))
+            )
 
 
 class Document:
@@ -940,18 +1119,21 @@ class Document:
         self.filepath = filepath
         self.window = window
 
+        self.document = DocxTemplate(self.model)
+
     def packWord(self):
-        doc = DocxTemplate(self.model)
-        doc.render(self.values)
-        doc.save(self.filepath)
-    
+        self.document.render(self.values)
+        self.document.save(self.filepath)
+
     def sendAlert(self):
-        if self.window:
+        if self.window:  # Si démarré avec Qt
             docMessageBox = QMessageBox(self.window)
             docMessageBox.setIcon(QMessageBox.Information)
             docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
 
-            docMessageBox.setText(f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?")
+            docMessageBox.setText(
+                f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?"
+            )
 
             buttonOpen = docMessageBox.addButton(QMessageBox.Open)
             buttonOpen.setText("Ouvrir le fichier")
@@ -963,16 +1145,16 @@ class Document:
 
             if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
                 if sys.platform == "win32":
-                        try:
-                            os.startfile(self.filepath)
-                        except:
-                            pass
+                    try:
+                        os.startfile(self.filepath)
+                    except:
+                        pass
                 else:
-                    os.system(fr'open {self.filepath}')
+                    os.system(fr"open {self.filepath}")
             else:
                 assert ConnectionRefusedError
-        else:
-            print(f"\nLe document a été créé: {self.filepath}")  # Si démarré à partir de l'invite de commande
+        else:  # Si démarré à partir avec l'invite de commande
+            print(f"\nLe document a été créé: {self.filepath}")
 
 
 if __name__ == "__main__":
