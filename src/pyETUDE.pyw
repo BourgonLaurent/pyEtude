@@ -1149,13 +1149,13 @@ class Document:
             docMessageBox.exec_()
 
             if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
-                if sys.platform == "win32":
+                if sys.platform.startswith("win32"):
                     try:
                         os.startfile(self.filepath)
                     except:
                         pass
                 else:
-                    os.system(fr"open {self.filepath}")
+                    os.system(f'open "{self.filepath}"')
             else:
                 assert ConnectionRefusedError
         else:  # Si démarré à partir avec l'invite de commande
