@@ -31,19 +31,21 @@ from urllib.error import HTTPError
 
 
 class FileDownloader:
-    """## Télécharge un fichier du répertoire GitHub raw
+    """## Un fichier existant sur le GitHub (selon GITHUB_REPO)
     
     ### Arguments:\n
         \tname {str} -- Nom du fichier à prendre
     
-    ### Returns:\n
-        \t[str] -- (si create=False): données décodées qui ont été prises
+    ### Methos:\n
+        \tsaveFile {() -> ()}: Télécharge un fichier et le sauvegarde
+        \treturnContent {() -> str}: Retourne le contenu du fichier en ligne
     """
 
     def __init__(self, name: str):
         self.name = name
 
     def saveFile(self):
+        """Télécharge un fichier et le sauvegarde"""
         try:
             urlretrieve(
                 quote(
@@ -63,6 +65,11 @@ class FileDownloader:
             )
 
     def returnContent(self) -> str:
+        """Retourne le contenu du fichier en ligne
+
+        Returns:
+            {str}: Contenu du fichier
+        """
         try:
             with urlopen(
                 quote(
@@ -80,59 +87,3 @@ class FileDownloader:
                 )
             ) as ur:
                 return ur.read().decode()
-
-
-def downloadFile(name: str):
-    """## Télécharge un fichier du répertoire GitHub raw
-    
-    ### Arguments:\n
-        \tname {str} -- Nom du fichier à prendre
-    
-    ### Returns:\n
-        \t[str] -- (si create=False): données décodées qui ont été prises
-    """
-    try:
-        urlretrieve(
-            quote(
-                fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{__version__}/src/{name}",
-                safe="/:?=&",
-            ),
-            name,
-        )
-
-    except HTTPError:
-        urlretrieve(
-            quote(
-                fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}",
-                safe="/:?=&",
-            ),
-            name,
-        )
-
-
-def downloadFileContent(name: str) -> str:
-    """## Retourne un fichier du répertoire GitHub raw
-    
-    ### Arguments:\n
-        \tname {str} -- Nom du fichier à prendre
-    
-    ### Returns:\n
-        \t[str] -- (si create=False): données décodées qui ont été prises
-    """
-    try:
-        with urlopen(
-            quote(
-                fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{__version__}/src/{name}",
-                safe="/:?=&",
-            )
-        ) as ur:
-            return ur.read().decode()
-
-    except HTTPError:
-        with urlopen(
-            quote(
-                fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}",
-                safe="/:?=&",
-            )
-        ) as ur:
-            return ur.read().decode()

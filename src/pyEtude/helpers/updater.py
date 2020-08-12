@@ -1,5 +1,5 @@
 ## downloader.py - pyEtude
-# Download manager for files on GitHub
+# Check updates on GitHub
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,11 +34,11 @@ from PySide2.QtWidgets import QMessageBox
 from PySide2.QtGui import QIcon
 
 
-def checkUpdates(window):
-    """## Vérifie les nouvelles versions du logiciek
-    
-    ### Arguments:\n
-        \twindow {PyQt5.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
+def checkNewVersion():
+    """Vérifie si une nouvelle version existe
+
+    Returns:
+        {str}: Dernière version stable sur GitHub
     """
     with urlopen(
         quote(
@@ -46,9 +46,18 @@ def checkUpdates(window):
             safe="/:?=&",
         )
     ) as ur:
-        content = loads(ur.read().decode("utf-8"))
+        return loads(ur.read().decode("utf-8"))["tag_name"]
 
-    if content["tag_name"] > f"v{__version__}":
+
+def checkUpdates(window):
+    """Vérifie les nouvelles versions du logiciel et affiche une boîte de dialogue
+    
+    Arguments:\n
+      * window {PySide2.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
+    """
+    current_version = checkNewVersion()
+
+    if current_version > f"v{__version__}":
         alert = QMessageBox(window)
         alert.setIcon(QMessageBox.Warning)  # type: ignore
 
@@ -56,7 +65,9 @@ def checkUpdates(window):
 
         alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
         alert.setInformativeText(
-            f"Version actuelle: v{__version__}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
+            f"<p>Version actuelle: v{__version__}<br>Version la plus récente: {current_version}</p>"
+            + "<br><br>"
+            + "<a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
         )
 
         alert.exec_()
