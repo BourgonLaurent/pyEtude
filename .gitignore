@@ -116,3 +116,7 @@ tmp/
 
 # Project related
 pyEtude.json
+
+# Exclude all Word documents, except those in the models folder
+*.docx
+!src/models/*.docx
