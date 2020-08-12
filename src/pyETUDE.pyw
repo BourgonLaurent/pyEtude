@@ -474,6 +474,7 @@ class frontEnd:
         document = Document(
             values, f"{self.model}.docx", self.filepaths[2], self.window
         )
+
         document.packWord()
         document.sendAlert()
 
@@ -515,7 +516,7 @@ class frontEnd:
 
         self.ui.matLineEdit.textChanged.connect(self.checkNumMat)
 
-    def checkNumMat(self, connection="", prefix="CHP"):
+    def checkNumMat(self, connection="", prefix="CHP", set_default=False):
         def findFiles(prefix):
             self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
                 {ord(i): None for i in r'\/:*?"<>|'}
@@ -524,22 +525,30 @@ class frontEnd:
                 self.checkCustomMatNamePath(),
                 self.getLineEditValue(self.ui.modelLineEdit),
             )
-            matched_files = []
-            for filename in [
-                f
-                for f in os.listdir(matpath)
-                if os.path.isfile(os.path.join(matpath, f))
-            ]:  # Does not look in other folders
-                if filename.startswith(
-                    f"{self.matiere}-{prefix}"
-                ) and filename.endswith(".docx"):
-                    matched_files.append(filename)
-            return matched_files
+
+            # Check and return files with these conditions:
+            #   - Inside matpath
+            #   - Is a file (not a directory)
+            #   - Starts with the name convention
+            #   - Is a word document (tested with extension)
+            try:
+                return [
+                    f
+                    for f in os.listdir(matpath)
+                    if os.path.isfile(os.path.join(matpath, f))
+                    and f.startswith(f"{self.matiere}-{prefix}")
+                    and f.endswith(".docx")
+                ]
+
+            except FileNotFoundError:  # If the directory doesn't exists
+                return []
 
         matched_files = findFiles(prefix)
-        if matched_files == [] and connection != "":
-            prefix = "MOD"
-            matched_files = findFiles(prefix)
+        if not matched_files and connection:
+            matched_files = findFiles("MOD")
+
+            if matched_files:
+                prefix = "MOD"
 
         if matched_files:
             new_suggested_file = (
@@ -568,6 +577,10 @@ class frontEnd:
             else:
                 assert ConnectionRefusedError
 
+        elif set_default:
+            self.ui.numLineEdit.setEnabled(False)
+            self.ui.numLineEdit.setText(f"{prefix}1")
+
         self.defaultFilePathChanged()
 
     def checkCustomMatNamePath(self):
@@ -593,10 +606,13 @@ class frontEnd:
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
                 self.ui.numLineEdit.setFocus()
+            if selection.text() == autoNumAction.text():
+                self.ui.numLineEdit.setEnabled(False)
+                self.checkNumMat(set_default=True)
             else:
                 self.ui.numLineEdit.setEnabled(False)
                 self.ui.numLineEdit.setText(selection.text())
-                self.checkNumMat(None, selection.text()[:3])
+                self.checkNumMat(prefix=selection.text()[:3])
 
         def calendarView():
             self.ui.numLineEdit.setEnabled(False)
