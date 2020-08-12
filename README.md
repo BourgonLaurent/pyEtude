@@ -82,6 +82,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Avoir un configurateur de modèles afin de créer un modèle personnalisé
 - [x] Avoir plusieurs modèles qui peuvent être choisis.
 - [x] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
+- [ ] Utiliser Qt for Python au lieu de PyQt5
 - [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
 - [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
 
@@ -89,17 +90,17 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 
 ### Configuration requise<a name="configuration"></a>
 
-| Catégorie          | Valeur           | Notes additionnelles                                                                         | Installation                                                                                   |
-| ------------------ | ---------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| OS:                | N'importe lequel |                                                                                              |                                                                                                |
-| Python:            | `Python 3`       | Développé sous Python 3.8.2, veuillez mettre à jour votre version si vous avez des problèmes | [Télécharger `Python3`](https://www.python.org/downloads/)                                     |
-| Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
-|                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
-|                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
-|                    | `urllib`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
-|                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
-|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                                                                |
-|                    | `PyQt5`          | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `pip install PyQt5` (ou `pip3 install PyQt5`, selon votre environnement) |
+| Catégorie          | Valeur           | Notes additionnelles                                                                         | Installation                                               |
+| ------------------ | ---------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| OS:                | N'importe lequel |                                                                                              |                                                            |
+| Python:            | `Python 3`       | Développé sous Python 3.8.2, veuillez mettre à jour votre version si vous avez des problèmes | [Télécharger `Python3`](https://www.python.org/downloads/) |
+| Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
+|                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
+|                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
+|                    | `urllib`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
+|                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
+|                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
+|                    | `PySide2`        | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `python3 -m pip install PySide2`     |
 
 - Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`pip install notebook ipywidgets`)
 
@@ -113,8 +114,8 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 Avec le terminal:
 
 ```bash
-$ cd Users/Laurent/Documents/GitHub/pyEtude
-$ python3 pyEtude.pyw
+cd Users/Laurent/Documents/GitHub/pyEtude
+python3 pyEtude.pyw
 ```
 
 ## 🎈 Utilisation<a name="utilisation"></a>
@@ -122,8 +123,8 @@ $ python3 pyEtude.pyw
 Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 ```bash
-$ cd Users/Laurent/Documents/GitHub/pyEtude
-$ python3 pyEtude.pyw
+cd Users/Laurent/Documents/GitHub/pyEtude
+python3 pyEtude.pyw
 ```
 
 - Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
@@ -215,11 +216,11 @@ $ python3 pyEtude.pyw
 
 <div align="center">
 
-[![Erreur PyQt5](assets_readme/pyqt5_error.png)](/assets_readme/pyqt5_error.png)
+[![Erreur PySide2](assets_readme/pyside2_error.png)](/assets_readme/pyside2_error.png)
 
 </div>
 
-Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propres à chaque version.
+Ceci est dû au fait que `PySide2` (Qt for Python) n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propres à chaque version.
 
 - Comment puis-je utiliser mon propre modèle? [Voir la documentation](../../wiki/Comment-créer-son-propre-modèle%3F)
 - Comment puis-je personaliser mes matières? [Voir la documentation](../../wiki/Comment-créer-ses-propres-matières%3F)
@@ -238,7 +239,7 @@ Ceci est dû au fait que `PyQt5` n'a pas été trouvé (Voir la [Configuration r
 - [λ cmder Console Emulator](https://cmder.net/) pour le développement et pour l'invite de commande
 - [Qt Designer](https://build-system.fman.io/qt-designer-download) pour créer le gabarit de l'application
 - [Python 3](https://www.python.org/) pour compiler et lancer ce programme
-- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/intro) pour tout le GUI et la transformation du `.ui` en `.py`
+- [Qt for Python](https://www.qt.io/qt-for-python) pour tout le GUI et la transformation du `.ui` en `.py`
 - [Microsoft Word 365](https://products.office.com/fr-ca/word) pour créer le modèle utilisé
 - [GitHub](https://github.com/) pour organiser, publier et sauvegarder ce projet
 
