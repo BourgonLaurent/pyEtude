@@ -15,8 +15,10 @@ import json, locale, os, sys, zipfile, urllib.request, urllib.error
 
 ## External packages
 try:
-    from PyQt5 import QtCore, QtGui, QtWidgets, uic
-    from PyQt5.QtWidgets import *
+    from PySide2 import QtCore, QtGui
+    from PySide2.QtUiTools import QUiLoader
+    from PySide2.QtWidgets import *
+    from PySide2.QtCore import QFile
 
     from docxtpl import DocxTemplate
 except ImportError as e:
@@ -48,7 +50,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r"3.0.1"
+VERSION = r"3.1.0"
 DEBUG = False
 ## Nom de fichiers importants
 FILES = {
@@ -170,7 +172,7 @@ def checkUpdates(window):
     """
     with urllib.request.urlopen(
         urllib.parse.quote(
-            fr"https://api.github.com/repos/BourgonLaurent/pyEtude/releases/latest",
+            fr"https://api.github.com/repos/{GITHUB_REPO}/releases/latest",
             safe="/:?=&",
         )
     ) as ur:
@@ -184,7 +186,7 @@ def checkUpdates(window):
 
         alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
         alert.setInformativeText(
-            f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/BourgonLaurent/pyEtude'>Téléchargez-la sur GitHub</a>"
+            f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
         )
 
         alert.exec_()
@@ -211,12 +213,22 @@ class frontEnd:
             if not os.path.isfile(FILES["debug"]):
                 downloadData(FILES["debug"])
 
-            # Sauvegarde les paramètres du fichier FILES["debug"]
-            self.Ui, self.Window = uic.loadUiType(FILES["debug"])
+            # Ouvre le fichier FILES["debug"]
+            ui_file = QFile(FILES["debug"])
+            ui_file.open(QFile.ReadOnly)
+
+            # Charge le fichier
+            self.window = QUiLoader().load(ui_file)
+
+            # Fermeture du fichier
+            ui_file.close()
+
+            # Création d'un alias pour compatibilité avec DEBUG = False
+            self.ui = self.window
 
             # Crée des instances de la fenêtre générée avec le fichier FILES["debug"]
-            self.window = self.Window()
-            self.ui = self.Ui()
+            # self.window = self.Window()
+            # self.ui = self.Ui()
         else:
             # Vérifie que le fichier a le format approprié
             if not FILES["pyuic5"].endswith(".py"):
@@ -229,11 +241,12 @@ class frontEnd:
             import pyet_ui
 
             # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
-            self.window = QtWidgets.QMainWindow()
+            self.window = QMainWindow()
             self.ui = pyet_ui.Ui_MainWindow()
 
-        # Associe le design à l'interface graphique
-        self.ui.setupUi(self.window)
+            # Associe le design à l'interface graphique
+            self.ui.setupUi(self.window)
+
         # Spécifie l'apparence générale universelle de l'interface
         self.app.setStyle("Fusion")
 
@@ -726,7 +739,7 @@ class frontEnd:
             self.updatePathLabel()
 
         def QLActivated():
-            pathMenu.exec(
+            pathMenu.exec_(
                 self.ui.pathPathLabel.mapToGlobal(
                     QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())
                 )
