@@ -11,7 +11,9 @@
 """
 # Imports
 ## Project packages
+from . import __version__, CONFIG_FILE, GITHUB_REPO
 from .ui.pyEt_main_ui import Ui_MainWindow
+from .ui.pyEt_styles_ui import STYLES
 
 ## Default packages
 import json, locale, os, sys, urllib.request, urllib.error
@@ -41,54 +43,6 @@ except ImportError as e:
     # Quitte le programme en indiquant l'erreur
     sys.exit(e)
 
-# Essaie d'aller dans une langue UTF-8
-try:
-    locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-except:
-    assert EnvironmentError
-    locale.setlocale(locale.LC_ALL, (None, None))
-
-# Paramètres généraux
-## Information de la version actuelle
-VERSION = r"4.0.0b1"
-## Nom de fichiers importants
-CONFIG_FILE = "pyEtude.json"  # (ext: *.json) généré avec le configurateur
-## Assets
-GITHUB_REPO = r"BourgonLaurent/pyEtude"
-STYLES = {
-    "message_box": """QWidget {
-                      background-color: #262626;
-                      border: 0px solid #32414B;
-                      padding: 0px;
-                      color: #FFFFFF;
-                      selection-background-color: #1464A0;
-                      selection-color: #FFFFFF;
-                    }
-                    QPushButton {
-                      background-color: #484644;
-                      border: 1px solid #605e5c;
-                      color: #FFFFFF;
-                      border-radius: 4px;
-                      padding-left: 30px;
-                      padding-right: 30px;
-                      padding-top: 5px;
-                      padding-bottom: 5px;
-                      outline: none;
-                    }
-                    QPushButton:pressed {
-                      background-color: #323130;
-                    }
-                    QPushButton:pressed:hover {
-                      background-color: #323130;
-                    }
-                    QPushButton:hover {
-                      background-color: #605e5c;
-                    }""",
-    "line_edit": """QLineEdit {
-                        border-top-right-radius: 0px;
-                        border-bottom-right-radius: 0px;
-                    }""",
-}
 ## CONFIGURATIONS
 MODEL_DEFAULT_CONFIG = {
     "default": None,
@@ -127,7 +81,7 @@ def downloadData(name, create=True):
         try:
             urllib.request.urlretrieve(
                 urllib.parse.quote(
-                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}",
+                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{__version__}/src/{name}",
                     safe="/:?=&",
                 ),
                 name,
@@ -144,7 +98,7 @@ def downloadData(name, create=True):
         try:
             with urllib.request.urlopen(
                 urllib.parse.quote(
-                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{VERSION}/src/{name}",
+                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{__version__}/src/{name}",
                     safe="/:?=&",
                 )
             ) as ur:
@@ -173,15 +127,15 @@ def checkUpdates(window):
     ) as ur:
         content = json.loads(ur.read().decode("utf-8"))
 
-    if content["tag_name"] > f"v{VERSION}":
+    if content["tag_name"] > f"v{__version__}":
         alert = QMessageBox(window)
         alert.setIcon(QMessageBox.Warning)
 
-        alert.setWindowTitle(f"pyÉtude - v{VERSION} - Nouvelle version")
+        alert.setWindowTitle(f"pyÉtude - v{__version__} - Nouvelle version")
 
         alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
         alert.setInformativeText(
-            f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
+            f"Version actuelle: v{__version__}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
         )
 
         alert.exec_()
@@ -224,7 +178,7 @@ class frontEnd:
         self.aboutTab()
 
         # Assigne le nom de la fenêtre
-        self.window.setWindowTitle("pyÉtude - v" + VERSION)
+        self.window.setWindowTitle("pyÉtude - v" + __version__)
         # Affiche la fenêtre
         self.window.show()
         # Lance le fonctionnement en arrière-plan de l'application
@@ -397,7 +351,7 @@ class frontEnd:
         if not self.model:
             QMessageBox.critical(
                 self.window,
-                f"pyÉtude - {VERSION} - Générateur",
+                f"pyÉtude - {__version__} - Générateur",
                 "Aucun modèle n'est sélectionné",
             )
             return FileNotFoundError
@@ -405,7 +359,7 @@ class frontEnd:
         if not os.path.isfile(model_config["filepath"]):
             QMessageBox.critical(
                 self.window,
-                f"pyÉtude - {VERSION} - Modèle",
+                f"pyÉtude - {__version__} - Modèle",
                 f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné",
             )
             return FileNotFoundError
@@ -414,7 +368,7 @@ class frontEnd:
             numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(
-                f"pyÉtude - {VERSION} - Fichier Existant Trouvé"
+                f"pyÉtude - {__version__} - Fichier Existant Trouvé"
             )
             numMatMessageBox.setText(
                 f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}"
@@ -541,7 +495,7 @@ class frontEnd:
                 numMatMessageBox = QMessageBox(self.window)
                 numMatMessageBox.setIcon(QMessageBox.Information)
                 numMatMessageBox.setWindowTitle(
-                    f"pyÉtude - {VERSION} - Fichiers Trouvés"
+                    f"pyÉtude - {__version__} - Fichiers Trouvés"
                 )
                 numMatMessageBox.setText(
                     f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
@@ -838,7 +792,7 @@ class frontEnd:
         self.ui.varVersionLabel.setText(
             QtCore.QCoreApplication.translate(
                 "MainWindow",
-                f'<html><head/><body><p><span style=" font-size:12pt; font-style:italic;">{VERSION}</span></p></body></html>',
+                f'<html><head/><body><p><span style=" font-size:12pt; font-style:italic;">{__version__}</span></p></body></html>',
             )
         )
 
@@ -1033,7 +987,7 @@ class frontEnd:
             self.modelConfig["models"] = self.modelConfig["default_models"]
             QMessageBox.information(
                 self.window,
-                f"pyÉtude - {VERSION} - Modèles par défaut",
+                f"pyÉtude - {__version__} - Modèles par défaut",
                 "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.",
             )
 
@@ -1128,7 +1082,7 @@ class Document:
         if self.window:  # Si démarré avec Qt
             docMessageBox = QMessageBox(self.window)
             docMessageBox.setIcon(QMessageBox.Information)
-            docMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Document généré")
+            docMessageBox.setWindowTitle(f"pyÉtude - {__version__} - Document généré")
 
             docMessageBox.setText(
                 f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?"
