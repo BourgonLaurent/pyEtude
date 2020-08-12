@@ -21,16 +21,16 @@
 #    SOFTWARE.
 
 
-# Imports
-## Default packages
+## Imports
+# Default packages
 import locale
 
-# Paramètres généraux
-## Information de la version actuelle
-__version__ = r"4.0.0b1"
-## Nom de fichiers importants
+## Paramètres généraux
+# Information de la version actuelle
+__version__ = r"4.0.0b5"
+# Nom de fichiers importants
 CONFIG_FILE = "pyEtude.json"  # (ext: *.json) généré avec le configurateur
-## Assets
+# Assets
 GITHUB_REPO = r"BourgonLaurent/pyEtude"
 
 # Essaie d'aller dans une langue UTF-8

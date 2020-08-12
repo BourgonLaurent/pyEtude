@@ -9,16 +9,18 @@
 ██║        ██║   MIT © Laurent Bourgon 2020
 ╚═╝        ╚═╝   
 """
-# Imports
-## Project packages
+## Imports
+# Project packages
 from . import __version__, CONFIG_FILE, GITHUB_REPO
+from .helpers.downloader import downloadFile
+from .helpers.updater import checkUpdates
 from .ui.pyEt_main_ui import Ui_MainWindow
 from .ui.pyEt_styles_ui import STYLES
 
-## Default packages
-import json, locale, os, sys, urllib.request, urllib.error
+# Default packages
+import json, locale, os, sys
 
-## External packages
+# External packages
 try:
     from PySide2 import QtCore, QtGui
     from PySide2.QtUiTools import QUiLoader
@@ -63,82 +65,6 @@ MODEL_DEFAULT_CONFIG = {
         }
     },
 }
-
-
-## GENERAL FUNCTIONS
-def downloadData(name, create=True):
-    """## Télécharge un fichier du répertoire GitHub raw
-    
-    ### Arguments:\n
-        \tname {str} -- Nom du fichier à prendre
-    ### Keyword Arguments:\n
-        \tcreate {bool} -- Crée un fichier (default: {True})
-    
-    ### Returns:\n
-        \t[str] -- (si create=False): données décodées qui ont été prises
-    """
-    if create:
-        try:
-            urllib.request.urlretrieve(
-                urllib.parse.quote(
-                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{__version__}/src/{name}",
-                    safe="/:?=&",
-                ),
-                name,
-            )
-        except urllib.error.HTTPError:
-            urllib.request.urlretrieve(
-                urllib.parse.quote(
-                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}",
-                    safe="/:?=&",
-                ),
-                name,
-            )
-    else:
-        try:
-            with urllib.request.urlopen(
-                urllib.parse.quote(
-                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/{__version__}/src/{name}",
-                    safe="/:?=&",
-                )
-            ) as ur:
-                return ur.read().decode()
-        except urllib.error.HTTPError:
-            with urllib.request.urlopen(
-                urllib.parse.quote(
-                    fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{name}",
-                    safe="/:?=&",
-                )
-            ) as ur:
-                return ur.read().decode()
-
-
-def checkUpdates(window):
-    """## Vérifie les nouvelles versions du logiciek
-    
-    ### Arguments:\n
-        \twindow {PyQt5.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
-    """
-    with urllib.request.urlopen(
-        urllib.parse.quote(
-            fr"https://api.github.com/repos/{GITHUB_REPO}/releases/latest",
-            safe="/:?=&",
-        )
-    ) as ur:
-        content = json.loads(ur.read().decode("utf-8"))
-
-    if content["tag_name"] > f"v{__version__}":
-        alert = QMessageBox(window)
-        alert.setIcon(QMessageBox.Warning)
-
-        alert.setWindowTitle(f"pyÉtude - v{__version__} - Nouvelle version")
-
-        alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
-        alert.setInformativeText(
-            f"Version actuelle: v{__version__}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
-        )
-
-        alert.exec_()
 
 
 class frontEnd:
@@ -993,7 +919,7 @@ class frontEnd:
 
             for model in self.modelConfig["default_models"]:
                 if not os.path.isfile(os.path.join("models", f"{model}.docx")):
-                    downloadData(f"models/{model}.docx")
+                    downloadFile(f"models/{model}.docx")
 
         for model in self.modelConfig["models"]:
             self.ui.modelListWidget.addItem(model)

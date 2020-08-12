@@ -20,11 +20,11 @@
 #    SOFTWARE.
 
 
-# Librairies
-## Project packages
+## Librairies
+# Project packages
 from pyEtude.pyETUDE import frontEnd
 
-## Default packages
+# Default packages
 import os
 
 # Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
