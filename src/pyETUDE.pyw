@@ -15,8 +15,10 @@ import json, locale, os, sys, zipfile, urllib.request, urllib.error
 
 ## External packages
 try:
-    from PyQt5 import QtCore, QtGui, QtWidgets, uic
-    from PyQt5.QtWidgets import *
+    from PySide2 import QtCore, QtGui
+    from PySide2.QtUiTools import QUiLoader
+    from PySide2.QtWidgets import *
+    from PySide2.QtCore import QFile
 
     from docxtpl import DocxTemplate
 except ImportError as e:
@@ -48,7 +50,7 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r"3.0.2b1"
+VERSION = r"3.1.0"
 DEBUG = False
 ## Nom de fichiers importants
 FILES = {
@@ -170,7 +172,7 @@ def checkUpdates(window):
     """
     with urllib.request.urlopen(
         urllib.parse.quote(
-            fr"https://api.github.com/repos/BourgonLaurent/pyEtude/releases/latest",
+            fr"https://api.github.com/repos/{GITHUB_REPO}/releases/latest",
             safe="/:?=&",
         )
     ) as ur:
@@ -184,7 +186,7 @@ def checkUpdates(window):
 
         alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
         alert.setInformativeText(
-            f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/BourgonLaurent/pyEtude'>Téléchargez-la sur GitHub</a>"
+            f"Version actuelle: v{VERSION}<br>Version la plus récente: {content['tag_name']}<br><br><a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
         )
 
         alert.exec_()
@@ -211,12 +213,19 @@ class frontEnd:
             if not os.path.isfile(FILES["debug"]):
                 downloadData(FILES["debug"])
 
-            # Sauvegarde les paramètres du fichier FILES["debug"]
-            self.Ui, self.Window = uic.loadUiType(FILES["debug"])
+            # Ouvre le fichier FILES["debug"]
+            ui_file = QFile(FILES["debug"])
+            ui_file.open(QFile.ReadOnly)
 
-            # Crée des instances de la fenêtre générée avec le fichier FILES["debug"]
-            self.window = self.Window()
-            self.ui = self.Ui()
+            # Charge le fichier
+            self.window = QUiLoader().load(ui_file)
+
+            # Fermeture du fichier
+            ui_file.close()
+
+            # Création d'un alias pour compatibilité avec DEBUG = False
+            self.ui = self.window
+
         else:
             # Vérifie que le fichier a le format approprié
             if not FILES["pyuic5"].endswith(".py"):
@@ -229,11 +238,12 @@ class frontEnd:
             import pyet_ui
 
             # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
-            self.window = QtWidgets.QMainWindow()
+            self.window = QMainWindow()
             self.ui = pyet_ui.Ui_MainWindow()
 
-        # Associe le design à l'interface graphique
-        self.ui.setupUi(self.window)
+            # Associe le design à l'interface graphique
+            self.ui.setupUi(self.window)
+
         # Spécifie l'apparence générale universelle de l'interface
         self.app.setStyle("Fusion")
 
@@ -490,6 +500,9 @@ class frontEnd:
                 self.ui.matLineEdit.setEnabled(False)
                 self.ui.matLineEdit.setText(self.matieres[selection.text()][0])
 
+                if selection.text() == "Automatique":
+                    self.checkNumMat(automatic=True)
+
         self.matiere = "PHY"
 
         matMenu = QMenu("matMenu", self.window)
@@ -516,7 +529,7 @@ class frontEnd:
 
         self.ui.matLineEdit.textChanged.connect(self.checkNumMat)
 
-    def checkNumMat(self, connection="", prefix="CHP", set_default=False):
+    def checkNumMat(self, connection="", prefix="CHP"):
         def findFiles(prefix):
             self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
                 {ord(i): None for i in r'\/:*?"<>|'}
@@ -526,18 +539,13 @@ class frontEnd:
                 self.getLineEditValue(self.ui.modelLineEdit),
             )
 
-            # Check and return files with these conditions:
-            #   - Inside matpath
-            #   - Is a file (not a directory)
-            #   - Starts with the name convention
-            #   - Is a word document (tested with extension)
             try:
                 return [
-                    f
-                    for f in os.listdir(matpath)
-                    if os.path.isfile(os.path.join(matpath, f))
-                    and f.startswith(f"{self.matiere}-{prefix}")
-                    and f.endswith(".docx")
+                    f  # Check and return files with these conditions:
+                    for f in os.listdir(matpath)  # Inside matpath
+                    if os.path.isfile(os.path.join(matpath, f))  # Is a file
+                    and f.startswith(f"{self.matiere}-{prefix}")  # Good Format
+                    and f.endswith(".docx")  # Is a word document (check extension)
                 ]
 
             except FileNotFoundError:  # If the directory doesn't exists
@@ -550,6 +558,8 @@ class frontEnd:
             if matched_files:
                 prefix = "MOD"
 
+        newName = str()
+
         if matched_files:
             new_suggested_file = (
                 int(
@@ -560,26 +570,32 @@ class frontEnd:
                 + 1
             )
 
-            numMatMessageBox = QMessageBox(self.window)
-            numMatMessageBox.setIcon(QMessageBox.Information)
-            numMatMessageBox.setWindowTitle(f"pyÉtude - {VERSION} - Fichiers Trouvés")
-            numMatMessageBox.setText(
-                f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
-            )
-            buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
-            buttonOpen.setText("Oui")
-            buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
-            buttonIgnore.setText("Non")
-            numMatMessageBox.exec_()
-            if numMatMessageBox.clickedButton().text() == "Oui":
-                self.ui.numLineEdit.setEnabled(False)
-                self.ui.numLineEdit.setText(f"{prefix}{new_suggested_file}")
-            else:
-                assert ConnectionRefusedError
+            if not self.autoNumAction.isChecked():
+                numMatMessageBox = QMessageBox(self.window)
+                numMatMessageBox.setIcon(QMessageBox.Information)
+                numMatMessageBox.setWindowTitle(
+                    f"pyÉtude - {VERSION} - Fichiers Trouvés"
+                )
+                numMatMessageBox.setText(
+                    f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
+                )
+                buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
+                buttonOpen.setText("Oui")
+                buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
+                buttonIgnore.setText("Non")
+                numMatMessageBox.exec_()
 
-        elif set_default:
+                if numMatMessageBox.clickedButton().text() == buttonIgnore.text():
+                    return
+
+            newName = f"{prefix}{new_suggested_file}"
+
+        elif self.autoNumAction.isChecked():
+            newName = f"{prefix}1"
+
+        if newName:
             self.ui.numLineEdit.setEnabled(False)
-            self.ui.numLineEdit.setText(f"{prefix}1")
+            self.ui.numLineEdit.setText(newName)
 
         self.defaultFilePathChanged()
 
@@ -606,9 +622,6 @@ class frontEnd:
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
                 self.ui.numLineEdit.setFocus()
-            if selection.text() == autoNumAction.text():
-                self.ui.numLineEdit.setEnabled(False)
-                self.checkNumMat(set_default=True)
             else:
                 self.ui.numLineEdit.setEnabled(False)
                 self.ui.numLineEdit.setText(selection.text())
@@ -666,8 +679,9 @@ class frontEnd:
         numMenu.addAction(calendarAction)
         numMenu.addSeparator()
 
-        autoNumAction = numActionGroup.addAction(QAction("Automatique", checkable=True))
-        numMenu.addAction(autoNumAction)
+        self.autoNumAction = QAction("Automatique", checkable=True)
+        autoNumActionG = numActionGroup.addAction(self.autoNumAction)
+        numMenu.addAction(autoNumActionG)
 
         personalizeNumAction = numActionGroup.addAction(
             QAction("Personnaliser", checkable=True)
@@ -742,7 +756,7 @@ class frontEnd:
             self.updatePathLabel()
 
         def QLActivated():
-            pathMenu.exec(
+            pathMenu.exec_(
                 self.ui.pathPathLabel.mapToGlobal(
                     QtCore.QPoint(0, self.ui.pathPathLabel.geometry().height())
                 )
