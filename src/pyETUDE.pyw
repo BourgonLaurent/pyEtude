@@ -11,7 +11,7 @@
 """
 # Imports
 ## Default packages
-import json, locale, os, sys, zipfile, urllib.request, urllib.error
+import json, locale, os, sys, urllib.request, urllib.error
 
 ## External packages
 try:
