@@ -11,8 +11,8 @@
 """
 ## Imports
 # Project packages
-from . import __version__, CONFIG_FILE, GITHUB_REPO
-from .helpers.downloader import downloadFile
+from . import __version__, CONFIG_FILE
+from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
 from .ui.pyEt_main_ui import Ui_MainWindow
 from .ui.pyEt_styles_ui import STYLES
@@ -23,9 +23,7 @@ import json, locale, os, sys
 # External packages
 try:
     from PySide2 import QtCore, QtGui
-    from PySide2.QtUiTools import QUiLoader
     from PySide2.QtWidgets import *
-    from PySide2.QtCore import QFile
 
     from docxtpl import DocxTemplate
 except ImportError as e:
@@ -919,7 +917,7 @@ class frontEnd:
 
             for model in self.modelConfig["default_models"]:
                 if not os.path.isfile(os.path.join("models", f"{model}.docx")):
-                    downloadFile(f"models/{model}.docx")
+                    FileDownloader(f"models/{model}.docx").saveFile()
 
         for model in self.modelConfig["models"]:
             self.ui.modelListWidget.addItem(model)
