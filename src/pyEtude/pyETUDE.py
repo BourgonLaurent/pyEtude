@@ -52,9 +52,7 @@ except:
 ## Information de la version actuelle
 VERSION = r"4.0.0b1"
 ## Nom de fichiers importants
-FILES = {
-    "config": "pyEtude.json",  # (ext: *.json) Nom du fichier .json généré avec le configurateur
-}
+CONFIG_FILE = "pyEtude.json"  # (ext: *.json) généré avec le configurateur
 ## Assets
 GITHUB_REPO = r"BourgonLaurent/pyEtude"
 STYLES = {
@@ -202,7 +200,7 @@ class frontEnd:
         # Crée une application vide
         self.app = QApplication([])
 
-        # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
+        # Crée des instances de la fenêtre générée avec le fichier UI
         self.window = QMainWindow()
         self.ui = Ui_MainWindow()
 
@@ -252,7 +250,7 @@ class frontEnd:
             "Physique": ["PHY", ""],
         }
         # Vérifie si la configuration a déjà été faite
-        if os.path.isfile(os.path.join("./", FILES["config"])):
+        if os.path.isfile(os.path.join("./", CONFIG_FILE)):
             # Active l'onglet du générateur
             self.ui.tabWidget.setTabEnabled(0, True)
             self.ui.tabWidget.setTabToolTip(0, "Créer un document")
@@ -320,7 +318,7 @@ class frontEnd:
     def readJSON(self):
         """## Lit le fichier de configuration .json et lui attribue les informations contenues"""
         # Prends le dictionnaire du fichier de configuration
-        with open(FILES["config"]) as json_f:
+        with open(CONFIG_FILE, encoding="utf-8") as json_f:
             jsonData = json.load(json_f)
         # Attribue l'auteur et le niveau
         self.auteur = jsonData["auteur"]
@@ -347,7 +345,7 @@ class frontEnd:
             json_data["modeles"] = self.modelConfig
 
         with open(
-            FILES["config"], "w", encoding="utf-8"
+            CONFIG_FILE, "w", encoding="utf-8"
         ) as json_f:  # Crée le fichier de configuration
             json.dump(
                 json_data, json_f, sort_keys=True, indent=4
@@ -448,7 +446,10 @@ class frontEnd:
         values = {i: values[i] for i in values if model_config["values"][i]}
 
         document = Document(
-            values, f"{self.model}.docx", self.filepaths[2], self.window
+            values,
+            self.modelConfig["models"][self.model]["filepath"],
+            self.filepaths[2],
+            self.window,
         )
 
         document.packWord()
@@ -880,7 +881,7 @@ class frontEnd:
 
                     self.modelConfig["models"][text_entered] = {
                         "filepath": os.path.join(
-                            os.getcwd(), "Documents de Révision.docx"
+                            os.getcwd(), "models", "Documents de Révision.docx"
                         ),
                         "folderpath": "Documents de Révision",
                         "values": {
@@ -1037,8 +1038,8 @@ class frontEnd:
             )
 
             for model in self.modelConfig["default_models"]:
-                if not os.path.isfile(f"{model}.docx"):
-                    downloadData(f"{model}.docx")
+                if not os.path.isfile(os.path.join("models", f"{model}.docx")):
+                    downloadData(f"models/{model}.docx")
 
         for model in self.modelConfig["models"]:
             self.ui.modelListWidget.addItem(model)
