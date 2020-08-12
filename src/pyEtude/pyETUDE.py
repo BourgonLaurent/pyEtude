@@ -10,6 +10,9 @@
 ╚═╝        ╚═╝   
 """
 # Imports
+## Project packages
+from .ui.pyEt_main_ui import Ui_MainWindow
+
 ## Default packages
 import json, locale, os, sys, urllib.request, urllib.error
 
@@ -38,9 +41,6 @@ except ImportError as e:
     # Quitte le programme en indiquant l'erreur
     sys.exit(e)
 
-# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
-os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
-
 # Essaie d'aller dans une langue UTF-8
 try:
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
@@ -50,12 +50,9 @@ except:
 
 # Paramètres généraux
 ## Information de la version actuelle
-VERSION = r"3.1.0"
-DEBUG = False
+VERSION = r"4.0.0b1"
 ## Nom de fichiers importants
 FILES = {
-    "debug": "pyEtude.ui",  # (ext: *.ui) Nom du fichier QtDesigner
-    "pyuic5": "pyet_ui.py",  # (ext: *.py) Nom du fichier .py généré avec pyuic5
     "config": "pyEtude.json",  # (ext: *.json) Nom du fichier .json généré avec le configurateur
 }
 ## Assets
@@ -196,57 +193,26 @@ class frontEnd:
     """## GUI de l'application, s'occupe de montrer à l'utilisateur les options possibles
 
     ### Méthodes:\n
-        \t__init__ -- Prépare l'environnement de travail selon le mode DEBUG
+        \t__init__ -- Prépare l'environnement de travail
         \texecuteGUI -- Génère et lance le GUI
     """
 
     def __init__(self):
-        """## Prépare l'environnement de travail selon le mode DEBUG"""
+        """## Prépare l'environnement de travail"""
         # Crée une application vide
         self.app = QApplication([])
-        # Change les opérations selon le mode DEBUG
-        if DEBUG:
-            # Vérifie que le fichier a le format approprié
-            if not FILES["debug"].endswith(".ui"):
-                raise FileNotFoundError
-            # Vérifie si le fichier existe sinon le télécharge en ligne
-            if not os.path.isfile(FILES["debug"]):
-                downloadData(FILES["debug"])
 
-            # Ouvre le fichier FILES["debug"]
-            ui_file = QFile(FILES["debug"])
-            ui_file.open(QFile.ReadOnly)
+        # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
+        self.window = QMainWindow()
+        self.ui = Ui_MainWindow()
 
-            # Charge le fichier
-            self.window = QUiLoader().load(ui_file)
-
-            # Fermeture du fichier
-            ui_file.close()
-
-            # Création d'un alias pour compatibilité avec DEBUG = False
-            self.ui = self.window
-
-        else:
-            # Vérifie que le fichier a le format approprié
-            if not FILES["pyuic5"].endswith(".py"):
-                raise FileNotFoundError
-            # Vérifie si le fichier existe sinon le télécharge en ligne
-            if not os.path.isfile(FILES["pyuic5"]):
-                downloadData(FILES["pyuic5"])
-
-            # Importe les paramètres du fichier FILES["pyuic5"]
-            import pyet_ui
-
-            # Crée des instances de la fenêtre générée avec le fichier FILES["pyuic5"]
-            self.window = QMainWindow()
-            self.ui = pyet_ui.Ui_MainWindow()
-
-            # Associe le design à l'interface graphique
-            self.ui.setupUi(self.window)
+        # Associe le design à l'interface graphique
+        self.ui.setupUi(self.window)
 
         # Spécifie l'apparence générale universelle de l'interface
         self.app.setStyle("Fusion")
 
+        # Vérifie si une version plus récente existe
         checkUpdates(self.window)
 
     def executeGUI(self):
@@ -1187,8 +1153,3 @@ class Document:
                 assert ConnectionRefusedError
         else:  # Si démarré à partir avec l'invite de commande
             print(f"\nLe document a été créé: {self.filepath}")
-
-
-if __name__ == "__main__":
-    fe = frontEnd()
-    fe.executeGUI()
