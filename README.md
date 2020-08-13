@@ -18,9 +18,9 @@
 
 <div align="center">
 
-  [![Releases](https://img.shields.io/github/release/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/releases) [![Languages](https://img.shields.io/github/languages/top/BourgonLaurent/pyEtude)](https://www.python.org/) [![License](https://img.shields.io/github/license/BourgonLaurent/pyEtude)](LICENSE)
+  [![Releases](https://img.shields.io/github/release/BourgonLaurent/Damysos)](https://github.com/BourgonLaurent/Damysos/releases) [![Languages](https://img.shields.io/github/languages/top/BourgonLaurent/Damysos)](https://www.python.org/) [![License](https://img.shields.io/github/license/BourgonLaurent/Damysos)](LICENSE)
 
-  [![GitHub Issues](https://img.shields.io/github/issues-raw/BourgonLaurent/pyEtude)](https://img.shields.io/github/issues/BourgonLaurent/pyEtude/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr-raw/BourgonLaurent/pyEtude)](https://github.com/BourgonLaurent/pyEtude/pulls)
+  [![GitHub Issues](https://img.shields.io/github/issues-raw/BourgonLaurent/Damysos)](https://img.shields.io/github/issues/BourgonLaurent/Damysos/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr-raw/BourgonLaurent/Damysos)](https://github.com/BourgonLaurent/Damysos/pulls)
 
 </div>
 
@@ -37,8 +37,8 @@
   - [Installation](#installation)
 - [Utilisation](#utilisation)
 - [Captures d'écran](#screenshots)
-  - [pyÉtude](#pyEtude)
-  - [pyÉtude-notebook](#notebook)
+  - [Damysos](#Damysos)
+  - [Damysos-notebook](#notebook)
   - [Résultats](#resultats)
   - [Exemple Réel](#exemple_reel)
 - [Foire Aux Questions](#faq)
@@ -66,7 +66,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 
 ## ⛓️ Ce qu'il faut et les limites du projet<a name="limites"></a>
 
-- Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). À cause de l'ajout d'un GUI, `pyÉtude` ne fonctionne que sous Windows, macOS et Linux (pour l'instant). Pour les autres périphériques, veuillez utiliser la version (obsolète) qui est en ligne de commande (`pyETUDE_cli.py`)
+- Ce problème nécessite (pour l'instant) [`Python3`](https://www.python.org/downloads/). À cause de l'ajout d'un GUI, `Damysos` ne fonctionne que sous Windows, macOS et Linux (pour l'instant). Pour les autres périphériques, veuillez utiliser la version (obsolète) qui est en ligne de commande (`Damysos_cli.py`)
 - Ce projet utilise un document `Word` manuellement configuré et le modifie à l'intérieur. Pour avoir un modèle différent, il faut modifier ce document avec les bonnes balises.
 - Ce projet n'utilise pas le module `python-docx` puisqu'il était trop compliqué d'avoir un résultat correct et sans problème. De plus, cela enlève un élément à télécharger.
 
@@ -83,7 +83,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Avoir plusieurs modèles qui peuvent être choisis.
 - [x] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [x] Utiliser Qt for Python au lieu de PyQt5
-- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install pyEtude`)
+- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install Damysos`)
 - [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
 
 ## 🏁 Bien Démarrer<a name="démarrer"></a>
@@ -107,15 +107,15 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 ### Installation<a name="installation"></a>
 
 1. Assurez-vous que vous respectez la [Configuration requise](#configuration).
-2. Télécharger la version la plus récente de `pyEtude-vX.X.X.pyw` dans les [releases](https://github.com/BourgonLaurent/pyEtude/releases).
-3. (optionnel, mais recommandé) Déplacer `pyEtude-vX.X.X.pyw` dans un dossier vide.
+2. Télécharger la version la plus récente de `Damysos-vX.X.X.pyw` dans les [releases](https://github.com/BourgonLaurent/Damysos/releases).
+3. (optionnel, mais recommandé) Déplacer `Damysos-vX.X.X.pyw` dans un dossier vide.
 4. Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 Avec le terminal:
 
 ```bash
-cd Users/Laurent/Documents/GitHub/pyEtude
-python3 pyEtude.pyw
+cd Users/Laurent/Documents/GitHub/Damysos
+python3 Damysos.pyw
 ```
 
 ## 🎈 Utilisation<a name="utilisation"></a>
@@ -123,15 +123,15 @@ python3 pyEtude.pyw
 Exécuter le programme avec le terminal/invite de commande ou en double-cliquant dessus, selon votre système d'exploitation.
 
 ```bash
-cd Users/Laurent/Documents/GitHub/pyEtude
-python3 pyEtude.pyw
+cd Users/Laurent/Documents/GitHub/Damysos
+python3 Damysos.pyw
 ```
 
 - Si c'est la première fois que vous lancez le programme vous devrez passer par le _configurateur_
 
 ## 🖼 Captures d'écran<a name="screenshots"></a>
 
-### pyÉtude<a name="pyEtude"></a>
+### Damysos<a name="Damysos"></a>
 
 - Configurateur (premier lancement):
 
@@ -145,11 +145,11 @@ python3 pyEtude.pyw
 
 <div align="center">
 
-[![Générateur](assets/pyetude.png)](/assets/pyetude.png)
+[![Générateur](assets/Damysos.png)](/assets/Damysos.png)
 
 </div>
 
-### pyÉtude-notebook<a name="notebook"></a>
+### Damysos-notebook<a name="notebook"></a>
 
 <div align="center">
 
@@ -201,16 +201,16 @@ python3 pyEtude.pyw
 - `OSError: [WinError 123] La syntaxe du nom de fichier, de répertoire ou de volume est incorrecte`:
     Le nom de matière et le numéro/chapitre ne peuvent pas contenir de caractères spéciaux, cela empêche la création du dossier temporaire et du fichier final. Si vous devez absolument en avoir un, veuillez mettre une valeur sans caractères spéciaux et modifiez-le manuellement.
 - Mes caractères `&` (esperluette) sont tous enlevés et n'apparaissent pas dans mon document:
-    Word a de la difficulté avec l'esperluette. Si vous voulez que j'ajoute un mode de compatibilité pour l'esperluette, veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues).
+    Word a de la difficulté avec l'esperluette. Si vous voulez que j'ajoute un mode de compatibilité pour l'esperluette, veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/Damysos/issues).
 &nbsp;
 - `Word a rencontré une erreur lors de l'ouverture du fichier`:
-    Cela est surement dû aux valeurs qui contiennent des caractères spéciaux. Si ce n'est pas le cas, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+    Cela est surement dû aux valeurs qui contiennent des caractères spéciaux. Si ce n'est pas le cas, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/Damysos/issues).
 - Le modèle que j'ai choisi est corrompu!:
-    Veuillez supprimer le modèle (le fichier `.docx`) et relancer `pyÉtude`, celui-ci le téléchargera automatiquement. Si le problème persiste, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+    Veuillez supprimer le modèle (le fichier `.docx`) et relancer `Damysos`, celui-ci le téléchargera automatiquement. Si le problème persiste, veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/Damysos/issues).
 - Mon nouveau document fait `24Ko`, le modèle fait `28Ko`, pourquoi?:
     Ceci est dû à un problème dans la compression du fichier, Word utilise une compression propre à lui et c'est pour cela que le document montera de `4Ko` dès la première sauvegarde.
 - Mes matières ne sont pas ordonnées correctement dans le menu du Générateur!
-    Ceci est dû au fait que l'ordinateur pense que `é`, `à`, ... sont des lettres complètement différentes de `e` et `a`: pour résoudre cela, j'utilise un dictionnaire créé par le système d'exploitation au lancement du logiciel. Cependant, quelques systèmes d'exploitation n'ont pas cette fonctionnalité (ex `macOS`). Si vous souhaitez vraiment cette fonctionnalité, veuillez faire un [ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues).
+    Ceci est dû au fait que l'ordinateur pense que `é`, `à`, ... sont des lettres complètement différentes de `e` et `a`: pour résoudre cela, j'utilise un dictionnaire créé par le système d'exploitation au lancement du logiciel. Cependant, quelques systèmes d'exploitation n'ont pas cette fonctionnalité (ex `macOS`). Si vous souhaitez vraiment cette fonctionnalité, veuillez faire un [ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/Damysos/issues).
 
 - J'ai l'erreur suivante:
 
@@ -227,11 +227,11 @@ Ceci est dû au fait que `PySide2` (Qt for Python) n'a pas été trouvé (Voir l
 - Comment puis-je modifier le chemin par défaut selon la matière choisie? [Voir la documenation](../../wiki/Comment-mettre-des-emplacements-par-défaut-selon-les-matières%3F)
 &nbsp;
 - Mon problème n'est pas ici!:
-    Veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/pyEtude/issues).
+    Veuillez faire [un ticket d'aide](https://github.com/BourgonLaurent/Damysos/issues).
 - Serait-ce possible d'ajouter `X`?:
-    Veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/pyEtude/issues)
+    Veuillez faire [un ticket de demande de fonctionnalité](https://github.com/BourgonLaurent/Damysos/issues)
 - Puis-je ajouter moi-même les fonctionnalités/résolution de problèmes?:
-    Veuillez faire un `fork` de ce projet, faire les modifications et faire [une demande de fusion](https://github.com/BourgonLaurent/pyEtude/pulls)
+    Veuillez faire un `fork` de ce projet, faire les modifications et faire [une demande de fusion](https://github.com/BourgonLaurent/Damysos/pulls)
 
 ## ⛏️ Créé avec<a name="créé"></a>
 

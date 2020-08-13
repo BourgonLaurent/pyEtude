@@ -1,4 +1,4 @@
-## __init__.py - pyEtude
+## __init__.py - Damysos
 # Placeholder so that Python see this directory as a module
 #
 # MIT (c) 2020 Laurent Bourgon
@@ -29,9 +29,9 @@ import locale
 # Information de la version actuelle
 __version__ = r"4.0.0b5"
 # Nom de fichiers importants
-CONFIG_FILE = "pyEtude.json"  # (ext: *.json) généré avec le configurateur
+CONFIG_FILE = "Damysos.json"  # (ext: *.json) généré avec le configurateur
 # Assets
-GITHUB_REPO = r"BourgonLaurent/pyEtude"
+GITHUB_REPO = r"BourgonLaurent/Damysos"
 
 # Essaie d'aller dans une langue UTF-8
 # si elle ne l'est pas

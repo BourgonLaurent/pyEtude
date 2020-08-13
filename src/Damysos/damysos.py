@@ -19,8 +19,8 @@ from .generator.document import Document
 from .generator.document_alert import DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
-from .ui.pyEt_main_ui import Ui_MainWindow
-from .ui.pyEt_styles_ui import STYLES
+from .ui.damysos_main_ui import Ui_MainWindow
+from .ui.damysos_styles_ui import STYLES
 
 # Default packages
 import json, locale, os, sys
@@ -88,7 +88,7 @@ class frontEnd:
         self.aboutTab()
 
         # Assigne le nom de la fenêtre
-        self.window.setWindowTitle("pyÉtude - v" + __version__)
+        self.window.setWindowTitle("Damysos - v" + __version__)
         # Affiche la fenêtre
         self.window.show()
         # Lance le fonctionnement en arrière-plan de l'application
@@ -261,7 +261,7 @@ class frontEnd:
         if not self.model:
             QMessageBox.critical(
                 self.window,
-                f"pyÉtude - {__version__} - Générateur",
+                f"Damysos - {__version__} - Générateur",
                 "Aucun modèle n'est sélectionné",
             )
             return FileNotFoundError
@@ -269,7 +269,7 @@ class frontEnd:
         if not os.path.isfile(model_config["filepath"]):
             QMessageBox.critical(
                 self.window,
-                f"pyÉtude - {__version__} - Modèle",
+                f"Damysos - {__version__} - Modèle",
                 f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné",
             )
             return FileNotFoundError
@@ -278,10 +278,10 @@ class frontEnd:
             numMatMessageBox = QMessageBox(self.window)
             numMatMessageBox.setIcon(QMessageBox.Information)
             numMatMessageBox.setWindowTitle(
-                f"pyÉtude - {__version__} - Fichier Existant Trouvé"
+                f"Damysos - {__version__} - Fichier Existant Trouvé"
             )
             numMatMessageBox.setText(
-                f"pyÉtude a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}"
+                f"Damysos a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}"
             )
             buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
             buttonOpen.setText("Oui")
@@ -405,10 +405,10 @@ class frontEnd:
                 numMatMessageBox = QMessageBox(self.window)
                 numMatMessageBox.setIcon(QMessageBox.Information)
                 numMatMessageBox.setWindowTitle(
-                    f"pyÉtude - {__version__} - Fichiers Trouvés"
+                    f"Damysos - {__version__} - Fichiers Trouvés"
                 )
                 numMatMessageBox.setText(
-                    f"pyÉtude a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
+                    f"Damysos a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
                 )
                 buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
                 buttonOpen.setText("Oui")
@@ -897,7 +897,7 @@ class frontEnd:
             self.modelConfig["models"] = self.modelConfig["default_models"]
             QMessageBox.information(
                 self.window,
-                f"pyÉtude - {__version__} - Modèles par défaut",
+                f"Damysos - {__version__} - Modèles par défaut",
                 "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.",
             )
 

@@ -1,5 +1,6 @@
 import sys
 
+print(sys.version)
 try:
     import os, json, locale, typing
 
@@ -14,7 +15,7 @@ except ImportError as e:
         + f"\t{repr(e)}"
         + "\n\n"
         + f"[*] Avez-vous installé {e.name}?\n"
-        + "C'est un module nécessaire au fonctionnement de pyÉtude.\n\n"
+        + "C'est un module nécessaire au fonctionnement de Damysos.\n\n"
         + "Essayez la commande suivante:"
         + f"\tpip install --update {e.name}\n\n"
         + "Vous pouvez aussi vous référer au README.md de la page GitHub."

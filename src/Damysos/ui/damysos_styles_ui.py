@@ -1,4 +1,4 @@
-## pyEt_styles_ui.py - pyEtude.ui
+## damysos_styles_ui.py - Damysos.ui
 # Stylesheets that are used for multiple components
 
 # Imports

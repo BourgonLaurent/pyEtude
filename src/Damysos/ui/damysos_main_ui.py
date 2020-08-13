@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'pyEt_main_ui.ui'
+## Form generated from reading UI file 'damysos_main_ui.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -2509,7 +2509,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.modelListPlus.setText(QCoreApplication.translate("MainWindow", u"+", None))
         self.modelListMinus.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.modelWikiLink.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/pyEtude/wiki/Comment-cr%C3%A9er-son-propre-mod%C3%A8le\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Comment cr\u00e9er vos propres mod\u00e8les?</span></a></p></body></html>", None))
+        self.modelWikiLink.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/Damysos/wiki/Comment-cr%C3%A9er-son-propre-mod%C3%A8le\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Comment cr\u00e9er vos propres mod\u00e8les?</span></a></p></body></html>", None))
         self.modelListReset.setText(QCoreApplication.translate("MainWindow", u"R\u00e9initialiser", None))
         self.modelValuesGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"Valeurs", None))
         self.titreModelLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Titre", None))
@@ -2536,10 +2536,10 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(tooltip)
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.modelTab), QCoreApplication.translate("MainWindow", u"Cr\u00e9er et g\u00e9rer les mod\u00e8les", None))
 #endif // QT_CONFIG(tooltip)
-        self.titleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:28pt; font-weight:600;\">py\u00c9tude</span></p></body></html>", None))
+        self.titleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:28pt; font-weight:600;\">Damysos</span></p></body></html>", None))
         self.versionLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-style:italic;\">Version: </span></p></body></html>", None))
         self.varVersionLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">[VERSION]</span></p></body></html>", None))
-        self.gitHubLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#f0f0f0;\">\u00a9 Laurent Bourgon Sous la license MIT</span></a></p><p><span style=\" color:#f0f0f0;\"><br/></span></p><p><a href=\"https://github.com/BourgonLaurent/pyEtude\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Projet GitHub</span></a></p><p><a href=\"https://github.com/BourgonLaurent/pyEtude#faq\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Vous avez un probl\u00e8me?</span></a></p></body></html>", None))
+        self.gitHubLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/Damysos/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#f0f0f0;\">\u00a9 Laurent Bourgon Sous la license MIT</span></a></p><p><span style=\" color:#f0f0f0;\"><br/></span></p><p><a href=\"https://github.com/BourgonLaurent/Damysos\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Projet GitHub</span></a></p><p><a href=\"https://github.com/BourgonLaurent/Damysos#faq\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Vous avez un probl\u00e8me?</span></a></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), QCoreApplication.translate("MainWindow", u"\u00c0 Propos", None))
 #if QT_CONFIG(tooltip)
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.aboutTab), QCoreApplication.translate("MainWindow", u"\u00c0 Propos", None))

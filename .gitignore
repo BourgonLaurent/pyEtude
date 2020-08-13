@@ -115,7 +115,7 @@ releases/
 tmp/
 
 # Project related
-pyEtude.json
+Damysos.json
 
 # Exclude all Word documents, except those in the models folder
 *.docx

@@ -1,5 +1,4 @@
-## Document.py - pyEtude.document
-# Document exporter
+# Damysos.py: Damysos launcher
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,47 +19,17 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-## Imports
+
+## Librairies
 # Project packages
-from .. import __version__
-from .document_alert import DocumentAlert
+from Damysos.damysos import frontEnd
 
 # Default packages
-from typing import Dict
+import os
 
-# External packages
-from docxtpl import DocxTemplate
+# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
+os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
 
-
-class Document:
-    """
-    Create a word document with specific values
-
-    Parameters
-    ----------
-    values : Dict[str, str]
-        Dictionnary containing the values to replace {"placeholder": "replaced"}
-    
-    model : str
-        Path to the document model
-    
-    filepath : str
-        Path to the export destination
-    
-    Methods
-    ----------
-    packWord : () -> ()
-        Export the Word Document
-    """
-
-    def __init__(self, values: Dict[str, str], model: str, filepath: str):
-        self.values = values
-        self.model = model
-        self.filepath = filepath
-
-        self.document = DocxTemplate(self.model)
-
-    def packWord(self):
-        """Export the Word Document with the values given earlier"""
-        self.document.render(self.values)
-        self.document.save(self.filepath)
+if __name__ == "__main__":
+    fe = frontEnd()
+    fe.executeGUI()

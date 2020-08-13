@@ -2921,7 +2921,7 @@ QListView::item:selected:hover {
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude/wiki/Comment-cr%C3%A9er-son-propre-mod%C3%A8le&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Comment créer vos propres modèles?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/Damysos/wiki/Comment-cr%C3%A9er-son-propre-mod%C3%A8le&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Comment créer vos propres modèles?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::RichText</enum>
@@ -3313,7 +3313,7 @@ QPushButton:selected {
        <item>
         <widget class="QLabel" name="titleLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:28pt; font-weight:600;&quot;&gt;pyÉtude&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:28pt; font-weight:600;&quot;&gt;Damysos&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -3353,7 +3353,7 @@ QPushButton:selected {
        <item>
         <widget class="QLabel" name="gitHubLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude/blob/master/LICENSE&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;© Laurent Bourgon Sous la license MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#f0f0f0;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Projet GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/pyEtude#faq&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Vous avez un problème?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/Damysos/blob/master/LICENSE&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;© Laurent Bourgon Sous la license MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#f0f0f0;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/Damysos&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Projet GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/BourgonLaurent/Damysos#faq&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f0f0f0;&quot;&gt;Vous avez un problème?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

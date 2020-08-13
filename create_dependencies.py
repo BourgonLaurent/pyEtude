@@ -30,7 +30,7 @@ from typing import Dict, List, Text
 chdir(path.realpath(__file__).replace(path.basename(__file__), ""))
 
 # MODIFY THIS TO CHANGE COMPILING
-BASE_FOLDER: Text = path.join("./", "src", "pyEtude", "client")
+BASE_FOLDER: Text = path.join("./", "src", "Damysos", "ui")
 FILES: List[str] = ["main"]
 
 # Create an empty Dict that will hold the success codes
@@ -39,16 +39,20 @@ SUCCESS: Dict[str, Dict[str, CompletedProcess]] = {"qrc": {}, "ui": {}}
 # Loop through the files to compile
 for f in FILES:
     # Resources files
-    qrc: Text = path.join(BASE_FOLDER, f"pyEt_{f}_resources.qrc")  # Get the .qrc file
-    qrc_py: Text = path.join(BASE_FOLDER, f"pyEt_{f}_resources_rc.py")  # File to create
+    qrc: Text = path.join(
+        BASE_FOLDER, f"damysos_{f}_resources.qrc"
+    )  # Get the .qrc file
+    qrc_py: Text = path.join(
+        BASE_FOLDER, f"damysos_{f}_resources_rc.py"
+    )  # File to create
     if path.exists(qrc):  # Check if a .qrc file needs to be compiled
         SUCCESS["qrc"][f] = run(
             ["pyside2-rcc", qrc, "-o", qrc_py,]
         )  # Run the compile command
 
     # UI files
-    ui: Text = path.join(BASE_FOLDER, f"pyEt_{f}_ui.ui")  # Get the .ui file
-    ui_py: Text = path.join(BASE_FOLDER, f"pyEt_{f}_ui.py")  # File to create
+    ui: Text = path.join(BASE_FOLDER, f"damysos_{f}_ui.ui")  # Get the .ui file
+    ui_py: Text = path.join(BASE_FOLDER, f"damysos_{f}_ui.py")  # File to create
     if path.exists(ui):  # Check if a .ui file needs to be compiled
         SUCCESS["ui"][f] = run(
             ["pyside2-uic", ui, "--from-imports", "-o", ui_py,]

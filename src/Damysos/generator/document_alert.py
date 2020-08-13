@@ -1,4 +1,4 @@
-## document_alert.py - pyEtude.document
+## document_alert.py - Damysos.document
 # Alert dialog to open a document
 #
 # MIT (c) 2020 Laurent Bourgon
@@ -58,7 +58,7 @@ class DocumentAlert(QMessageBox):
         self.filepath = filepath
 
         self.setIcon(QMessageBox.Information)  # type: ignore
-        self.setWindowTitle(f"pyÉtude - {__version__} - Document généré")
+        self.setWindowTitle(f"Damysos - {__version__} - Document généré")
 
         self.setText(f"Le document a été créé:\n{filepath}\n\nVoulez-vous l'ouvrir?")
 

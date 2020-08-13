@@ -1,4 +1,4 @@
-## downloader.py - pyEtude.helpers
+## downloader.py - Damysos.helpers
 # Check updates on GitHub
 #
 # MIT (c) 2020 Laurent Bourgon
@@ -28,6 +28,7 @@ from .. import __version__, GITHUB_REPO
 from json import loads
 from urllib.request import urlopen
 from urllib.parse import quote
+from urllib.error import HTTPError
 
 # External packages
 from PySide2.QtWidgets import QMessageBox
@@ -40,13 +41,16 @@ def checkNewVersion():
     Returns:
         {str}: Dernière version stable sur GitHub
     """
-    with urlopen(
-        quote(
-            fr"https://api.github.com/repos/{GITHUB_REPO}/releases/latest",
-            safe="/:?=&",
-        )
-    ) as ur:
-        return loads(ur.read().decode("utf-8"))["tag_name"]
+    try:
+        with urlopen(
+            quote(
+                fr"https://api.github.com/repos/{GITHUB_REPO}/releases/latest",
+                safe="/:?=&",
+            )
+        ) as ur:
+            return loads(ur.read().decode("utf-8"))["tag_name"]
+    except HTTPError:
+        return __version__
 
 
 def checkUpdates(window):
@@ -61,9 +65,9 @@ def checkUpdates(window):
         alert = QMessageBox(window)
         alert.setIcon(QMessageBox.Warning)  # type: ignore
 
-        alert.setWindowTitle(f"pyÉtude - v{__version__} - Nouvelle version")
+        alert.setWindowTitle(f"Damysos - v{__version__} - Nouvelle version")
 
-        alert.setText(f"Une version plus récente de pyÉtude a été trouvée.")
+        alert.setText(f"Une version plus récente de Damysos a été trouvée.")
         alert.setInformativeText(
             f"<p>Version actuelle: v{__version__}<br>Version la plus récente: {current_version}</p>"
             + "<br><br>"
