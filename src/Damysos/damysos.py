@@ -11,7 +11,7 @@
 """
 ## Imports
 # Verifications
-from .helpers import checkRequirements
+from .helpers import check_requirements
 
 # Project packages
 from . import __version__, CONFIG_FILE
