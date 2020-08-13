@@ -12,6 +12,8 @@
 ## Imports
 # Project packages
 from . import __version__, CONFIG_FILE
+from .document.document import Document
+from .document.document_alert import DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
 from .ui.pyEt_main_ui import Ui_MainWindow
@@ -327,11 +329,11 @@ class frontEnd:
             values,
             self.modelConfig["models"][self.model]["filepath"],
             self.filepaths[2],
-            self.window,
         )
 
         document.packWord()
-        document.sendAlert()
+
+        DocumentAlert(document.filepath, self.window).exec_()
 
     def matGenTab(self):
         def isChecked(selection):
@@ -987,48 +989,3 @@ class frontEnd:
             modelMenu.addAction(
                 modelActionGroup.addAction(QAction(f"{model}", checkable=True))
             )
-
-
-class Document:
-    def __init__(self, values, model, filepath, window=""):
-        self.values = values
-        self.model = model
-        self.filepath = filepath
-        self.window = window
-
-        self.document = DocxTemplate(self.model)
-
-    def packWord(self):
-        self.document.render(self.values)
-        self.document.save(self.filepath)
-
-    def sendAlert(self):
-        if self.window:  # Si démarré avec Qt
-            docMessageBox = QMessageBox(self.window)
-            docMessageBox.setIcon(QMessageBox.Information)
-            docMessageBox.setWindowTitle(f"pyÉtude - {__version__} - Document généré")
-
-            docMessageBox.setText(
-                f"Le document a été créé:\n{self.filepath}\n\nVoulez-vous l'ouvrir?"
-            )
-
-            buttonOpen = docMessageBox.addButton(QMessageBox.Open)
-            buttonOpen.setText("Ouvrir le fichier")
-
-            buttonIgnore = docMessageBox.addButton(QMessageBox.No)
-            buttonIgnore.setText("Non")
-
-            docMessageBox.exec_()
-
-            if docMessageBox.clickedButton().text() == "Ouvrir le fichier":
-                if sys.platform.startswith("win32"):
-                    try:
-                        os.startfile(self.filepath)
-                    except:
-                        pass
-                else:
-                    os.system(f'open "{self.filepath}"')
-            else:
-                assert ConnectionRefusedError
-        else:  # Si démarré à partir avec l'invite de commande
-            print(f"\nLe document a été créé: {self.filepath}")
