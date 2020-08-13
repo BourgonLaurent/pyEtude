@@ -137,7 +137,7 @@ python3 pyEtude.pyw
 
 <div align="center">
 
-[![Configurateur](assets_readme/configurator.png)](/assets_readme/configurator.png)
+[![Configurateur](assets/configurator.png)](/assets/configurator.png)
 
 </div>
 
@@ -145,7 +145,7 @@ python3 pyEtude.pyw
 
 <div align="center">
 
-[![Générateur](assets_readme/pyetude.png)](/assets_readme/pyetude.png)
+[![Générateur](assets/pyetude.png)](/assets/pyetude.png)
 
 </div>
 
@@ -153,7 +153,7 @@ python3 pyEtude.pyw
 
 <div align="center">
 
-[![Configurateur](assets_readme/notebook.gif)](/assets_readme/notebook.gif)
+[![Configurateur](assets/notebook.gif)](/assets/notebook.gif)
 
 </div>
 
@@ -171,9 +171,9 @@ python3 pyEtude.pyw
 | Nom du fichier | `PHY-1607.docx`          |
 
 <p align="center">
-  <a href="assets_readme/page_de_garde.png"><img src="assets_readme/page_de_garde.png" width="256"></a>
-  <a href="assets_readme/table_des_matieres.png"><img src="assets_readme/table_des_matieres.png" width="256"></a>
-  <a href="assets_readme/document.png"><img src="assets_readme/document.png" width="256"></a>
+  <a href="assets/page_de_garde.png"><img src="assets/page_de_garde.png" width="256"></a>
+  <a href="assets/table_des_matieres.png"><img src="assets/table_des_matieres.png" width="256"></a>
+  <a href="assets/document.png"><img src="assets/document.png" width="256"></a>
 </p>
 
 ### Exemple réel<a name="exemple_reel"></a>
@@ -190,10 +190,10 @@ python3 pyEtude.pyw
 | Nom du fichier | `STE-CHP1.docx`                         |
 
 <p align="center">
-  <a href="assets_readme/e_page_de_garde.png"><img src="assets_readme/e_page_de_garde.png" width="256"></a>
-  <a href="assets_readme/e_table_des_matieres.png"><img src="assets_readme/e_table_des_matieres.png" width="256"></a>
-  <a href="assets_readme/e_doc_1.png"><img src="assets_readme/e_doc_1.png" width="256"></a>
-  <a href="assets_readme/e_doc_2.png"><img src="assets_readme/e_doc_2.png" width="256"></a>
+  <a href="assets/e_page_de_garde.png"><img src="assets/e_page_de_garde.png" width="256"></a>
+  <a href="assets/e_table_des_matieres.png"><img src="assets/e_table_des_matieres.png" width="256"></a>
+  <a href="assets/e_doc_1.png"><img src="assets/e_doc_1.png" width="256"></a>
+  <a href="assets/e_doc_2.png"><img src="assets/e_doc_2.png" width="256"></a>
 </p>
 
 ## ⁉️ Foire Aux Questions<a name="faq"></a>
@@ -216,7 +216,7 @@ python3 pyEtude.pyw
 
 <div align="center">
 
-[![Erreur PySide2](assets_readme/pyside2_error.png)](/assets_readme/pyside2_error.png)
+[![Erreur PySide2](assets/pyside2_error.png)](/assets/pyside2_error.png)
 
 </div>
 

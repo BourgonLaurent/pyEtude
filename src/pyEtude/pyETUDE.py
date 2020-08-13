@@ -15,12 +15,12 @@ from .helpers import checkRequirements
 
 # Project packages
 from . import __version__, CONFIG_FILE
-from .creator.document import Document
-from .creator.document_alert import DocumentAlert
+from .generator.document import Document
+from .generator.document_alert import DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
-from .ui.pyEt_main_ui import Ui_MainWindow
-from .ui.pyEt_styles_ui import STYLES
+from .client.pyEt_main_ui import Ui_MainWindow
+from .client.pyEt_styles_ui import STYLES
 
 # Default packages
 import json, locale, os, sys
