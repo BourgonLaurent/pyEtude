@@ -19,8 +19,8 @@ from .generator.document import Document
 from .generator.document_alert import DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
-from .client.pyEt_main_ui import Ui_MainWindow
-from .client.pyEt_styles_ui import STYLES
+from .ui.pyEt_main_ui import Ui_MainWindow
+from .ui.pyEt_styles_ui import STYLES
 
 # Default packages
 import json, locale, os, sys
