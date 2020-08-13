@@ -23,7 +23,7 @@
 ## Imports
 # Default packages
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, List, Optional, cast
 
 
 @dataclass
@@ -44,8 +44,30 @@ class Model:
     exportpath: str
     values: ModelValues
 
-    @property
-    def __dictionary__(self) -> Dict[str, str]:
-        new_dict = self.__dict__.copy()
-        new_dict["values"] = self.values.__dict__
-        return new_dict
+
+@dataclass
+class ModelConfig:
+    default: Optional[Model]
+    models: List[Model]
+
+
+## Example:
+# model_config = ModelConfig(
+#     default=None,
+#     models=[
+#         Model(
+#             name="Documents de Révision",
+#             filepath="Documents de Révision.docx",
+#             exportpath="Documents de Révision",
+#             values=ModelValues(
+#                 auteur="Auteur",
+#                 niveau="Niveau",
+#                 titre="Titre",
+#                 soustitre="Sous-Titre",
+#                 matiere="Matière",
+#                 numero="Numéro",
+#                 section="Section",
+#             ),
+#         )
+#     ],
+# )
