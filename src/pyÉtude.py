@@ -33,4 +33,3 @@ os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
 if __name__ == "__main__":
     fe = frontEnd()
     fe.executeGUI()
-

@@ -10,10 +10,13 @@
 ╚═╝        ╚═╝   
 """
 ## Imports
+# Verifications
+from .helpers import checkRequirements
+
 # Project packages
 from . import __version__, CONFIG_FILE
-from .document.document import Document
-from .document.document_alert import DocumentAlert
+from .creator.document import Document
+from .creator.document_alert import DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
 from .ui.pyEt_main_ui import Ui_MainWindow
@@ -23,27 +26,8 @@ from .ui.pyEt_styles_ui import STYLES
 import json, locale, os, sys
 
 # External packages
-try:
-    from PySide2 import QtCore, QtGui
-    from PySide2.QtWidgets import *
-
-    from docxtpl import DocxTemplate
-except ImportError as e:
-    # Crée le message d'erreur
-    error_message = f"""[!] Impossible de continuer:\n\n\t{e.msg}\n\n
-[*] Avez-vous installé {e.name}?\nC'est un module nécessaire au fonctionnement de pyÉtude.\n\nEssayez la commande suivante:
-\t\tpip install --update {e.name}\n\nSinon référez-vous au README.md de la page GitHub."""
-    # Essaie de montrer un message d'erreur à l'aide d'un GUI par défaut
-    try:
-        from tkinter import Tk
-        from tkinter.messagebox import showerror
-
-        Tk().withdraw()
-        showerror("pyÉtude - Configuration requise non respectée", error_message)
-    except ImportError:  # Le module de GUI n'existe pas
-        print(error_message)
-    # Quitte le programme en indiquant l'erreur
-    sys.exit(e)
+from PySide2 import QtCore, QtGui
+from PySide2.QtWidgets import *
 
 ## CONFIGURATIONS
 MODEL_DEFAULT_CONFIG = {
