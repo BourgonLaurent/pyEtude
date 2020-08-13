@@ -23,6 +23,7 @@
 ## Imports
 # Default packages
 from dataclasses import dataclass
+from typing import Dict
 
 
 @dataclass
@@ -42,3 +43,9 @@ class Model:
     filepath: str
     exportpath: str
     values: ModelValues
+
+    @property
+    def __dictionary__(self) -> Dict[str, str]:
+        new_dict = self.__dict__.copy()
+        new_dict["values"] = self.values.__dict__
+        return new_dict

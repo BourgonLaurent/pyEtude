@@ -21,15 +21,46 @@
 #    SOFTWARE.
 
 ## Imports
+# Project packages
+from .model import Model
+
 # Default packages
 from dataclasses import dataclass
-from typing import List, Optional
-
-from .model import Model
+from typing import Dict, List, Optional, cast
 
 
 @dataclass
 class ModelConfig:
     default: Optional[Model]
     models: List[Model]
-    default_models: List[Model]
+
+    @property
+    def __dictionary__(self) -> Dict[str, str]:
+        new_dict = self.__dict__.copy()
+        new_dict["models"] = [
+            model.__dictionary__ for model in cast(List[Model], new_dict["models"])
+        ]
+
+        return new_dict
+
+
+## Example:
+# model_config = ModelConfig(
+#     default=None,
+#     models=[
+#         Model(
+#             name="Documents de Révision",
+#             filepath=os.path.join(os.getcwd(), "Documents de Révision.docx"),
+#             exportpath="Documents de Révision",
+#             values=ModelValues(
+#                 auteur="Auteur",
+#                 niveau="Niveau",
+#                 titre="Titre",
+#                 soustitre="Sous-Titre",
+#                 matiere="Matière",
+#                 numero="Numéro",
+#                 section="Section",
+#             ),
+#         )
+#     ],
+# )
