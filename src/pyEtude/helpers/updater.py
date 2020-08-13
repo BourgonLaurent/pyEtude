@@ -67,7 +67,7 @@ def checkUpdates(window):
         alert.setInformativeText(
             f"<p>Version actuelle: v{__version__}<br>Version la plus récente: {current_version}</p>"
             + "<br><br>"
-            + "<a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
+            + f"<a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
         )
 
         alert.exec_()
