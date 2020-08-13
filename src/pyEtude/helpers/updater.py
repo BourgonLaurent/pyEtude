@@ -1,4 +1,4 @@
-## downloader.py - pyEtude
+## downloader.py - pyEtude.helpers
 # Check updates on GitHub
 #
 # MIT (c) 2020 Laurent Bourgon

@@ -1,4 +1,4 @@
-## downloader.py - pyEtude
+## downloader.py - pyEtude.helpers
 # Download manager for files on GitHub
 #
 # MIT (c) 2020 Laurent Bourgon
@@ -31,14 +31,21 @@ from urllib.error import HTTPError
 
 
 class FileDownloader:
-    """## Un fichier existant sur le GitHub (selon GITHUB_REPO)
+    """
+    Un fichier existant sur le GitHub (selon GITHUB_REPO)
+
+    Parameters
+    ----------
+    name : str
+        Nom du fichier à prendre
+
+    Methods
+    ----------
+    saveFile : () -> ()
+        Télécharge un fichier et le sauvegarde
     
-    ### Arguments:\n
-        \tname {str} -- Nom du fichier à prendre
-    
-    ### Methos:\n
-        \tsaveFile {() -> ()}: Télécharge un fichier et le sauvegarde
-        \treturnContent {() -> str}: Retourne le contenu du fichier en ligne
+    returnContent: () -> str
+        Retourne le contenu du fichier en ligne
     """
 
     def __init__(self, name: str):
