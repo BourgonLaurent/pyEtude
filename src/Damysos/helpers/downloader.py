@@ -32,27 +32,27 @@ from urllib.error import HTTPError
 
 class FileDownloader:
     """
-    Un fichier existant sur le GitHub (selon GITHUB_REPO)
+    A file existing on GitHub (GITHUB_REPO)
 
     Parameters
     ----------
     name : str
-        Nom du fichier à prendre
+        Name of the file
 
     Methods
     ----------
     saveFile : () -> ()
-        Télécharge un fichier et le sauvegarde
-    
+        Downloads a file and saves it
+
     returnContent: () -> str
-        Retourne le contenu du fichier en ligne
+        Returns the content of the online file
     """
 
     def __init__(self, name: str):
         self.name = name
 
     def saveFile(self):
-        """Télécharge un fichier et le sauvegarde"""
+        """Downloads a file and saves it"""
         try:
             urlretrieve(
                 quote(
@@ -72,11 +72,15 @@ class FileDownloader:
             )
 
     def returnContent(self) -> str:
-        """Retourne le contenu du fichier en ligne
-
-        Returns:
-            {str}: Contenu du fichier
         """
+        Returns the content of the online file
+
+        Returns
+        -------
+        str
+            Content of the file
+        """
+
         try:
             with urlopen(
                 quote(

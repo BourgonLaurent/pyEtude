@@ -22,8 +22,8 @@
 
 ## Imports
 # Default packages
-from dataclasses import dataclass
-from typing import List, Optional
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any
 
 
 @dataclass
@@ -36,13 +36,19 @@ class ModelValues:
     The parameter correspond to the Jinja tags
     """
 
-    auteur: str
-    niveau: str
-    titre: str
-    soustitre: str
-    matiere: str
-    numero: str
-    section: str
+    auteur: str = ""
+    niveau: str = ""
+    titre: str = ""
+    soustitre: str = ""
+    matiere: str = ""
+    numero: str = ""
+    section: str = ""
+
+    def rebuild_from_dict(self, rebuild_dict: Dict[str, str]):
+        for key, value in rebuild_dict.items():
+            self.__setattr__(key, value)
+
+        return self
 
 
 @dataclass
@@ -53,22 +59,31 @@ class Model:
     Parameters
     ----------
     name: str
-        Name of the model
+        (Optional) Name of the model
     
     filepath: str
-        Filepath of the Word document
+        (Optional) Filepath of the Word document
     
     export_name: str
-        Name of the folder that will contain the exported documents
+        (Optional) Name of the folder that will contain the exported documents
 
     values: ModelValues
-        ModelValues object containing the Jinja tags that will be replaced
+        (Optional) ModelValues object containing the Jinja tags that will be replaced
     """
 
-    name: str
-    filepath: str
-    export_name: str
-    values: ModelValues
+    name: str = ""
+    filepath: str = ""
+    export_name: str = ""
+    values: ModelValues = ModelValues()
+
+    def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+        for key, value in rebuild_dict.items():
+            if key == "values":
+                value = ModelValues().rebuild_from_dict(value)
+
+            self.__setattr__(key, value)
+
+        return self
 
 
 @dataclass
@@ -78,15 +93,24 @@ class ModelConfig:
 
     Parameters
     ----------
-    models: List[Model]
-        List containing Model objects that can be selected
+    models: List[Model] | None
+        (Optional) List containing Model objects that can be selected
     
     default: Model | None
         (Optional) The default model that is set, (must also be part of the models)
     """
 
-    models: List[Model]
+    models: List[Model] = field(default=list)  # type: ignore
     default: Optional[Model] = None
+
+    def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+        for key, value in rebuild_dict.items():
+            if key == "models":
+                value = [Model().rebuild_from_dict(m) for m in value]
+
+            self.__setattr__(key, value)
+
+        return self
 
 
 ## Example:
@@ -108,3 +132,20 @@ class ModelConfig:
 #         )
 #     ],
 # )
+# model_config_dict = {
+#     "models": {
+#         "name": "Documents de Révision",
+#         "filepath": "Documents de Révision.docx",
+#         "export_name": "Documents de Révision",
+#         "values": {
+#             "auteur": "Auteur",
+#             "niveau": "Niveau",
+#             "titre": "Titre",
+#             "soustitre": "Sous-Titre",
+#             "matiere": "Matière",
+#             "numero": "Numéro",
+#             "section": "Section",
+#         },
+#     },
+#     "default": None,
+# }

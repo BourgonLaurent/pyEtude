@@ -68,6 +68,16 @@ class TestModelValues(TestCase):
             json.loads(json.dumps(asdict(self.values)))["matiere"], self.matiere
         )
 
+    def test_rebuilding(self):
+        """Test if the rebuild process works correctly"""
+        # Full conversion
+        self.assertEqual(
+            ModelValues().rebuild_from_dict(
+                json.loads(json.dumps(asdict(self.values)))
+            ),
+            self.values,
+        )
+
 
 class TestModel(TestCase):
     name = "test"
@@ -110,6 +120,21 @@ class TestModel(TestCase):
         # Children conversion: ModelValues
         self.assertEqual(
             json.loads(json.dumps(asdict(self.model)))["values"], asdict(self.values)
+        )
+
+    def test_rebuilding(self):
+        """Test if the rebuild process works correctly"""
+        # Full conversion
+        self.assertEqual(
+            Model().rebuild_from_dict(json.loads(json.dumps(asdict(self.model)))),
+            self.model,
+        )
+        # Children conversion: ModelValues
+        self.assertEqual(
+            Model()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.model))))
+            .values,
+            self.values,
         )
 
 
@@ -170,4 +195,29 @@ class TestModelConfig(TestCase):
         self.assertEqual(
             json.loads(json.dumps(asdict(self.model_config)))["models"][0]["values"],
             asdict(self.model.values),
+        )
+
+    def test_rebuilding(self):
+        """Test if the rebuild process works correctly"""
+        # Full conversion
+        self.assertEqual(
+            ModelConfig().rebuild_from_dict(
+                json.loads(json.dumps(asdict(self.model_config)))
+            ),
+            self.model_config,
+        )
+        # Children conversion: Model
+        self.assertEqual(
+            ModelConfig()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.model_config))))
+            .models[0],
+            self.model,
+        )
+        # Children conversion: ModelValues
+        self.assertEqual(
+            ModelConfig()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.model_config))))
+            .models[0]
+            .values,
+            self.values,
         )
