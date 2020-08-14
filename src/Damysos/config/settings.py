@@ -48,6 +48,11 @@ class Settings:
     
     modeles: ModelConfig
         Models that are available to the user
+    
+    Methods
+    ----------
+    rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> Settings
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
     """
 
     auteur: str = ""
@@ -56,6 +61,20 @@ class Settings:
     modeles: ModelConfig = ModelConfig()
 
     def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+        """
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+
+        Parameters
+        ----------
+        rebuild_dict : Dict[str, Any]
+            Dictionary that will be used to populate the dataclass
+
+        Returns
+        -------
+        Settings
+            Returns itself
+        """
+
         for key, value in rebuild_dict.items():
             if key == "matieres":
                 value = {

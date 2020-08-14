@@ -23,7 +23,7 @@
 ## Imports
 # Default packages
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -34,6 +34,11 @@ class ModelValues:
     Parameters
     ----------
     The parameter correspond to the Jinja tags
+
+    Methods
+    ----------
+    rebuild_from_dict: (rebuild_dict: Dict[str, str]) -> ModelValues
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
     """
 
     auteur: str = ""
@@ -45,6 +50,19 @@ class ModelValues:
     section: str = ""
 
     def rebuild_from_dict(self, rebuild_dict: Dict[str, str]):
+        """
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+
+        Parameters
+        ----------
+        rebuild_dict : Dict[str, str]
+            Dictionary that will be used to populate the dataclass
+
+        Returns
+        -------
+        ModelValues
+            Returns itself
+        """
         for key, value in rebuild_dict.items():
             self.__setattr__(key, value)
 
@@ -69,6 +87,11 @@ class Model:
 
     values: ModelValues
         (Optional) ModelValues object containing the Jinja tags that will be replaced
+
+    Methods
+    ----------
+    rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> Model
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
     """
 
     name: str = ""
@@ -77,6 +100,19 @@ class Model:
     values: ModelValues = ModelValues()
 
     def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+        """
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+
+        Parameters
+        ----------
+        rebuild_dict : Dict[str, Any]
+            Dictionary that will be used to populate the dataclass
+
+        Returns
+        -------
+        Model
+            Returns itself
+        """
         for key, value in rebuild_dict.items():
             if key == "values":
                 value = ModelValues().rebuild_from_dict(value)
@@ -98,12 +134,31 @@ class ModelConfig:
     
     default: Model | None
         (Optional) The default model that is set, (must also be part of the models)
+
+    Methods
+    ----------
+    rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> ModelConfig
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
     """
 
     models: List[Model] = field(default=List[Model])  # type: ignore
     default: Optional[Model] = None
 
     def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+        """
+        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+
+        Parameters
+        ----------
+        rebuild_dict : Dict[str, Any]
+            Dictionary that will be used to populate the dataclass
+
+        Returns
+        -------
+        ModelConfig
+            Returns itself
+        """
+
         for key, value in rebuild_dict.items():
             if key == "models":
                 value = [Model().rebuild_from_dict(m) for m in value]
