@@ -48,6 +48,9 @@ class Matiere:
     alias: str = ""
     path: str = ""
 
+    def __bool__(self):
+        return bool(self.alias or self.path)
+
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, str]):
         """
