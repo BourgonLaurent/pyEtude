@@ -22,7 +22,7 @@
 
 ## Imports
 # Tested packages
-from Damysos.model import ModelValues, Model, ModelConfig
+from Damysos.config.model import ModelValues, Model, ModelConfig
 
 # Default packages
 import json
