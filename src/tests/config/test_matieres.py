@@ -56,3 +56,11 @@ class TestModelConfig(TestCase):
         self.assertEqual(
             json.loads(json.dumps(asdict(self.matiere)))["alias"], self.alias
         )
+
+    def test_rebuilding(self):
+        """Test if the rebuild process works correctly"""
+        # Full conversion
+        self.assertEqual(
+            Matiere().rebuild_from_dict(json.loads(json.dumps(asdict(self.matiere)))),
+            self.matiere,
+        )

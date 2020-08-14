@@ -23,6 +23,7 @@
 ## Imports
 # Default packages
 from dataclasses import dataclass
+from typing import Dict
 
 
 @dataclass
@@ -33,11 +34,17 @@ class Matiere:
     Parameters
     ----------    
     alias: str
-        Short name of the matière
+        (Optional) Short name of the matière
     
     path: str
-        Path of where the files for this matière are saved
+        (Optional) Path of where the files for this matière are saved
     """
 
-    alias: str
-    path: str
+    alias: str = ""
+    path: str = ""
+
+    def rebuild_from_dict(self, rebuild_dict: Dict[str, str]):
+        for key, value in rebuild_dict.items():
+            self.__setattr__(key, value)
+
+        return self
