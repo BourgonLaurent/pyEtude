@@ -32,7 +32,6 @@ from urllib.error import HTTPError
 
 # External packages
 from PySide2.QtWidgets import QMessageBox
-from PySide2.QtGui import QIcon
 
 
 def check_new_version():
