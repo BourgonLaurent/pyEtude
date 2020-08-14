@@ -1,4 +1,4 @@
-## check_requirements.py - Damysos.helpers
+## check_requirements.py - damysos.helpers
 # Check if everything is installed correctly
 #
 # MIT (c) 2020 Laurent Bourgon

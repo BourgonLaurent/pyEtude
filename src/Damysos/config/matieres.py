@@ -1,4 +1,4 @@
-## matieres.py - Damysos.config
+## matieres.py - damysos.config
 # Matières Classes
 #
 # MIT (c) 2020 Laurent Bourgon

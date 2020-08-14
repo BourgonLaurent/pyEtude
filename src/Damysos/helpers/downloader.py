@@ -1,4 +1,4 @@
-## downloader.py - Damysos.helpers
+## downloader.py - damysos.helpers
 # Download manager for files on GitHub
 #
 # MIT (c) 2020 Laurent Bourgon

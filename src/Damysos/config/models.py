@@ -1,4 +1,4 @@
-## model.py - Damysos.config
+## model.py - damysos.config
 # Model Classes
 #
 # MIT (c) 2020 Laurent Bourgon

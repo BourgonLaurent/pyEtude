@@ -23,9 +23,9 @@
 ## Imports
 # Tested packages
 from typing import Set
-from Damysos.config.matieres import Matiere
-from Damysos.config.models import ModelConfig, Model, ModelValues
-from Damysos.config.settings import Settings
+from damysos.config.matieres import Matiere
+from damysos.config.models import ModelConfig, Model, ModelValues
+from damysos.config.settings import Settings
 
 # Default packages
 import json

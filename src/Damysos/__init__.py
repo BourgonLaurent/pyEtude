@@ -1,4 +1,4 @@
-## __init__.py - Damysos
+## __init__.py - damysos
 # Placeholder so that Python see this directory as a module
 #
 # MIT (c) 2020 Laurent Bourgon
@@ -29,7 +29,7 @@ import locale
 # Information de la version actuelle
 __version__ = r"4.0.0b5"
 # Nom de fichiers importants
-CONFIG_FILE = "Damysos.config"  # (format: JSON) généré avec le configurateur
+CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
 # Assets
 GITHUB_REPO = r"BourgonLaurent/Damysos"
 

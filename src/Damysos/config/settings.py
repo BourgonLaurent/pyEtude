@@ -1,4 +1,4 @@
-## settings.py - Damysos.config
+## settings.py - damysos.config
 # Settings classes
 #
 # MIT (c) 2020 Laurent Bourgon
@@ -22,10 +22,12 @@
 
 ## Imports
 # Project packages
+from .. import CONFIG_FILE
 from .matieres import Matiere
 from .models import ModelConfig
 
 # Default packages
+import json
 from dataclasses import dataclass, field
 from typing import Any, Dict
 
@@ -51,6 +53,9 @@ class Settings:
     
     Methods
     ----------
+    load_config_file () -> Settings
+        Populate the parameters from damysos.CONFIG_FILE    
+    
     rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> Settings
         Populate the parameters from a dictionary (to be used with dataclasses.asdict)
     """
@@ -59,6 +64,14 @@ class Settings:
     niveau: str = ""
     matieres: Dict[str, Matiere] = field(default=Dict[str, Matiere])  # type: ignore
     modeles: ModelConfig = ModelConfig()
+
+    def load_config_file(self):
+        with open(CONFIG_FILE, mode="r", encoding="utf-8") as config_file:
+            config: Dict[str, Any] = json.load(config_file)
+
+        self.rebuild_from_dict(config)
+
+        return self
 
     def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
         """

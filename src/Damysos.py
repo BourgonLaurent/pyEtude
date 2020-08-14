@@ -1,4 +1,4 @@
-# Damysos.py: Damysos launcher
+# Damysos.py: damysos launcher
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,7 +22,8 @@
 
 ## Librairies
 # Project packages
-from Damysos.frontend import frontEnd
+from damysos.frontend import frontEnd
+from damysos.config.settings import Settings
 
 # Default packages
 import os

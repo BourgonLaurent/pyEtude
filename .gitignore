@@ -115,7 +115,7 @@ releases/
 tmp/
 
 # Project related
-Damysos.config
+damysos.config
 
 # Exclude all Word documents, except those in the models folder
 *.docx

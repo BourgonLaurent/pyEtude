@@ -1,4 +1,4 @@
-## downloader.py - Damysos.helpers
+## downloader.py - damysos.helpers
 # Check updates on GitHub
 #
 # MIT (c) 2020 Laurent Bourgon

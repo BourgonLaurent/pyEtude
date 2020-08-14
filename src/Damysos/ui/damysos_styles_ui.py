@@ -1,4 +1,4 @@
-## damysos_styles_ui.py - Damysos.ui
+## damysos_styles_ui.py - damysos.ui
 # Stylesheets that are used for multiple components
 
 # Imports

@@ -22,7 +22,7 @@
 
 ## Imports
 # Tested packages
-from Damysos.config.matieres import Matiere
+from damysos.config.matieres import Matiere
 
 # Default packages
 import json
