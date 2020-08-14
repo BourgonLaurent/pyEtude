@@ -1,4 +1,4 @@
-## test_model.py - test.config
+## test_model.py - tests.config
 # Testing Model Classes
 #
 # MIT (c) 2020 Laurent Bourgon
