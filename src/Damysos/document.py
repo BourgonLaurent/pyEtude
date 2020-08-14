@@ -22,7 +22,7 @@
 
 ## Imports
 # Project packages
-from .. import __version__
+from . import __version__
 
 # Default packages
 import os, sys
