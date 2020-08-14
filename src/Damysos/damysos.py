@@ -14,7 +14,7 @@
 from . import __version__, CONFIG_FILE
 from .document import Document, DocumentAlert
 from .helpers.downloader import FileDownloader
-from .helpers.updater import checkUpdates
+from .helpers.updater import check_updates
 from .ui.damysos_main_ui import Ui_MainWindow
 from .ui.damysos_styles_ui import STYLES
 

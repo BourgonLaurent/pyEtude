@@ -35,7 +35,7 @@ from PySide2.QtWidgets import QMessageBox
 from PySide2.QtGui import QIcon
 
 
-def checkNewVersion():
+def check_new_version():
     """Vérifie si une nouvelle version existe
 
     Returns:
@@ -53,13 +53,13 @@ def checkNewVersion():
         return __version__
 
 
-def checkUpdates(window):
+def check_updates(window):
     """Vérifie les nouvelles versions du logiciel et affiche une boîte de dialogue
     
     Arguments:\n
       * window {PySide2.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
     """
-    current_version = checkNewVersion()
+    current_version = check_new_version()
 
     if current_version > f"v{__version__}":
         alert = QMessageBox(window)
