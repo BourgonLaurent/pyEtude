@@ -23,7 +23,6 @@
 ## Librairies
 # Project packages
 from damysos.frontend import frontEnd
-from damysos.config.settings import Settings
 
 # Default packages
 import os

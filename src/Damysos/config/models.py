@@ -35,10 +35,10 @@ class ModelValues:
     ----------
     The parameter correspond to the Jinja tags
 
-    Methods
+    Static Methods
     ----------
     rebuild_from_dict: (rebuild_dict: Dict[str, str]) -> ModelValues
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
     auteur: str = ""
@@ -49,9 +49,10 @@ class ModelValues:
     numero: str = ""
     section: str = ""
 
-    def rebuild_from_dict(self, rebuild_dict: Dict[str, str]):
+    @staticmethod
+    def rebuild_from_dict(rebuild_dict: Dict[str, str]):
         """
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
 
         Parameters
         ----------
@@ -61,12 +62,14 @@ class ModelValues:
         Returns
         -------
         ModelValues
-            Returns itself
+            Returns the object created
         """
-        for key, value in rebuild_dict.items():
-            self.__setattr__(key, value)
+        model_values = ModelValues()
 
-        return self
+        for key, value in rebuild_dict.items():
+            model_values.__setattr__(key, value)
+
+        return model_values
 
 
 @dataclass
@@ -88,10 +91,10 @@ class Model:
     values: ModelValues
         (Optional) ModelValues object containing the Jinja tags that will be replaced
 
-    Methods
+    Static Methods
     ----------
     rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> Model
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
     name: str = ""
@@ -99,9 +102,10 @@ class Model:
     export_name: str = ""
     values: ModelValues = ModelValues()
 
-    def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+    @staticmethod
+    def rebuild_from_dict(rebuild_dict: Dict[str, Any]):
         """
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
 
         Parameters
         ----------
@@ -111,15 +115,17 @@ class Model:
         Returns
         -------
         Model
-            Returns itself
+            Returns the object created
         """
+        model = Model()
+
         for key, value in rebuild_dict.items():
             if key == "values":
-                value = ModelValues().rebuild_from_dict(value)
+                value = ModelValues.rebuild_from_dict(value)
 
-            self.__setattr__(key, value)
+            model.__setattr__(key, value)
 
-        return self
+        return model
 
 
 @dataclass
@@ -135,18 +141,19 @@ class ModelConfig:
     default: Model | None
         (Optional) The default model that is set, (must also be part of the models)
 
-    Methods
+    Static Methods
     ----------
     rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> ModelConfig
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
     models: List[Model] = field(default=List[Model])  # type: ignore
     default: Optional[Model] = None
 
-    def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+    @staticmethod
+    def rebuild_from_dict(rebuild_dict: Dict[str, Any]):
         """
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
 
         Parameters
         ----------
@@ -156,16 +163,17 @@ class ModelConfig:
         Returns
         -------
         ModelConfig
-            Returns itself
+            Returns the object created
         """
+        model_config = ModelConfig()
 
         for key, value in rebuild_dict.items():
             if key == "models":
-                value = [Model().rebuild_from_dict(m) for m in value]
+                value = [Model.rebuild_from_dict(m) for m in value]
 
-            self.__setattr__(key, value)
+            model_config.__setattr__(key, value)
 
-        return self
+        return model_config
 
 
 ## Example:

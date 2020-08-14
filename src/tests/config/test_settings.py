@@ -109,21 +109,21 @@ class TestSettings(TestCase):
         """Test if the rebuild process works correctly"""
         # Full conversion
         self.assertEqual(
-            Settings().rebuild_from_dict(json.loads(json.dumps(asdict(self.settings)))),
+            Settings.rebuild_from_dict(json.loads(json.dumps(asdict(self.settings)))),
             self.settings,
         )
         # Children conversion: Matiere
         self.assertEqual(
-            Settings()
-            .rebuild_from_dict(json.loads(json.dumps(asdict(self.settings))))
-            .matieres,
+            Settings.rebuild_from_dict(
+                json.loads(json.dumps(asdict(self.settings)))
+            ).matieres,
             self.matieres,
         )
         # Children conversion: ModelConfig
         self.assertEqual(
-            Settings()
-            .rebuild_from_dict(json.loads(json.dumps(asdict(self.settings))))
-            .modeles,
+            Settings.rebuild_from_dict(
+                json.loads(json.dumps(asdict(self.settings)))
+            ).modeles,
             self.modeles,
         )
         # Children conversion: Model

@@ -39,18 +39,19 @@ class Matiere:
     path: str
         (Optional) Path of where the files for this matière are saved
     
-    Methods
+    Static Methods
     ----------
     rebuild_from_dict: (rebuild_dict: Dict[str, str]) -> Matiere
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
     alias: str = ""
     path: str = ""
 
-    def rebuild_from_dict(self, rebuild_dict: Dict[str, str]):
+    @staticmethod
+    def rebuild_from_dict(rebuild_dict: Dict[str, str]):
         """
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
 
         Parameters
         ----------
@@ -60,9 +61,11 @@ class Matiere:
         Returns
         -------
         Matiere
-            Returns itself
+            Returns the object created
         """
-        for key, value in rebuild_dict.items():
-            self.__setattr__(key, value)
+        matiere = Matiere()
 
-        return self
+        for key, value in rebuild_dict.items():
+            matiere.__setattr__(key, value)
+
+        return matiere

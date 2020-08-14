@@ -72,9 +72,7 @@ class TestModelValues(TestCase):
         """Test if the rebuild process works correctly"""
         # Full conversion
         self.assertEqual(
-            ModelValues().rebuild_from_dict(
-                json.loads(json.dumps(asdict(self.values)))
-            ),
+            ModelValues.rebuild_from_dict(json.loads(json.dumps(asdict(self.values)))),
             self.values,
         )
 
@@ -126,7 +124,7 @@ class TestModel(TestCase):
         """Test if the rebuild process works correctly"""
         # Full conversion
         self.assertEqual(
-            Model().rebuild_from_dict(json.loads(json.dumps(asdict(self.model)))),
+            Model.rebuild_from_dict(json.loads(json.dumps(asdict(self.model)))),
             self.model,
         )
         # Children conversion: ModelValues
@@ -201,22 +199,23 @@ class TestModelConfig(TestCase):
         """Test if the rebuild process works correctly"""
         # Full conversion
         self.assertEqual(
-            ModelConfig().rebuild_from_dict(
+            ModelConfig.rebuild_from_dict(
                 json.loads(json.dumps(asdict(self.model_config)))
             ),
             self.model_config,
         )
         # Children conversion: Model
         self.assertEqual(
-            ModelConfig()
-            .rebuild_from_dict(json.loads(json.dumps(asdict(self.model_config))))
-            .models[0],
+            ModelConfig.rebuild_from_dict(
+                json.loads(json.dumps(asdict(self.model_config)))
+            ).models[0],
             self.model,
         )
         # Children conversion: ModelValues
         self.assertEqual(
-            ModelConfig()
-            .rebuild_from_dict(json.loads(json.dumps(asdict(self.model_config))))
+            ModelConfig.rebuild_from_dict(
+                json.loads(json.dumps(asdict(self.model_config)))
+            )
             .models[0]
             .values,
             self.values,
