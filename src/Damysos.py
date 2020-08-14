@@ -22,7 +22,7 @@
 
 ## Librairies
 # Project packages
-from Damysos.damysos import frontEnd
+from Damysos.frontend import frontEnd
 
 # Default packages
 import os
