@@ -10,13 +10,9 @@
 ╚═╝        ╚═╝   
 """
 ## Imports
-# Verifications
-from .helpers import check_requirements
-
 # Project packages
 from . import __version__, CONFIG_FILE
-from .generator.document import Document
-from .generator.document_alert import DocumentAlert
+from .document import Document, DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import checkUpdates
 from .ui.damysos_main_ui import Ui_MainWindow

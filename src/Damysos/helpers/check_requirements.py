@@ -1,6 +1,5 @@
 import sys
 
-print(sys.version)
 try:
     import os, json, locale, typing
 

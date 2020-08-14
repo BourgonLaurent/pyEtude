@@ -40,3 +40,7 @@ try:
         locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 except:
     assert EnvironmentError
+
+# Check if everything is installed correctly
+# Shows an error to the user if not
+from .helpers import check_requirements
