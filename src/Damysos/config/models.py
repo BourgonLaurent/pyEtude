@@ -100,7 +100,7 @@ class ModelConfig:
         (Optional) The default model that is set, (must also be part of the models)
     """
 
-    models: List[Model] = field(default=list)  # type: ignore
+    models: List[Model] = field(default=List[Model])  # type: ignore
     default: Optional[Model] = None
 
     def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):

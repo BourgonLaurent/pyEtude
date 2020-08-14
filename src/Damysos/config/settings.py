@@ -26,8 +26,8 @@ from .matieres import Matiere
 from .models import ModelConfig
 
 # Default packages
-from dataclasses import dataclass
-from typing import Dict
+from dataclasses import dataclass, field
+from typing import Any, Dict
 
 
 @dataclass
@@ -50,7 +50,21 @@ class Settings:
         Models that are available to the user
     """
 
-    auteur: str
-    niveau: str
-    matieres: Dict[str, Matiere]
-    modeles: ModelConfig
+    auteur: str = ""
+    niveau: str = ""
+    matieres: Dict[str, Matiere] = field(default=Dict[str, Matiere])  # type: ignore
+    modeles: ModelConfig = ModelConfig()
+
+    def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+        for key, value in rebuild_dict.items():
+            if key == "matieres":
+                value = {
+                    name: Matiere().rebuild_from_dict(matiere)
+                    for name, matiere in value.items()
+                }
+            elif key == "modeles":
+                value = ModelConfig().rebuild_from_dict(value)
+
+            self.__setattr__(key, value)
+
+        return self

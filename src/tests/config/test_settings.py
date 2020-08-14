@@ -33,7 +33,7 @@ from unittest import TestCase
 from dataclasses import asdict
 
 
-class TestModelConfig(TestCase):
+class TestSettings(TestCase):
     auteur = "User"
     niveau = "Grade ÀÉÇ"
     matieres = {"Test": Matiere(alias="TEST", path="Tests ÀÉÇ")}
@@ -102,5 +102,42 @@ class TestModelConfig(TestCase):
             json.loads(json.dumps(asdict(self.settings)))["modeles"]["models"][0][
                 "values"
             ],
-            asdict(self.model.values),
+            asdict(self.model_values),
+        )
+
+    def test_rebuilding(self):
+        """Test if the rebuild process works correctly"""
+        # Full conversion
+        self.assertEqual(
+            Settings().rebuild_from_dict(json.loads(json.dumps(asdict(self.settings)))),
+            self.settings,
+        )
+        # Children conversion: Matiere
+        self.assertEqual(
+            Settings()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.settings))))
+            .matieres,
+            self.matieres,
+        )
+        # Children conversion: ModelConfig
+        self.assertEqual(
+            Settings()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.settings))))
+            .modeles,
+            self.modeles,
+        )
+        # Children conversion: Model
+        self.assertEqual(
+            Settings()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.settings))))
+            .modeles.models[0],
+            self.model,
+        )
+        # Children conversion: ModelValues
+        self.assertEqual(
+            Settings()
+            .rebuild_from_dict(json.loads(json.dumps(asdict(self.settings))))
+            .modeles.models[0]
+            .values,
+            self.model_values,
         )
