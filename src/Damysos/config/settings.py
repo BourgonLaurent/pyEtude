@@ -28,7 +28,7 @@ from .models import ModelConfig
 
 # Default packages
 import json
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from typing import Any, Dict
 
 
@@ -57,7 +57,7 @@ class Settings:
         Populate the parameters from damysos.CONFIG_FILE    
     
     rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> Settings
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
     auteur: str = ""
@@ -65,17 +65,23 @@ class Settings:
     matieres: Dict[str, Matiere] = field(default=Dict[str, Matiere])  # type: ignore
     modeles: ModelConfig = ModelConfig()
 
-    def load_config_file(self):
+    def dump_config_file(self):
+        with open(CONFIG_FILE, mode="w", encoding="utf-8") as config_file:
+            json.dump(
+                asdict(self), config_file, sort_keys=True, indent=4, ensure_ascii=False
+            )
+
+    @staticmethod
+    def load_config_file():
         with open(CONFIG_FILE, mode="r", encoding="utf-8") as config_file:
             config: Dict[str, Any] = json.load(config_file)
 
-        self.rebuild_from_dict(config)
+        return Settings.rebuild_from_dict(config)
 
-        return self
-
-    def rebuild_from_dict(self, rebuild_dict: Dict[str, Any]):
+    @staticmethod
+    def rebuild_from_dict(rebuild_dict: Dict[str, Any]):
         """
-        Populate the parameters from a dictionary (to be used with dataclasses.asdict)
+        Create a new object from the dictionary (to be used with dataclasses.asdict)
 
         Parameters
         ----------
@@ -85,18 +91,19 @@ class Settings:
         Returns
         -------
         Settings
-            Returns itself
+            Returns the object created
         """
+        settings = Settings()
 
         for key, value in rebuild_dict.items():
             if key == "matieres":
                 value = {
-                    name: Matiere().rebuild_from_dict(matiere)
+                    name: Matiere.rebuild_from_dict(matiere)
                     for name, matiere in value.items()
                 }
             elif key == "modeles":
-                value = ModelConfig().rebuild_from_dict(value)
+                value = ModelConfig.rebuild_from_dict(value)
 
-            self.__setattr__(key, value)
+            settings.__setattr__(key, value)
 
-        return self
+        return settings
