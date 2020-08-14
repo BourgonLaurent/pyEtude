@@ -29,7 +29,7 @@ import locale
 # Information de la version actuelle
 __version__ = r"4.0.0b5"
 # Nom de fichiers importants
-CONFIG_FILE = "Damysos.json"  # (ext: *.json) généré avec le configurateur
+CONFIG_FILE = "Damysos.config"  # (format: JSON) généré avec le configurateur
 # Assets
 GITHUB_REPO = r"BourgonLaurent/Damysos"
 
