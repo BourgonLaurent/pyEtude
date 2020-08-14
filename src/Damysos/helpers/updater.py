@@ -28,7 +28,7 @@ from .. import __version__, GITHUB_REPO
 from json import loads
 from urllib.request import urlopen
 from urllib.parse import quote
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 
 # External packages
 from PySide2.QtWidgets import QMessageBox
@@ -48,7 +48,7 @@ def check_new_version():
             )
         ) as ur:
             return loads(ur.read().decode("utf-8"))["tag_name"]
-    except HTTPError:
+    except (HTTPError, URLError):
         return __version__
 
 

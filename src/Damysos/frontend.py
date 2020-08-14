@@ -71,7 +71,7 @@ class frontEnd:
         self.app.setStyle("Fusion")
 
         # Vérifie si une version plus récente existe
-        checkUpdates(self.window)
+        check_updates(self.window)
 
     def executeGUI(self):
         """## Génère et lance le GUI"""

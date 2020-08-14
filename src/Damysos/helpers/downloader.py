@@ -27,7 +27,7 @@ from .. import __version__, GITHUB_REPO
 # Default packages
 from urllib.request import urlretrieve, urlopen
 from urllib.parse import quote
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 
 
 class FileDownloader:
@@ -62,7 +62,7 @@ class FileDownloader:
                 self.name,
             )
 
-        except HTTPError:
+        except (HTTPError, URLError):
             urlretrieve(
                 quote(
                     fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{self.name}",
@@ -90,7 +90,7 @@ class FileDownloader:
             ) as ur:
                 return ur.read().decode()
 
-        except HTTPError:
+        except (HTTPError, URLError):
             with urlopen(
                 quote(
                     fr"https://raw.githubusercontent.com/{GITHUB_REPO}/master/src/{self.name}",
