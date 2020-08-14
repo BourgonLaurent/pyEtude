@@ -23,11 +23,19 @@
 ## Imports
 # Default packages
 from dataclasses import dataclass
-from typing import Dict, List, Optional, cast
+from typing import List, Optional
 
 
 @dataclass
 class ModelValues:
+    """
+    Values for the models
+
+    Parameters
+    ----------
+    The parameter correspond to the Jinja tags
+    """
+
     auteur: str
     niveau: str
     titre: str
@@ -39,26 +47,55 @@ class ModelValues:
 
 @dataclass
 class Model:
+    """
+    Model Object that represents a Word document containing Jinja2 tags
+
+    Parameters
+    ----------
+    name: str
+        Name of the model
+    
+    filepath: str
+        Filepath of the Word document
+    
+    export_name: str
+        Name of the folder that will contain the exported documents
+
+    values: ModelValues
+        ModelValues object containing the Jinja tags that will be replaced
+    """
+
     name: str
     filepath: str
-    exportpath: str
+    export_name: str
     values: ModelValues
 
 
 @dataclass
 class ModelConfig:
-    default: Optional[Model]
+    """
+    Configuration Object that holds all available models
+
+    Parameters
+    ----------
     models: List[Model]
+        List containing Model objects that can be selected
+    
+    default: Model | None
+        (Optional) The default model that is set, (must also be part of the models)
+    """
+
+    models: List[Model]
+    default: Optional[Model] = None
 
 
 ## Example:
 # model_config = ModelConfig(
-#     default=None,
 #     models=[
 #         Model(
 #             name="Documents de Révision",
 #             filepath="Documents de Révision.docx",
-#             exportpath="Documents de Révision",
+#             export_name="Documents de Révision",
 #             values=ModelValues(
 #                 auteur="Auteur",
 #                 niveau="Niveau",
