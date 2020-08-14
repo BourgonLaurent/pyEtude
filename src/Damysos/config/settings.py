@@ -21,28 +21,36 @@
 #    SOFTWARE.
 
 ## Imports
+# Project packages
+from .matieres import Matiere
+from .models import ModelConfig
+
 # Default packages
 from dataclasses import dataclass
-from typing import Dict, List, Optional
-
-from .models import ModelConfig
+from typing import Dict
 
 
 @dataclass
-class SettingsConfig:
+class Settings:
     """
     Configuration Object that holds all settings
 
     Parameters
     ----------
-    models: List[Model]
-        List containing Model objects that can be selected
+    auteur : str
+        Name of the user
+
+    niveau : str
+        Level of the user
+
+    matieres: Dict[str, Matiere]
+        Dictionary containing the matière, the key is its name
     
-    default: Model | None
-        (Optional) The default model that is set, (must also be part of the models)
+    modeles: ModelConfig
+        Models that are available to the user
     """
 
     auteur: str
-    matieres: Dict[str, List[str]]
-    modeles: ModelConfig
     niveau: str
+    matieres: Dict[str, Matiere]
+    modeles: ModelConfig
