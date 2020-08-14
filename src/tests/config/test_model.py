@@ -1,5 +1,5 @@
-## model.py - Damysos.models
-# Model Classes
+## test_model.py - test.config
+# Testing Model Classes
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,7 +22,7 @@
 
 ## Imports
 # Tested packages
-from Damysos.config.model import ModelValues, Model, ModelConfig
+from Damysos.config.models import ModelValues, Model, ModelConfig
 
 # Default packages
 import json
