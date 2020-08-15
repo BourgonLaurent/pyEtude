@@ -17,6 +17,7 @@ from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
 from .ui.main_ui import Ui_MainWindow
 from .ui.styles_ui import CustomStyles
+from .ui.dialogs.calendar_dialog import CalendarDialog
 
 # Default packages
 import json, locale, os, sys
@@ -163,9 +164,9 @@ class frontEnd:
             self.ui.matiereTable.tableWidget.insertRow(
                 self.ui.matiereTable.tableWidget.rowCount()
             )
-            self.ui.matiereTable.tableWidget.setTextAt(i, 0, key)
-            self.ui.matiereTable.tableWidget.setTextAt(i, 1, datadict[key][0])
-            self.ui.matiereTable.tableWidget.setTextAt(i, 2, datadict[key][1])
+            self.ui.matiereTable.tableWidget.setTextAt((i, 0), key)
+            self.ui.matiereTable.tableWidget.setTextAt((i, 1), datadict[key][0])
+            self.ui.matiereTable.tableWidget.setTextAt((i, 2), datadict[key][1])
 
     def readJSON(self):
         """## Lit le fichier de configuration .json et lui attribue les informations contenues"""
@@ -438,34 +439,10 @@ class frontEnd:
                 self.checkNumMat(prefix=selection.text()[:3])
 
         def calendarView():
-            self.ui.numLineEdit.setEnabled(False)
-            calendarView = QDialog(self.window)
-            calendarView.setWindowFlags(
-                QtCore.Qt.Dialog
-                | QtCore.Qt.MSWindowsFixedSizeDialogHint
-                | QtCore.Qt.WindowMinimizeButtonHint
-            )
-
-            calendar = QCalendarWidget(calendarView)
-            calendar.setGeometry(QtCore.QRect(0, 0, 312, 183))
-            calendar.setFirstDayOfWeek(QtCore.Qt.Monday)
-            calendar.setGridVisible(True)
-            calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
-            calendar.setObjectName("numCalendarWidget")
-
-            calwe_format = QtGui.QTextCharFormat()
-            calwe_format.setForeground(QtGui.QColor("#148CD2"))
-            calendar.setWeekdayTextFormat(QtCore.Qt.Saturday, calwe_format)
-            calendar.setWeekdayTextFormat(QtCore.Qt.Sunday, calwe_format)
-
-            def qdateToString(qdate):
-                self.numero = qdate.toString("MMdd")
-                self.ui.numLineEdit.setText(self.numero)
-                calendarView.done(0)
-
-            calendar.clicked.connect(qdateToString)
-            calendarView.setWindowTitle("Veuillez choisir une date")
-            calendarView.exec_()
+            calendar_dialog = CalendarDialog(self.window)
+            calendar_dialog.exec_()
+            self.numero = calendar_dialog.date
+            self.ui.numLineEdit.setText(self.numero)
 
         numMenu = QMenu("numMenu", self.window)
         numMenu.triggered.connect(isChecked)
