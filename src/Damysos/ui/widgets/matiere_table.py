@@ -21,11 +21,9 @@
 #    SOFTWARE.
 
 ## Imports
-# Project packages
-
 # External packages
-from typing import cast
-from PySide2.QtGui import Qt
+from typing import cast, Tuple
+from PySide2.QtCore import Slot, Qt
 from PySide2.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
@@ -42,7 +40,30 @@ from PySide2.QtWidgets import (
 
 
 class MatiereTable(QWidget):
-    def __init__(self, parent) -> None:
+    """
+    Group of modified QTableWidget and QPushButton containing additional logic and buttons
+    
+    Attributes
+    ----------
+    verticalLayout: QVBoxLayout
+        The main layout of the widget, regroups everything
+    
+    tableWidget: MatiereTableWidget
+        The MatiereTableWidget
+    
+    control: MatiereTableControl
+        The buttons under the MatiereTableWidget
+    """
+
+    def __init__(self, parent: QWidget) -> None:
+        """
+        Initialize the Widget
+
+        Parameters
+        ----------
+        parent : QWidget
+            QWidget that will be attached to this widget
+        """
         super().__init__(parent=parent)
 
         self.verticalLayout = QVBoxLayout(self)
@@ -55,16 +76,49 @@ class MatiereTable(QWidget):
 
 
 class MatiereTableWidget(QTableWidget):
-    """QLabel that prevents using dangerous and breaking characters"""
+    """
+    Modified QTableWidget containing additional logic
+    
+    Attributes
+    ----------
+    verticalLayout: QVBoxLayout
+        The main layout of the widget, regroups everything
+    
+    tableWidget: MatiereTableWidget
+        The MatiereTableWidget
+    
+    control: MatiereTableControl
+        The buttons under the MatiereTableWidget
+    """
 
     def __init__(self, parent: QWidget):
         """
-        Creates the QLabel and sets its text
+        Initialize the Widget
 
         Parameters
         ----------
         parent : QWidget
-            Any Widget that will be parent of the QLabel
+            QWidget that will be attached to this widget
+        
+        Methods
+        ----------
+        set_headers: () -> ()
+            Configures and loads the widget inside the table
+        
+        set_connections: () -> ()
+            Connects the Signals and Slots of components
+        
+        add_row: () -> ()
+            Add a row to the bottom of the table
+        
+        remove_row: () -> ()
+            Remove the selected row (or the last one if none are selected) in the table
+        
+        clear: () -> ()
+            (Override) Remove everything in the table
+        
+        setTextAt: (row: int, column: int, text: str) -> ()
+            Set the text on a new item
         """
 
         super().__init__(parent=parent)  # type: ignore
@@ -111,40 +165,72 @@ class MatiereTableWidget(QTableWidget):
 
         self.verticalHeader().setVisible(False)
 
+    def set_connections(self):
+        """Connects the Signals and Slots of components"""
+        self.itemDoubleClicked.connect(self.browse_directory)  # type: ignore
+
     def add_row(self):
+        """Add a row to the bottom of the table"""
         self.insertRow(self.rowCount())
 
     def remove_row(self):
+        """Remove the selected row (or the last one if none are selected) in the table"""
         self.removeRow(
             self.currentRow() if self.currentRow() > 0 else self.rowCount() - 1
         )
 
     def clear(self):
+        """(Override) Remove everything in the table"""
         super().clear()
         self.set_headers()
 
-    def setTextAt(self, row: int, column: int, text: str):
+    def setTextAt(self, coords: Tuple[int, int], text: str):
+        """
+        Set the text on a new item
+
+        Parameters
+        ----------
+        coords : Tuple[int, int]
+            x: Horizontal Point
+            y: Vertical Point
+
+        text : str
+            [description]
+        """
         table_item = QTableWidgetItem()
         table_item.setText(text)
         table_item.setToolTip(text)
 
-        self.setItem(row, column, table_item)
+        self.setItem(coords[0], coords[1], table_item)
 
+    @Slot(QTableWidgetItem)  # type: ignore
     def browse_directory(self, item: QTableWidgetItem):
+        """
+        Opens a dialog to select a folder
+
+        Parameters
+        ----------
+        item : QTableWidgetItem
+            Item that will have the path of the directory
+        """
         if item.column() == 2:
             item.setFlags(cast(Qt.ItemFlags, Qt.ItemIsEnabled))
 
             filename: str = QFileDialog.getExistingDirectory()
 
-            item.setText(filename or "")
-            item.setToolTip(filename or "")
-
-    def set_connections(self):
-        self.itemDoubleClicked.connect(self.browse_directory)  # type: ignore
+            self.setTextAt((item.row(), item.column()), filename or "")
 
 
 class MatiereTableControl(QWidget):
     def __init__(self, parent: MatiereTable) -> None:
+        """
+        Initialize the Widget
+
+        Parameters
+        ----------
+        parent : QWidget
+            QWidget that will be attached to this widget
+        """
         super().__init__(parent=parent)
 
         self.boxlayout = QHBoxLayout()  # type: ignore
