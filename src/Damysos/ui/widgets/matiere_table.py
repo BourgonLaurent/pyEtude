@@ -69,12 +69,11 @@ class MatiereTableWidget(QTableWidget):
         """
 
         super().__init__(parent=parent)  # type: ignore
-        # self.setGeometry(0, 0, 641, 191)
         self.setColumnCount(3)
         self.setRowCount(15)
 
-        self.setHeaders()
-        self.setConnections()
+        self.set_headers()
+        self.set_connections()
 
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -91,7 +90,7 @@ class MatiereTableWidget(QTableWidget):
         self.setWordWrap(False)
         self.setCornerButtonEnabled(True)
 
-    def setHeaders(self):
+    def set_headers(self):
         self.header_matiere = QTableWidgetItem()
         self.header_matiere.setTextAlignment(cast(int, Qt.AlignCenter))
         self.header_matiere.setText("Matière")
@@ -123,7 +122,7 @@ class MatiereTableWidget(QTableWidget):
 
     def reset_table(self):
         self.clear()
-        self.setHeaders()
+        self.set_headers()
 
     def check_if_browsing(self, item: QTableWidgetItem):
         if item.column() == 2:
@@ -131,27 +130,18 @@ class MatiereTableWidget(QTableWidget):
 
             filename: str = QFileDialog.getExistingDirectory()
 
-            if not filename:
-                self.item(self.currentRow(), 2).setText("")
-                return
+            item.setText(filename or "")
+            item.setToolTip(filename or "")
 
-            table_item = QTableWidgetItem()
-            table_item.setText(filename)
-
-            self.setItem(self.currentRow(), 2, table_item)
-
-    def test(self, hi):
-        print(hi)
-
-    def setConnections(self):
+    def set_connections(self):
         self.itemDoubleClicked.connect(self.check_if_browsing)  # type: ignore
-        # self.
 
 
 class MatiereTableControl(QWidget):
     def __init__(self, parent: MatiereTable) -> None:
         super().__init__(parent=parent)
-        self.boxlayout = QHBoxLayout(parent)
+
+        self.boxlayout = QHBoxLayout()  # type: ignore
 
         self.plus = QPushButton(text="+", parent=self)
         self.plus.setFixedSize(21, 24)
@@ -163,12 +153,12 @@ class MatiereTableControl(QWidget):
         self.minus.clicked.connect(parent.tableWidget.remove_row)  # type: ignore
         self.boxlayout.addWidget(self.minus)
 
-        self.controlSpacer = QSpacerItem(
-            100, 20, QSizePolicy.Expanding, QSizePolicy.Minimum  # type: ignore
+        self.spacer = QSpacerItem(
+            100, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
-        self.boxlayout.addItem(self.controlSpacer)
+        self.boxlayout.addItem(self.spacer)
 
         self.reset = QPushButton(text="Réinitialiser", parent=self)
         self.reset.setFixedSize(85, 24)
-        self.reset.clicked.connect(parent.tableWidget.reset_table) # type: ignore
+        self.reset.clicked.connect(parent.tableWidget.reset_table)  # type: ignore
         self.boxlayout.addWidget(self.reset)
