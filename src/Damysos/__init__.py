@@ -22,8 +22,31 @@
 
 
 ## Imports
-# Default packages
-import locale
+# Required to import separately
+import sys
+
+# Check if everything is installed correctly
+# Shows an error to the user if not
+try:
+    # Standard library
+    import os, json, locale, typing
+
+    # External libraries
+    import PySide2, docxtpl
+except ImportError as e:
+    # Show error message
+    print(
+        "[!] Impossible de continuer:\n\n"
+        + f"\t{repr(e)}"
+        + "\n\n"
+        + f"[*] Avez-vous installé {e.name}?\n"
+        + "C'est un module nécessaire au fonctionnement de Damysos.\n\n"
+        + "Essayez la commande suivante:"
+        + f"\tpip install --update {e.name}\n\n"
+        + "Vous pouvez aussi vous référer au README.md de la page GitHub."
+    )
+    # Exit and tell error
+    sys.exit(e)
 
 ## Paramètres généraux
 # Information de la version actuelle
@@ -40,7 +63,3 @@ try:
         locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 except:
     assert EnvironmentError
-
-# Check if everything is installed correctly
-# Shows an error to the user if not
-from .helpers import check_requirements
