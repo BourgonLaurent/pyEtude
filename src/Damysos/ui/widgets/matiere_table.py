@@ -130,7 +130,7 @@ class MatiereTableWidget(QTableWidget):
 
         self.setItem(row, column, table_item)
 
-    def check_if_browsing(self, item: QTableWidgetItem):
+    def browse_directory(self, item: QTableWidgetItem):
         if item.column() == 2:
             item.setFlags(cast(Qt.ItemFlags, Qt.ItemIsEnabled))
 
@@ -140,7 +140,7 @@ class MatiereTableWidget(QTableWidget):
             item.setToolTip(filename or "")
 
     def set_connections(self):
-        self.itemDoubleClicked.connect(self.check_if_browsing)  # type: ignore
+        self.itemDoubleClicked.connect(self.browse_directory)  # type: ignore
 
 
 class MatiereTableControl(QWidget):
