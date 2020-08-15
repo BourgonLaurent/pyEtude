@@ -17,7 +17,7 @@ from PySide2.QtWidgets import *
 
 from .widgets.version_label import VersionLabel
 from .widgets.safe_line_edit import SafeLineEdit
-from .widgets.matiere_table_widget import MatiereTableWidget
+from .widgets.matiere_table import MatiereTable
 
 
 class Ui_MainWindow(object):
@@ -2048,99 +2048,9 @@ class Ui_MainWindow(object):
         self.matieresConfig.setFlat(False)
         self.matieresConfig.setCheckable(True)
         self.matieresConfig.setChecked(True)
-        self.matiereTableWidget = MatiereTableWidget(self.matieresConfig)
-        if (self.matiereTableWidget.columnCount() < 3):
-            self.matiereTableWidget.setColumnCount(3)
-        __qtablewidgetitem = QTableWidgetItem()
-        __qtablewidgetitem.setTextAlignment(Qt.AlignCenter);
-        self.matiereTableWidget.setHorizontalHeaderItem(0, __qtablewidgetitem)
-        __qtablewidgetitem1 = QTableWidgetItem()
-        __qtablewidgetitem1.setTextAlignment(Qt.AlignCenter);
-        self.matiereTableWidget.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        __qtablewidgetitem2 = QTableWidgetItem()
-        self.matiereTableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        if (self.matiereTableWidget.rowCount() < 15):
-            self.matiereTableWidget.setRowCount(15)
-        __qtablewidgetitem3 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(0, __qtablewidgetitem3)
-        __qtablewidgetitem4 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(1, __qtablewidgetitem4)
-        __qtablewidgetitem5 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(2, __qtablewidgetitem5)
-        __qtablewidgetitem6 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(3, __qtablewidgetitem6)
-        __qtablewidgetitem7 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(4, __qtablewidgetitem7)
-        __qtablewidgetitem8 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(5, __qtablewidgetitem8)
-        __qtablewidgetitem9 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(6, __qtablewidgetitem9)
-        __qtablewidgetitem10 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(7, __qtablewidgetitem10)
-        __qtablewidgetitem11 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(8, __qtablewidgetitem11)
-        __qtablewidgetitem12 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(9, __qtablewidgetitem12)
-        __qtablewidgetitem13 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(10, __qtablewidgetitem13)
-        __qtablewidgetitem14 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(11, __qtablewidgetitem14)
-        __qtablewidgetitem15 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(12, __qtablewidgetitem15)
-        __qtablewidgetitem16 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(13, __qtablewidgetitem16)
-        __qtablewidgetitem17 = QTableWidgetItem()
-        self.matiereTableWidget.setVerticalHeaderItem(14, __qtablewidgetitem17)
-        self.matiereTableWidget.setObjectName(u"matiereTableWidget")
-        self.matiereTableWidget.setEnabled(True)
-        self.matiereTableWidget.setGeometry(QRect(10, 30, 641, 191))
-        self.matiereTableWidget.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.matiereTableWidget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.matiereTableWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.matiereTableWidget.setAutoScroll(False)
-        self.matiereTableWidget.setAutoScrollMargin(0)
-        self.matiereTableWidget.setDragEnabled(True)
-        self.matiereTableWidget.setDragDropMode(QAbstractItemView.InternalMove)
-        self.matiereTableWidget.setDefaultDropAction(Qt.MoveAction)
-        self.matiereTableWidget.setAlternatingRowColors(True)
-        self.matiereTableWidget.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.matiereTableWidget.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-        self.matiereTableWidget.setShowGrid(False)
-        self.matiereTableWidget.setWordWrap(False)
-        self.matiereTableWidget.setCornerButtonEnabled(True)
-        self.matiereTableWidget.setRowCount(15)
-        self.matiereTableWidget.horizontalHeader().setDefaultSectionSize(175)
-        self.matiereTableWidget.horizontalHeader().setHighlightSections(True)
-        self.matiereTableWidget.horizontalHeader().setStretchLastSection(True)
-        self.matiereTableWidget.verticalHeader().setVisible(False)
-        self.matiereTableWidget.verticalHeader().setHighlightSections(False)
-        self.matiereTableWidget.verticalHeader().setProperty("showSortIndicator", False)
-        self.matiereTableWidget.verticalHeader().setStretchLastSection(False)
-        self.matiereTablePlus = QPushButton(self.matieresConfig)
-        self.matiereTablePlus.setObjectName(u"matiereTablePlus")
-        self.matiereTablePlus.setEnabled(True)
-        self.matiereTablePlus.setGeometry(QRect(10, 230, 21, 21))
-        self.matiereTablePlus.setCursor(QCursor(Qt.PointingHandCursor))
-        self.matiereTableMinus = QPushButton(self.matieresConfig)
-        self.matiereTableMinus.setObjectName(u"matiereTableMinus")
-        self.matiereTableMinus.setEnabled(True)
-        self.matiereTableMinus.setGeometry(QRect(33, 230, 21, 21))
-        self.matiereTableMinus.setCursor(QCursor(Qt.PointingHandCursor))
-        self.matiereTableReset = QPushButton(self.matieresConfig)
-        self.matiereTableReset.setObjectName(u"matiereTableReset")
-        self.matiereTableReset.setEnabled(True)
-        self.matiereTableReset.setGeometry(QRect(63, 230, 75, 21))
-        self.matiereTableReset.setCursor(QCursor(Qt.PointingHandCursor))
-        self.matiereTableBrowse = QPushButton(self.matieresConfig)
-        self.matiereTableBrowse.setObjectName(u"matiereTableBrowse")
-        self.matiereTableBrowse.setEnabled(True)
-        self.matiereTableBrowse.setGeometry(QRect(576, 230, 75, 21))
-        self.matiereTableBrowse.setCursor(QCursor(Qt.PointingHandCursor))
-        self.matiereTableFrame = QFrame(self.matieresConfig)
-        self.matiereTableFrame.setObjectName(u"matiereTableFrame")
-        self.matiereTableFrame.setGeometry(QRect(10, 30, 641, 221))
-        self.matiereTableFrame.setFrameShape(QFrame.StyledPanel)
-        self.matiereTableFrame.setFrameShadow(QFrame.Raised)
+        self.matiereTable = MatiereTable(self.matieresConfig)
+        self.matiereTable.setObjectName(u"matiereTable")
+        self.matiereTable.setGeometry(QRect(0, 30, 661, 231))
         self.tabWidget.addTab(self.configTab, "")
         self.modelTab = QWidget()
         self.modelTab.setObjectName(u"modelTab")
@@ -2460,46 +2370,6 @@ class Ui_MainWindow(object):
         self.niveauLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Secondaire 5 - 2019-2020", None))
         self.configSaveButton.setText(QCoreApplication.translate("MainWindow", u"Appliquer et Enregistrer", None))
         self.matieresConfig.setTitle(QCoreApplication.translate("MainWindow", u"Mati\u00e8res Personnalis\u00e9es", None))
-        ___qtablewidgetitem = self.matiereTableWidget.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Mati\u00e8re", None));
-        ___qtablewidgetitem1 = self.matiereTableWidget.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Nom Court", None));
-        ___qtablewidgetitem2 = self.matiereTableWidget.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Chemin", None));
-        ___qtablewidgetitem3 = self.matiereTableWidget.verticalHeaderItem(0)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem4 = self.matiereTableWidget.verticalHeaderItem(1)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem5 = self.matiereTableWidget.verticalHeaderItem(2)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem6 = self.matiereTableWidget.verticalHeaderItem(3)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem7 = self.matiereTableWidget.verticalHeaderItem(4)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem8 = self.matiereTableWidget.verticalHeaderItem(5)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem9 = self.matiereTableWidget.verticalHeaderItem(6)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem10 = self.matiereTableWidget.verticalHeaderItem(7)
-        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem11 = self.matiereTableWidget.verticalHeaderItem(8)
-        ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem12 = self.matiereTableWidget.verticalHeaderItem(9)
-        ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem13 = self.matiereTableWidget.verticalHeaderItem(10)
-        ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem14 = self.matiereTableWidget.verticalHeaderItem(11)
-        ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem15 = self.matiereTableWidget.verticalHeaderItem(12)
-        ___qtablewidgetitem15.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem16 = self.matiereTableWidget.verticalHeaderItem(13)
-        ___qtablewidgetitem16.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        ___qtablewidgetitem17 = self.matiereTableWidget.verticalHeaderItem(14)
-        ___qtablewidgetitem17.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-        self.matiereTablePlus.setText(QCoreApplication.translate("MainWindow", u"+", None))
-        self.matiereTableMinus.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.matiereTableReset.setText(QCoreApplication.translate("MainWindow", u"R\u00e9initialiser", None))
-        self.matiereTableBrowse.setText(QCoreApplication.translate("MainWindow", u"Parcourir...", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.configTab), QCoreApplication.translate("MainWindow", u"Configurateur", None))
 #if QT_CONFIG(tooltip)
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.configTab), QCoreApplication.translate("MainWindow", u"Modifier les Informations", None))

@@ -151,22 +151,28 @@ class frontEnd:
             self.setMatieres(self.matieresDefault)
 
     def setMatieres(self, datadict: dict):
-        """## Insère le dictionnaire donné dans le tableau self.ui.matiereTableWidget
+        """## Insère le dictionnaire donné dans le tableau self.ui.matiereTable.tableWidget
         
         ### Arguments:\n
             \tdatadict {dict} -- Dictionnaire des matières
         """
         # Supprime toutes les anciennes rangées
-        for i in range(0, self.ui.matiereTableWidget.rowCount() + 1):
-            self.ui.matiereTableWidget.removeRow(
-                self.ui.matiereTableWidget.rowCount() - 1
+        for i in range(0, self.ui.matiereTable.tableWidget.rowCount() + 1):
+            self.ui.matiereTable.tableWidget.removeRow(
+                self.ui.matiereTable.tableWidget.rowCount() - 1
             )
         # Insère les données du dictionnaire dans le tableau
         for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):
-            self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
-            self.ui.matiereTableWidget.setItem(i, 0, QTableWidgetItem(key))
-            self.ui.matiereTableWidget.setItem(i, 1, QTableWidgetItem(datadict[key][0]))
-            self.ui.matiereTableWidget.setItem(i, 2, QTableWidgetItem(datadict[key][1]))
+            self.ui.matiereTable.tableWidget.insertRow(
+                self.ui.matiereTable.tableWidget.rowCount()
+            )
+            self.ui.matiereTable.tableWidget.setItem(i, 0, QTableWidgetItem(key))
+            self.ui.matiereTable.tableWidget.setItem(
+                i, 1, QTableWidgetItem(datadict[key][0])
+            )
+            self.ui.matiereTable.tableWidget.setItem(
+                i, 2, QTableWidgetItem(datadict[key][1])
+            )
 
     def readJSON(self):
         """## Lit le fichier de configuration .json et lui attribue les informations contenues"""
@@ -617,10 +623,10 @@ class frontEnd:
 
             self.matieres = {}
 
-            for row in range(self.ui.matiereTableWidget.rowCount()):
-                matiere = self.ui.matiereTableWidget.item(row, 0)
-                mat = self.ui.matiereTableWidget.item(row, 1)
-                path = self.ui.matiereTableWidget.item(row, 2)
+            for row in range(self.ui.matiereTable.tableWidget.rowCount()):
+                matiere = self.ui.matiereTable.tableWidget.item(row, 0)
+                mat = self.ui.matiereTable.tableWidget.item(row, 1)
+                path = self.ui.matiereTable.tableWidget.item(row, 2)
                 if matiere and mat:
                     if matiere.text() and mat.text():
                         path_text = path.text().replace("&", "") if path else ""
@@ -638,48 +644,50 @@ class frontEnd:
 
     def matieresConfig(self):
         def addRow():
-            new_row = self.ui.matiereTableWidget.rowCount()
-            self.ui.matiereTableWidget.insertRow(new_row)
-            self.ui.matiereTableWidget.item(new_row, 2).setFlags(
+            new_row = self.ui.matiereTable.tableWidget.rowCount()
+            self.ui.matiereTable.tableWidget.insertRow(new_row)
+            self.ui.matiereTable.tableWidget.item(new_row, 2).setFlags(
                 QtCore.Qt.ItemIsEnabled
             )
 
         def delRow():
-            self.ui.matiereTableWidget.removeRow(
+            self.ui.matiereTable.tableWidget.removeRow(
                 (
-                    self.ui.matiereTableWidget.rowCount() - 1
-                    if self.ui.matiereTableWidget.currentRow() == -1
-                    else self.ui.matiereTableWidget.currentRow()
+                    self.ui.matiereTable.tableWidget.rowCount() - 1
+                    if self.ui.matiereTable.tableWidget.currentRow() == -1
+                    else self.ui.matiereTable.tableWidget.currentRow()
                 )
             )
 
         def resetRows():
             self.setMatieres(self.matieresDefault)
 
-        def checkBrowse():
-            self.ui.matiereTableBrowse.setEnabled(
-                self.ui.matiereTableWidget.currentColumn() == 2
-            )
+        # def checkBrowse():
+        #     self.ui.matiereTableBrowse.setEnabled(
+        #         self.ui.matiereTable.tableWidget.currentColumn() == 2
+        #     )
 
         def browseDirectory():
-            if self.ui.matiereTableWidget.currentColumn() == 2:
+            if self.ui.matiereTable.tableWidget.currentColumn() == 2:
                 filename = QFileDialog.getExistingDirectory()
-                self.ui.matiereTableWidget.setItem(
-                    self.ui.matiereTableWidget.currentRow(),
+                self.ui.matiereTable.tableWidget.setItem(
+                    self.ui.matiereTable.tableWidget.currentRow(),
                     2,
                     QTableWidgetItem(filename),
                 )
 
-        for row in range(self.ui.matiereTableWidget.rowCount()):
-            self.ui.matiereTableWidget.item(row, 2).setFlags(QtCore.Qt.ItemIsEnabled)
+        # for row in range(self.ui.matiereTable.tableWidget.rowCount()):
+        #     self.ui.matiereTable.tableWidget.item(row, 2).setFlags(
+        #         QtCore.Qt.ItemIsEnabled
+        #     )
 
-        self.ui.matiereTablePlus.clicked.connect(addRow)
-        self.ui.matiereTableMinus.clicked.connect(delRow)
-        self.ui.matiereTableReset.clicked.connect(resetRows)
+        # self.ui.matiereTable.plus.clicked.connect(addRow)
+        # self.ui.matiereTable.minus.clicked.connect(delRow)
+        # self.ui.matiereTable.reset.clicked.connect(resetRows)
 
-        self.ui.matiereTableBrowse.setEnabled(False)
-        self.ui.matiereTableWidget.currentCellChanged.connect(checkBrowse)
-        self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
+        # self.ui.matiereTableBrowse.setEnabled(False)
+        # self.ui.matiereTable.tableWidget.currentCellChanged.connect(checkBrowse)
+        # self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
 
     def modelTab(self):
         self.modelForm = {
