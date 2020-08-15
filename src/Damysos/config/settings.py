@@ -81,6 +81,7 @@ class Settings:
                 config: Dict[str, Any] = json.load(config_file)
 
             return Settings.rebuild_from_dict(config)
+
         except FileNotFoundError:
             return Settings()
 
