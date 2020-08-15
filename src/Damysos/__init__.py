@@ -27,7 +27,7 @@ import locale
 
 ## Paramètres généraux
 # Information de la version actuelle
-__version__ = r"4.0.0b5"
+__version__ = r"4.0.0b10"
 # Nom de fichiers importants
 CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
 # Assets

@@ -1,4 +1,5 @@
-# Damysos.py: damysos launcher
+## version_label.py - damysos.ui.widgets
+# Label that shows the current version (damysos.__version__)
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,17 +20,22 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-
-## Librairies
+## Imports
 # Project packages
-import damysos.frontend
+from damysos import __version__
 
-# Default packages
-import os
+# External packages
+from PySide2.QtWidgets import QWidget, QLabel
 
-# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
-os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
 
-if __name__ == "__main__":
-    fe = damysos.frontend.frontEnd()
-    fe.executeGUI()
+class VersionLabel(QLabel):
+    def __init__(self, parent: QWidget):
+        super().__init__(
+            text="<html><head/><body>"
+            + '<p><span style="font-size:12pt; font-style:italic;">'
+            + __version__
+            + "</span></p>"
+            + "</body></html>",
+            parent=parent,
+        )
+

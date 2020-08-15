@@ -1773,7 +1773,7 @@ PlotWidget {
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -2973,7 +2973,7 @@ QListView::item:selected:hover {
          <x>10</x>
          <y>30</y>
          <width>431</width>
-         <height>201</height>
+         <height>230</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="modelValuesFormLayout">
@@ -3339,10 +3339,7 @@ QPushButton:selected {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="varVersionLabel">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;[VERSION]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
+          <widget class="VersionLabel" name="varVersionLabel">
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
@@ -3372,6 +3369,13 @@ QPushButton:selected {
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VersionLabel</class>
+   <extends>QLabel</extends>
+   <header>/widgets/version_label.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

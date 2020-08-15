@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'damysos_main_ui.ui'
+## Form generated from reading UI file 'main_ui.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -14,6 +14,8 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
     QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
     QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
+
+from .widgets.version_label import VersionLabel
 
 
 class Ui_MainWindow(object):
@@ -2194,7 +2196,7 @@ class Ui_MainWindow(object):
         self.modelValuesGroupBox.setGeometry(QRect(220, 5, 451, 237))
         self.formLayoutWidget_2 = QWidget(self.modelValuesGroupBox)
         self.formLayoutWidget_2.setObjectName(u"formLayoutWidget_2")
-        self.formLayoutWidget_2.setGeometry(QRect(10, 30, 431, 201))
+        self.formLayoutWidget_2.setGeometry(QRect(10, 30, 431, 230))
         self.modelValuesFormLayout = QFormLayout(self.formLayoutWidget_2)
         self.modelValuesFormLayout.setObjectName(u"modelValuesFormLayout")
         self.modelValuesFormLayout.setContentsMargins(0, 0, 0, 0)
@@ -2393,7 +2395,7 @@ class Ui_MainWindow(object):
 
         self.versionLayout.addWidget(self.versionLabel)
 
-        self.varVersionLabel = QLabel(self.verticalLayoutWidget)
+        self.varVersionLabel = VersionLabel(self.verticalLayoutWidget)
         self.varVersionLabel.setObjectName(u"varVersionLabel")
         self.varVersionLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
@@ -2415,7 +2417,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2538,7 +2540,6 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.titleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:28pt; font-weight:600;\">Damysos</span></p></body></html>", None))
         self.versionLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-style:italic;\">Version: </span></p></body></html>", None))
-        self.varVersionLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">[VERSION]</span></p></body></html>", None))
         self.gitHubLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/Damysos/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#f0f0f0;\">\u00a9 Laurent Bourgon Sous la license MIT</span></a></p><p><span style=\" color:#f0f0f0;\"><br/></span></p><p><a href=\"https://github.com/BourgonLaurent/Damysos\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Projet GitHub</span></a></p><p><a href=\"https://github.com/BourgonLaurent/Damysos#faq\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Vous avez un probl\u00e8me?</span></a></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), QCoreApplication.translate("MainWindow", u"\u00c0 Propos", None))
 #if QT_CONFIG(tooltip)

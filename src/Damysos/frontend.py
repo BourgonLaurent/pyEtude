@@ -15,8 +15,8 @@ from . import __version__, CONFIG_FILE
 from .document import Document, DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
-from .ui.damysos_main_ui import Ui_MainWindow
-from .ui.damysos_styles_ui import STYLES
+from .ui.main_ui import Ui_MainWindow
+from .ui.styles_ui import STYLES
 
 # Default packages
 import json, locale, os, sys
@@ -80,8 +80,6 @@ class frontEnd:
 
         # Mise en place de l'onglet de configuration
         self.configTab()
-        # Mise en place de l'onglet d'information
-        self.aboutTab()
 
         # Assigne le nom de la fenêtre
         self.window.setWindowTitle("Damysos - v" + __version__)
@@ -693,14 +691,6 @@ class frontEnd:
         self.ui.matiereTableBrowse.setEnabled(False)
         self.ui.matiereTableWidget.clicked.connect(checkBrowse)
         self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
-
-    def aboutTab(self):
-        self.ui.varVersionLabel.setText(
-            QtCore.QCoreApplication.translate(
-                "MainWindow",
-                f'<html><head/><body><p><span style=" font-size:12pt; font-style:italic;">{__version__}</span></p></body></html>',
-            )
-        )
 
     def modelTab(self):
         self.modelForm = {
