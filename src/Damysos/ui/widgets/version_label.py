@@ -43,8 +43,6 @@ class VersionLabel(QLabel):
         """
         new_version = check_new_version()
 
-        print(new_version)
-
         super().__init__(
             text="<html><head/><body>"
             + '<p><span style="font-size:12pt;">'
