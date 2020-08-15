@@ -62,8 +62,11 @@ class Settings:
 
     auteur: str = ""
     niveau: str = ""
-    matieres: Dict[str, Matiere] = field(default=Dict[str, Matiere])  # type: ignore
+    matieres: Dict[str, Matiere] = field(default_factory=lambda: {})  # type: ignore
     modeles: ModelConfig = ModelConfig()
+
+    def __bool__(self):
+        return bool([v for v in self.__dict__.values() if v])
 
     def dump_config_file(self):
         with open(CONFIG_FILE, mode="w", encoding="utf-8") as config_file:
@@ -73,10 +76,13 @@ class Settings:
 
     @staticmethod
     def load_config_file():
-        with open(CONFIG_FILE, mode="r", encoding="utf-8") as config_file:
-            config: Dict[str, Any] = json.load(config_file)
+        try:
+            with open(CONFIG_FILE, mode="r", encoding="utf-8") as config_file:
+                config: Dict[str, Any] = json.load(config_file)
 
-        return Settings.rebuild_from_dict(config)
+            return Settings.rebuild_from_dict(config)
+        except FileNotFoundError:
+            return Settings()
 
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, Any]):

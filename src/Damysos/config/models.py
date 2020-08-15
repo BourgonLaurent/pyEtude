@@ -49,6 +49,9 @@ class ModelValues:
     numero: str = ""
     section: str = ""
 
+    def __bool__(self):
+        return bool([v for v in self.__dict__.values() if v])
+
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, str]):
         """
@@ -102,6 +105,9 @@ class Model:
     export_name: str = ""
     values: ModelValues = ModelValues()
 
+    def __bool__(self):
+        return bool([v for v in self.__dict__.values() if v])
+
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, Any]):
         """
@@ -147,8 +153,11 @@ class ModelConfig:
         Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
-    models: List[Model] = field(default=List[Model])  # type: ignore
+    models: List[Model] = field(default_factory=lambda: [])  # type: ignore
     default: Optional[Model] = None
+
+    def __bool__(self):
+        return bool([v for v in self.__dict__.values() if v])
 
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, Any]):

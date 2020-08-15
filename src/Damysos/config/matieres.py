@@ -49,7 +49,7 @@ class Matiere:
     path: str = ""
 
     def __bool__(self):
-        return bool(self.alias or self.path)
+        return bool([v for v in self.__dict__.values() if v])
 
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, str]):
