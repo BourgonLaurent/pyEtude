@@ -153,7 +153,7 @@ class ModelConfig:
         Create a new object from the dictionary (to be used with dataclasses.asdict)
     """
 
-    models: List[Model] = field(default_factory=lambda: [])  # type: ignore
+    models: List[Model] = field(default_factory=lambda: [])
     default: Optional[Model] = None
 
     def __bool__(self):

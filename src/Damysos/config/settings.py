@@ -62,7 +62,7 @@ class Settings:
 
     auteur: str = ""
     niveau: str = ""
-    matieres: Dict[str, Matiere] = field(default_factory=lambda: {})  # type: ignore
+    matieres: Dict[str, Matiere] = field(default_factory=lambda: {})
     modeles: ModelConfig = ModelConfig()
 
     def __bool__(self):
