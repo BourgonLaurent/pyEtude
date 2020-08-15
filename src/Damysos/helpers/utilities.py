@@ -1,5 +1,5 @@
-## regex.py - damysos.helpers
-# Useful Regex
+## utilities.py - damysos.helpers
+# Useful Components
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,3 +28,4 @@ from PySide2.QtCore import QRegExp
 # Allow only safe, path-friendly characters
 SAFE_CHARACTERS = r"[^#%&{}j\\<>*?/$!'\":@+`|=]+"
 SAFE_CHARACTERS_QREGEXP = QRegExp(SAFE_CHARACTERS)
+

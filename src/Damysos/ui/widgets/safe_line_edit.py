@@ -22,7 +22,7 @@
 
 ## Imports
 # Project packages
-from damysos.helpers.regex import SAFE_CHARACTERS_QREGEXP
+from damysos.helpers.utilities import SAFE_CHARACTERS_QREGEXP
 
 # External packages
 from PySide2.QtGui import QRegExpValidator
