@@ -157,22 +157,15 @@ class frontEnd:
             \tdatadict {dict} -- Dictionnaire des matières
         """
         # Supprime toutes les anciennes rangées
-        for i in range(0, self.ui.matiereTable.tableWidget.rowCount() + 1):
-            self.ui.matiereTable.tableWidget.removeRow(
-                self.ui.matiereTable.tableWidget.rowCount() - 1
-            )
+        self.ui.matiereTable.tableWidget.clear()
         # Insère les données du dictionnaire dans le tableau
         for i, key in enumerate(sorted(datadict, key=locale.strxfrm)):
             self.ui.matiereTable.tableWidget.insertRow(
                 self.ui.matiereTable.tableWidget.rowCount()
             )
-            self.ui.matiereTable.tableWidget.setItem(i, 0, QTableWidgetItem(key))
-            self.ui.matiereTable.tableWidget.setItem(
-                i, 1, QTableWidgetItem(datadict[key][0])
-            )
-            self.ui.matiereTable.tableWidget.setItem(
-                i, 2, QTableWidgetItem(datadict[key][1])
-            )
+            self.ui.matiereTable.tableWidget.setTextAt(i, 0, key)
+            self.ui.matiereTable.tableWidget.setTextAt(i, 1, datadict[key][0])
+            self.ui.matiereTable.tableWidget.setTextAt(i, 2, datadict[key][1])
 
     def readJSON(self):
         """## Lit le fichier de configuration .json et lui attribue les informations contenues"""

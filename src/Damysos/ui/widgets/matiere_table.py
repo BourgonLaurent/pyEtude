@@ -24,8 +24,7 @@
 # Project packages
 
 # External packages
-from typing import cast, List
-from PySide2.QtCore import QRect, SignalInstance
+from typing import cast
 from PySide2.QtGui import Qt
 from PySide2.QtWidgets import (
     QFileDialog,
@@ -120,9 +119,16 @@ class MatiereTableWidget(QTableWidget):
             self.currentRow() if self.currentRow() > 0 else self.rowCount() - 1
         )
 
-    def reset_table(self):
-        self.clear()
+    def clear(self):
+        super().clear()
         self.set_headers()
+
+    def setTextAt(self, row: int, column: int, text: str):
+        table_item = QTableWidgetItem()
+        table_item.setText(text)
+        table_item.setToolTip(text)
+
+        self.setItem(row, column, table_item)
 
     def check_if_browsing(self, item: QTableWidgetItem):
         if item.column() == 2:
@@ -160,5 +166,5 @@ class MatiereTableControl(QWidget):
 
         self.reset = QPushButton(text="Réinitialiser", parent=self)
         self.reset.setFixedSize(85, 24)
-        self.reset.clicked.connect(parent.tableWidget.reset_table)  # type: ignore
+        self.reset.clicked.connect(parent.tableWidget.clear)  # type: ignore
         self.boxlayout.addWidget(self.reset)
