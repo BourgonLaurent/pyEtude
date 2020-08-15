@@ -1,5 +1,5 @@
-## calendar_dialog.py - damysos.ui.dialogs
-# Dialog showing a calendar
+## dialogs.py - damysos.ui
+# Different kind of dialogs
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,16 +22,30 @@
 
 ## Imports
 # Project packages
-from PySide2.QtGui import QBrush, QTextCharFormat
-from damysos.helpers.utilities import SAFE_CHARACTERS_QREGEXP
+from damysos import __version__, GITHUB_REPO
 
 # Default packages
 from typing import cast
 
 # External packages
-from PySide2.QtCore import QDate, Qt, QRect, Slot
-from PySide2.QtGui import QColor
-from PySide2.QtWidgets import QWidget, QDialog, QCalendarWidget
+from PySide2.QtCore import QDate, Qt, Slot
+from PySide2.QtGui import QColor, QTextCharFormat
+from PySide2.QtWidgets import QMessageBox, QWidget, QDialog, QCalendarWidget
+
+
+class UpdateMessageBox(QMessageBox):
+    def __init__(self, parent: QWidget, online_version: str) -> None:
+        super().__init__(parent=parent)
+
+        self.setIcon(QMessageBox.Icon.Warning)
+        self.setWindowTitle(f"Damysos - v{__version__} - Nouvelle version")
+
+        self.setText(f"Une version plus récente de Damysos a été trouvée.")
+        self.setInformativeText(
+            f"<p>Version actuelle: v{__version__}<br>Version la plus récente: {online_version}</p>"
+            + "<br><br>"
+            + f"<a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
+        )
 
 
 class CalendarDialog(QDialog):
@@ -41,7 +55,7 @@ class CalendarDialog(QDialog):
     Attributes
     ----------
     date : str
-        Date selected, formatted in MMdd 
+        Date selected, formatted in MMdd
     """
 
     date: str
@@ -68,29 +82,46 @@ class CalendarDialog(QDialog):
             )
         )
 
-        self.calendar = CustomCalendar(self)
+        self.calendar = CalendarDialog.CustomCalendar(parent=self)
         self.calendar.clicked.connect(self.QDateToString)  # type: ignore
 
     @Slot(QDate)  # type: ignore
     def QDateToString(self, qdate: QDate):
+        """
+        Converts the date selected to a string in MMdd
+
+        Parameters
+        ----------
+        qdate : QDate
+            Date that will be transformed
+        """
         self.date = qdate.toString("MMdd", self.calendar.calendar())
         self.done(0)
 
+    class CustomCalendar(QCalendarWidget):
+        """Modified QCalendarWidget"""
 
-class CustomCalendar(QCalendarWidget):
-    def __init__(self, parent: QDialog) -> None:
-        super().__init__(parent=parent)
+        def __init__(self, parent: QDialog) -> None:
+            """
+            Initialize the modified calendar
 
-        self.setGeometry(0, 0, 312, 183)
-        self.setGridVisible(True)
+            Parameters
+            ----------
+            parent : QDialog
+                QDialog that will be attached to the calendar
+            """
+            super().__init__(parent=parent)
 
-        self.setFirstDayOfWeek(Qt.DayOfWeek.Monday)
-        self.setVerticalHeaderFormat(
-            QCalendarWidget.VerticalHeaderFormat.NoVerticalHeader
-        )
+            self.setGeometry(0, 0, 312, 183)
+            self.setGridVisible(True)
 
-        self.week_end_text_format = QTextCharFormat()  # type: ignore
-        self.week_end_text_format.setForeground(QColor("#148CD2"))  # type: ignore
+            self.setFirstDayOfWeek(Qt.DayOfWeek.Monday)
+            self.setVerticalHeaderFormat(
+                QCalendarWidget.VerticalHeaderFormat.NoVerticalHeader
+            )
 
-        self.setWeekdayTextFormat(Qt.DayOfWeek.Saturday, self.week_end_text_format)
-        self.setWeekdayTextFormat(Qt.DayOfWeek.Sunday, self.week_end_text_format)
+            self.week_end_text_format = QTextCharFormat()  # type: ignore
+            self.week_end_text_format.setForeground(QColor("#148CD2"))  # type: ignore
+
+            self.setWeekdayTextFormat(Qt.DayOfWeek.Saturday, self.week_end_text_format)
+            self.setWeekdayTextFormat(Qt.DayOfWeek.Sunday, self.week_end_text_format)

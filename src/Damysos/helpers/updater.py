@@ -22,7 +22,8 @@
 
 ## Imports
 # Project packages
-from .. import __version__, GITHUB_REPO
+from damysos import __version__, GITHUB_REPO
+from damysos.ui.dialogs import UpdateMessageBox
 
 # Default packages
 from json import loads
@@ -58,19 +59,8 @@ def check_updates(window):
     Arguments:\n
       * window {PySide2.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
     """
-    current_version = check_new_version()
+    version = check_new_version()
 
-    if current_version > f"v{__version__}":
-        alert = QMessageBox(window)
-        alert.setIcon(QMessageBox.Warning)  # type: ignore
-
-        alert.setWindowTitle(f"Damysos - v{__version__} - Nouvelle version")
-
-        alert.setText(f"Une version plus récente de Damysos a été trouvée.")
-        alert.setInformativeText(
-            f"<p>Version actuelle: v{__version__}<br>Version la plus récente: {current_version}</p>"
-            + "<br><br>"
-            + f"<a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
-        )
-
-        alert.exec_()
+    if version > f"v{__version__}":
+        update_msgbox = UpdateMessageBox(parent=window, online_version=version)
+        update_msgbox.exec_()

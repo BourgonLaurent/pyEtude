@@ -17,7 +17,7 @@ from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
 from .ui.main_ui import Ui_MainWindow
 from .ui.styles_ui import CustomStyles
-from .ui.dialogs.calendar_dialog import CalendarDialog
+from .ui.dialogs import CalendarDialog
 
 # Default packages
 import json, locale, os, sys
@@ -441,7 +441,11 @@ class frontEnd:
         def calendarView():
             calendar_dialog = CalendarDialog(self.window)
             calendar_dialog.exec_()
-            self.numero = calendar_dialog.date
+            try:
+                self.numero = calendar_dialog.date
+            except AttributeError:
+                pass
+
             self.ui.numLineEdit.setText(self.numero)
 
         numMenu = QMenu("numMenu", self.window)
