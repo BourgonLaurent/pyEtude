@@ -16,7 +16,7 @@ from .document import Document, DocumentAlert
 from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
 from .ui.main_ui import Ui_MainWindow
-from .ui.styles_ui import STYLES
+from .ui.styles_ui import CustomStyles
 
 # Default packages
 import json, locale, os, sys
@@ -87,11 +87,6 @@ class frontEnd:
         self.window.show()
         # Lance le fonctionnement en arrière-plan de l'application
         self.app.exec_()
-
-    def esperLimit(self, lineedit):
-        lineedit.setValidator(
-            QtGui.QRegExpValidator(QtCore.QRegExp(r"[^&\\/]+"), lineedit)
-        )  # Empêche l'utilisation des esperluètes "&"
 
     def firstLaunch(self):
         # Crée les matières par défaut
@@ -228,16 +223,7 @@ class frontEnd:
         self.ui.niveauPersoLabel.setText(self.niveau)
         # Applique le style à l'entrée de texte
         for le in (self.ui.matLineEdit, self.ui.numLineEdit):
-            le.setStyleSheet(STYLES["line_edit"])
-        # Empêche l'utilisation de l'esperluète '&' dans les entrées de texte
-        for le in (
-            self.ui.matLineEdit,
-            self.ui.numLineEdit,
-            self.ui.sectionLineEdit,
-            self.ui.soustitreLineEdit,
-            self.ui.titreLineEdit,
-        ):
-            self.esperLimit(le)
+            le.setStyleSheet(CustomStyles.LINE_EDIT)
 
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
@@ -646,17 +632,17 @@ class frontEnd:
             self.writeJSON()
             self.firstLaunch()
 
-        # Empêche l'utilisation des esperluètes "&"
-        self.esperLimit(self.ui.auteurLineEdit)
-        self.esperLimit(self.ui.niveauLineEdit)
-
         self.ui.configSaveButton.clicked.connect(saveVariable)
 
         self.matieresConfig()
 
     def matieresConfig(self):
         def addRow():
-            self.ui.matiereTableWidget.insertRow(self.ui.matiereTableWidget.rowCount())
+            new_row = self.ui.matiereTableWidget.rowCount()
+            self.ui.matiereTableWidget.insertRow(new_row)
+            self.ui.matiereTableWidget.item(new_row, 2).setFlags(
+                QtCore.Qt.ItemIsEnabled
+            )
 
         def delRow():
             self.ui.matiereTableWidget.removeRow(
@@ -684,12 +670,15 @@ class frontEnd:
                     QTableWidgetItem(filename),
                 )
 
+        for row in range(self.ui.matiereTableWidget.rowCount()):
+            self.ui.matiereTableWidget.item(row, 2).setFlags(QtCore.Qt.ItemIsEnabled)
+
         self.ui.matiereTablePlus.clicked.connect(addRow)
         self.ui.matiereTableMinus.clicked.connect(delRow)
         self.ui.matiereTableReset.clicked.connect(resetRows)
 
         self.ui.matiereTableBrowse.setEnabled(False)
-        self.ui.matiereTableWidget.clicked.connect(checkBrowse)
+        self.ui.matiereTableWidget.currentCellChanged.connect(checkBrowse)
         self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
 
     def modelTab(self):

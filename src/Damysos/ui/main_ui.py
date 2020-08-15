@@ -16,6 +16,8 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
 from PySide2.QtWidgets import *
 
 from .widgets.version_label import VersionLabel
+from .widgets.safe_line_edit import SafeLineEdit
+from .widgets.matiere_table_widget import MatiereTableWidget
 
 
 class Ui_MainWindow(object):
@@ -1836,7 +1838,7 @@ class Ui_MainWindow(object):
         self.matGroupBox = QGroupBox(self.infoGroupBox)
         self.matGroupBox.setObjectName(u"matGroupBox")
         self.matGroupBox.setGeometry(QRect(100, 150, 140, 61))
-        self.matLineEdit = QLineEdit(self.matGroupBox)
+        self.matLineEdit = SafeLineEdit(self.matGroupBox)
         self.matLineEdit.setObjectName(u"matLineEdit")
         self.matLineEdit.setEnabled(False)
         self.matLineEdit.setGeometry(QRect(15, 25, 98, 29))
@@ -1856,7 +1858,7 @@ class Ui_MainWindow(object):
         self.numGroupBox = QGroupBox(self.infoGroupBox)
         self.numGroupBox.setObjectName(u"numGroupBox")
         self.numGroupBox.setGeometry(QRect(100, 210, 140, 61))
-        self.numLineEdit = QLineEdit(self.numGroupBox)
+        self.numLineEdit = SafeLineEdit(self.numGroupBox)
         self.numLineEdit.setObjectName(u"numLineEdit")
         self.numLineEdit.setEnabled(False)
         self.numLineEdit.setGeometry(QRect(15, 25, 98, 29))
@@ -1883,7 +1885,7 @@ class Ui_MainWindow(object):
         font1.setUnderline(True)
         self.sectionNumLabel.setFont(font1)
         self.sectionNumLabel.setStyleSheet(u"")
-        self.sectionLineEdit = QLineEdit(self.sectionGroupBox)
+        self.sectionLineEdit = SafeLineEdit(self.sectionGroupBox)
         self.sectionLineEdit.setObjectName(u"sectionLineEdit")
         self.sectionLineEdit.setGeometry(QRect(40, 25, 251, 29))
         sizePolicy1.setHeightForWidth(self.sectionLineEdit.sizePolicy().hasHeightForWidth())
@@ -2046,7 +2048,7 @@ class Ui_MainWindow(object):
         self.matieresConfig.setFlat(False)
         self.matieresConfig.setCheckable(True)
         self.matieresConfig.setChecked(True)
-        self.matiereTableWidget = QTableWidget(self.matieresConfig)
+        self.matiereTableWidget = MatiereTableWidget(self.matieresConfig)
         if (self.matiereTableWidget.columnCount() < 3):
             self.matiereTableWidget.setColumnCount(3)
         __qtablewidgetitem = QTableWidgetItem()
@@ -2134,6 +2136,11 @@ class Ui_MainWindow(object):
         self.matiereTableBrowse.setEnabled(True)
         self.matiereTableBrowse.setGeometry(QRect(576, 230, 75, 21))
         self.matiereTableBrowse.setCursor(QCursor(Qt.PointingHandCursor))
+        self.matiereTableFrame = QFrame(self.matieresConfig)
+        self.matiereTableFrame.setObjectName(u"matiereTableFrame")
+        self.matiereTableFrame.setGeometry(QRect(10, 30, 641, 221))
+        self.matiereTableFrame.setFrameShape(QFrame.StyledPanel)
+        self.matiereTableFrame.setFrameShadow(QFrame.Raised)
         self.tabWidget.addTab(self.configTab, "")
         self.modelTab = QWidget()
         self.modelTab.setObjectName(u"modelTab")
@@ -2305,7 +2312,7 @@ class Ui_MainWindow(object):
 
         self.modelPathsLayout.setWidget(1, QFormLayout.LabelRole, self.modelDestinationLabel)
 
-        self.modelDestinationLineEdit = QLineEdit(self.formLayoutWidget)
+        self.modelDestinationLineEdit = SafeLineEdit(self.formLayoutWidget)
         self.modelDestinationLineEdit.setObjectName(u"modelDestinationLineEdit")
 
         self.modelPathsLayout.setWidget(1, QFormLayout.FieldRole, self.modelDestinationLineEdit)
@@ -2405,7 +2412,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

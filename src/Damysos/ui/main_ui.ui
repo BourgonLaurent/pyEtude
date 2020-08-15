@@ -1773,7 +1773,7 @@ PlotWidget {
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -1897,7 +1897,7 @@ PlotWidget {
        <property name="title">
         <string>Matière</string>
        </property>
-       <widget class="QLineEdit" name="matLineEdit">
+       <widget class="SafeLineEdit" name="matLineEdit">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -1974,7 +1974,7 @@ PlotWidget {
        <property name="title">
         <string>Numéro</string>
        </property>
-       <widget class="QLineEdit" name="numLineEdit">
+       <widget class="SafeLineEdit" name="numLineEdit">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -2065,7 +2065,7 @@ PlotWidget {
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;1.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="sectionLineEdit">
+       <widget class="SafeLineEdit" name="sectionLineEdit">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -2552,7 +2552,7 @@ PlotWidget {
       <property name="checked">
        <bool>true</bool>
       </property>
-      <widget class="QTableWidget" name="matiereTableWidget">
+      <widget class="MatiereTableWidget" name="matiereTableWidget">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -2801,6 +2801,22 @@ PlotWidget {
        </property>
        <property name="text">
         <string>Parcourir...</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="matiereTableFrame">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>641</width>
+         <height>221</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
       </widget>
      </widget>
@@ -3179,7 +3195,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="modelDestinationLineEdit"/>
+         <widget class="SafeLineEdit" name="modelDestinationLineEdit"/>
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="modelPathModelLabel">
@@ -3357,6 +3373,16 @@ QPushButton:selected {
    <class>VersionLabel</class>
    <extends>QLabel</extends>
    <header>/widgets/version_label.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SafeLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>/widgets/safe_line_edit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MatiereTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>/widgets/matiere_table_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
