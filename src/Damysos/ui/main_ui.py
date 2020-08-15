@@ -2386,23 +2386,11 @@ class Ui_MainWindow(object):
 
         self.aboutLayout.addWidget(self.titleLabel)
 
-        self.versionLayout = QHBoxLayout()
-        self.versionLayout.setObjectName(u"versionLayout")
-        self.versionLabel = QLabel(self.verticalLayoutWidget)
+        self.versionLabel = VersionLabel(self.verticalLayoutWidget)
         self.versionLabel.setObjectName(u"versionLabel")
-        self.versionLabel.setTextFormat(Qt.RichText)
-        self.versionLabel.setAlignment(Qt.AlignRight|Qt.AlignTop|Qt.AlignTrailing)
+        self.versionLabel.setAlignment(Qt.AlignCenter)
 
-        self.versionLayout.addWidget(self.versionLabel)
-
-        self.varVersionLabel = VersionLabel(self.verticalLayoutWidget)
-        self.varVersionLabel.setObjectName(u"varVersionLabel")
-        self.varVersionLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
-
-        self.versionLayout.addWidget(self.varVersionLabel)
-
-
-        self.aboutLayout.addLayout(self.versionLayout)
+        self.aboutLayout.addWidget(self.versionLabel)
 
         self.gitHubLabel = QLabel(self.verticalLayoutWidget)
         self.gitHubLabel.setObjectName(u"gitHubLabel")
@@ -2539,7 +2527,6 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.modelTab), QCoreApplication.translate("MainWindow", u"Cr\u00e9er et g\u00e9rer les mod\u00e8les", None))
 #endif // QT_CONFIG(tooltip)
         self.titleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:28pt; font-weight:600;\">Damysos</span></p></body></html>", None))
-        self.versionLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-style:italic;\">Version: </span></p></body></html>", None))
         self.gitHubLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"https://github.com/BourgonLaurent/Damysos/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#f0f0f0;\">\u00a9 Laurent Bourgon Sous la license MIT</span></a></p><p><span style=\" color:#f0f0f0;\"><br/></span></p><p><a href=\"https://github.com/BourgonLaurent/Damysos\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Projet GitHub</span></a></p><p><a href=\"https://github.com/BourgonLaurent/Damysos#faq\"><span style=\" text-decoration: underline; color:#f0f0f0;\">Vous avez un probl\u00e8me?</span></a></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), QCoreApplication.translate("MainWindow", u"\u00c0 Propos", None))
 #if QT_CONFIG(tooltip)

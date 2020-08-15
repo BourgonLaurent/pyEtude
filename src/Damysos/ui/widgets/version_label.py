@@ -22,20 +22,40 @@
 
 ## Imports
 # Project packages
-from damysos import __version__
+from damysos import __version__, GITHUB_REPO
+from damysos.helpers.updater import check_new_version
 
 # External packages
 from PySide2.QtWidgets import QWidget, QLabel
 
 
 class VersionLabel(QLabel):
+    """QLabel saying the latest version available on damysos.GITHUB_REPO"""
+
     def __init__(self, parent: QWidget):
+        """
+        Creates the QLabel and sets its text
+
+        Parameters
+        ----------
+        parent : QWidget
+            Any Widget that will be parent of the QLabel
+        """
+        new_version = check_new_version()
+
+        print(new_version)
+
         super().__init__(
             text="<html><head/><body>"
-            + '<p><span style="font-size:12pt; font-style:italic;">'
-            + __version__
+            + '<p><span style="font-size:12pt;">'
+            + (
+                f'<a href="https://github.com/{GITHUB_REPO}/releases">'
+                + f"Une nouvelle version de Damysos ({new_version}) est disponible sur GitHub."
+                + "</a>"
+                if new_version > f"v{__version__}"
+                else "Vous avez la version la plus récente de Damysos."
+            )
             + "</span></p>"
             + "</body></html>",
             parent=parent,
         )
-

@@ -3324,28 +3324,11 @@ QPushButton:selected {
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="versionLayout" stretch="0,0">
-         <item>
-          <widget class="QLabel" name="versionLabel">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Version: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::RichText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="VersionLabel" name="varVersionLabel">
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="VersionLabel" name="versionLabel">
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="gitHubLabel">
