@@ -1,5 +1,6 @@
 ## __init__.py - damysos
-# Placeholder so that Python see this directory as a module
+# Set global variables and make global checks
+# Ensures that everything will work correctly after
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,6 +21,13 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
+## General parameters
+# Current version
+__version__ = r"4.0.0b10"
+# Important files
+CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
+# Assets
+GITHUB_REPO = r"BourgonLaurent/Damysos"
 
 ## Imports
 # Required to import separately
@@ -33,31 +41,27 @@ try:
 
     # External libraries
     import PySide2, docxtpl
+
 except ImportError as e:
     # Show error message
     print(
-        "[!] Impossible de continuer:\n\n"
+        f"damysos - v{__version__}\n\n"
+        + "[!] Impossible de continuer:\n\n"
         + f"\t{repr(e)}"
         + "\n\n"
         + f"[*] Avez-vous installé {e.name}?\n"
         + "C'est un module nécessaire au fonctionnement de Damysos.\n\n"
         + "Essayez la commande suivante:"
         + f"\tpip install --update {e.name}\n\n"
-        + "Vous pouvez aussi vous référer au README.md de la page GitHub."
+        + "Pour plus d'aide référez-vous au README.md sur GitHub:\n"
+        + f"\thttps://github.com/{GITHUB_REPO}"
     )
     # Exit and tell error
     sys.exit(e)
 
-## Paramètres généraux
-# Information de la version actuelle
-__version__ = r"4.0.0b10"
-# Nom de fichiers importants
-CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
-# Assets
-GITHUB_REPO = r"BourgonLaurent/Damysos"
-
-# Essaie d'aller dans une langue UTF-8
-# si elle ne l'est pas
+## Locale
+# Try to get into an UTF-8 locale
+# if it isn't currently
 try:
     if not locale.getlocale()[1].lower() == "utf-8":
         locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
