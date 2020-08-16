@@ -22,15 +22,13 @@
 
 ## Imports
 # Project packages
-from . import __version__
+from damysos import __version__
 
 # Default packages
-import os, sys
 from typing import Dict
 
 # External packages
 from docxtpl import DocxTemplate
-from PySide2.QtWidgets import QMessageBox, QWidget
 
 
 class Document:
@@ -65,60 +63,3 @@ class Document:
         """Export the Word Document with the values given earlier"""
         self.document.render(self.values)
         self.document.save(self.filepath)
-
-
-class DocumentAlert(QMessageBox):
-    """
-    Custom QMessageBox to open a file
-
-    Parameters
-    ----------
-    filepath : str
-        Path to file to open
-    
-    window : QWidget
-        Widget that will have the QMessageBox
-    
-    Methods
-    ----------
-    exec_ : () -> ()
-        Show the alert
-    
-    openFile: () -> ()
-        Open the file set, according to the current OS
-    """
-
-    def __init__(self, filepath: str, window: QWidget) -> None:
-        super().__init__(window)
-
-        self.filepath = filepath
-
-        self.setIcon(QMessageBox.Information)  # type: ignore
-        self.setWindowTitle(f"Damysos - {__version__} - Document généré")
-
-        self.setText(f"Le document a été créé:\n{filepath}\n\nVoulez-vous l'ouvrir?")
-
-        self.buttonOpen = self.addButton(QMessageBox.Open)  # type: ignore
-        self.buttonOpen.setText("Ouvrir le fichier")
-
-        self.buttonIgnore = self.addButton(QMessageBox.No)  # type: ignore
-        self.buttonIgnore.setText("Non")
-
-    def exec_(self):
-        """Show the alert"""
-        super().exec_()
-
-        if self.clickedButton() == self.buttonOpen:
-            self.openFile()
-        else:
-            assert ConnectionRefusedError
-
-    def openFile(self):
-        """Open the file set depending on the OS"""
-        if sys.platform.startswith("win"):
-            try:
-                os.startfile(self.filepath)  # type: ignore
-            except:
-                pass
-        else:
-            os.system(f'open "{self.filepath}"')

@@ -26,6 +26,7 @@ from damysos import __version__, GITHUB_REPO
 
 # Default packages
 from typing import cast
+import os, sys
 
 # External packages
 from PySide2.QtCore import QDate, Qt, Slot
@@ -44,7 +45,7 @@ class UpdateMessageBox(QMessageBox):
         self.setInformativeText(
             f"<p>Version actuelle: v{__version__}<br>Version la plus récente: {online_version}</p>"
             + "<br><br>"
-            + f"<a style='color: white;' href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
+            + f"<a href='https://github.com/{GITHUB_REPO}/releases'>Téléchargez-la sur GitHub</a>"
         )
 
 
@@ -125,3 +126,76 @@ class CalendarDialog(QDialog):
 
             self.setWeekdayTextFormat(Qt.DayOfWeek.Saturday, self.week_end_text_format)
             self.setWeekdayTextFormat(Qt.DayOfWeek.Sunday, self.week_end_text_format)
+
+
+class DocumentCreatedMessageBox(QMessageBox):
+    """
+    Custom QMessageBox to open a file
+
+    Parameters
+    ----------
+    filepath : str
+        Path to file to open
+    
+    window : QWidget
+        Widget that will have the QMessageBox
+    
+    Methods
+    ----------
+    exec_ : () -> ()
+        Show the alert
+    
+    openFile: () -> ()
+        Open the file set, according to the current OS
+    """
+
+    def __init__(self, filepath: str, window: QWidget) -> None:
+        super().__init__(window)
+
+        self.filepath = filepath
+
+        self.setIcon(QMessageBox.Information)  # type: ignore
+        self.setWindowTitle(f"Damysos - {__version__} - Document généré")
+
+        self.setText(f"Le document a été créé:\n{filepath}\n\nVoulez-vous l'ouvrir?")
+
+        self.buttonAccept = self.addButton(
+            "Ouvrir le fichier", QMessageBox.ButtonRole.AcceptRole
+        )
+
+        self.buttonReject = self.addButton("Non", QMessageBox.ButtonRole.RejectRole)
+
+    def exec_(self):
+        """Show the alert"""
+        super().exec_()
+
+        if self.clickedButton() == self.buttonAccept:
+            self.openFile()
+        else:
+            assert ConnectionRefusedError
+
+    def openFile(self):
+        """Open the file set depending on the OS"""
+        if sys.platform.startswith("win"):
+            try:
+                os.startfile(self.filepath)  # type: ignore
+            except:
+                pass
+        else:
+            os.system(f'open "{self.filepath}"')
+
+    class DocumentExistsMessageBox(QMessageBox):
+        def __init__(self, parent: QWidget, file_destroyed: str) -> None:
+            super().__init__(parent=parent)
+
+            self.setIcon(QMessageBox.Icon.Information)
+            self.setWindowTitle(f"Damysos - {__version__} - Fichier Existant Trouvé")
+            self.setText(
+                "Damysos a trouvé un fichier ayant le même nom.\n"
+                + "Souhaitez-vous écraser le fichier actuel?\n\n"
+                + "*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\n"
+                + f"Fichier qui sera écrasé: {file_destroyed}"
+            )
+
+            self.buttonAccept = self.addButton("Oui", QMessageBox.ButtonRole.AcceptRole)
+            self.buttonReject = self.addButton("Non", QMessageBox.ButtonRole.RejectRole)

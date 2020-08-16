@@ -11,13 +11,13 @@
 """
 ## Imports
 # Project packages
-from . import __version__, CONFIG_FILE
-from .document import Document, DocumentAlert
+from damysos import __version__, CONFIG_FILE
+from .document import Document
 from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
 from .ui.main_ui import Ui_MainWindow
 from .ui.styles_ui import CustomStyles
-from .ui.dialogs import CalendarDialog
+from .ui.dialogs import CalendarDialog, DocumentCreatedMessageBox
 
 # Default packages
 import json, locale, os, sys
@@ -255,21 +255,11 @@ class frontEnd:
             return FileNotFoundError
 
         if os.path.isfile(self.filepaths[2]):
-            numMatMessageBox = QMessageBox(self.window)
-            numMatMessageBox.setIcon(QMessageBox.Information)
-            numMatMessageBox.setWindowTitle(
-                f"Damysos - {__version__} - Fichier Existant Trouvé"
+            msg = DocumentCreatedMessageBox.DocumentExistsMessageBox(
+                self.window, self.filepaths[2]
             )
-            numMatMessageBox.setText(
-                f"Damysos a trouvé un fichier ayant le même nom.\nSouhaitez-vous écraser le fichier actuel?\n\n*ATTENTION CETTE ACTION EST IRRÉVERSIBLE*\n\nFichier qui sera écrasé: {self.filepaths[2]}"
-            )
-            buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
-            buttonOpen.setText("Oui")
-            buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
-            buttonIgnore.setText("Non")
-            numMatMessageBox.exec_()
 
-            if numMatMessageBox.clickedButton().text() == "Non":
+            if msg.exec_(): # If user rejects
                 return FileExistsError
 
         if not os.path.isdir(self.filepaths[0]) and not os.path.exists(
@@ -297,7 +287,7 @@ class frontEnd:
 
         document.packWord()
 
-        DocumentAlert(document.filepath, self.window).exec_()
+        DocumentCreatedMessageBox(document.filepath, self.window).exec_()
 
     def matGenTab(self):
         def isChecked(selection):
