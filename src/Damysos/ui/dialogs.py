@@ -142,9 +142,6 @@ class DocumentCreatedMessageBox(QMessageBox):
     
     Methods
     ----------
-    exec_ : () -> ()
-        Show the alert
-    
     openFile: () -> ()
         Open the file set, according to the current OS
     """
@@ -185,6 +182,18 @@ class DocumentCreatedMessageBox(QMessageBox):
             os.system(f'open "{self.filepath}"')
 
     class DocumentExistsMessageBox(QMessageBox):
+        """
+        Custom QMesageBox asking if user wants to overwrite contents of the file
+
+        Attributes
+        ----------
+        buttonAccept : QPushButton (role: QMessageBox.ButtonRole.AcceptRole)
+            Button accepting the overwrite
+        
+        buttonReject : QPushButton (role: QMessageBox.ButtonRole.RejectRole)
+            Button refusing the overwrite
+        """
+
         def __init__(self, parent: QWidget, file_destroyed: str) -> None:
             super().__init__(parent=parent)
 
@@ -199,3 +208,32 @@ class DocumentCreatedMessageBox(QMessageBox):
 
             self.buttonAccept = self.addButton("Oui", QMessageBox.ButtonRole.AcceptRole)
             self.buttonReject = self.addButton("Non", QMessageBox.ButtonRole.RejectRole)
+
+
+class AutomaticNumberMessageBox(QMessageBox):
+    """
+    Custom QMesageBox asking if user wants to overwrite contents of the file
+
+    Attributes
+    ----------
+    buttonAccept : QPushButton (role: QMessageBox.ButtonRole.AcceptRole)
+        Button accepting the overwrite
+    
+    buttonReject : QPushButton (role: QMessageBox.ButtonRole.RejectRole)
+        Button refusing the overwrite
+    """
+
+    def __init__(self, parent: QWidget, new_file: str) -> None:
+        super().__init__(parent=parent)
+
+        self.setIcon(QMessageBox.Icon.Information)
+        self.setWindowTitle(f"Damysos - {__version__} - Numérotation Automatique")
+
+        self.setText(
+            "Damysos a trouvé des documents existants pour cette matière.\n"
+            + "Souhaitez-vous poursuivre la numérotation trouvée?\n\n"
+            + f"\tNouveau fichier: {new_file}.docx"
+        )
+
+        self.buttonAccept = self.addButton("Oui", QMessageBox.ButtonRole.AcceptRole)
+        self.buttonReject = self.addButton("Non", QMessageBox.ButtonRole.RejectRole)
