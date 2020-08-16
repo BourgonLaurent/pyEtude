@@ -17,7 +17,11 @@ from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
 from .ui.main_ui import Ui_MainWindow
 from .ui.styles_ui import CustomStyles
-from .ui.dialogs import CalendarDialog, DocumentCreatedMessageBox
+from .ui.dialogs import (
+    AutomaticNumberMessageBox,
+    CalendarDialog,
+    DocumentCreatedMessageBox,
+)
 
 # Default packages
 import json, locale, os, sys
@@ -72,7 +76,7 @@ class frontEnd:
         self.app.setStyle("Fusion")
 
         # Vérifie si une version plus récente existe
-        check_updates(self.window)
+        check_updates(window=self.window)
 
     def executeGUI(self):
         """## Génère et lance le GUI"""
@@ -105,12 +109,8 @@ class frontEnd:
         }
         # Vérifie si la configuration a déjà été faite
         if os.path.isfile(os.path.join("./", CONFIG_FILE)):
-            # Active l'onglet du générateur
-            self.ui.tabWidget.setTabEnabled(0, True)
-            self.ui.tabWidget.setTabToolTip(0, "Créer un document")
-            self.ui.tabWidget.setCurrentIndex(0)
-
-            # self.ui.matieresConfig.setChecked(True)
+            # Change le mode
+            self.ui.tabWidget.setConfigurationMode(in_configuration_mode=False)
 
             # Lit le document de configuration et assigne:
             # self.auteur, self.niveau, self.matieres
@@ -140,13 +140,8 @@ class frontEnd:
 
         else:
             assert FileNotFoundError
-            # Empêche l'accès au générateur
-            self.ui.tabWidget.setTabEnabled(0, False)
-            self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
-            self.ui.tabWidget.setTabEnabled(2, False)
-            self.ui.tabWidget.setTabToolTip(0, "Veuillez utilisez le Configurateur")
-
-            self.ui.tabWidget.setCurrentIndex(1)
+            # Change le mode
+            self.ui.tabWidget.setConfigurationMode(in_configuration_mode=True)
 
             # Assigne les matières par défaut dans le tableau
             self.setMatieres(self.matieresDefault)
@@ -229,13 +224,10 @@ class frontEnd:
         self.pathGenTab()
 
         # Connection du bouton 'Générer' à sa fonction
-        self.ui.genPushButton.pressed.connect(self.createDocument)
-
-    def getLineEditValue(self, lineedit):
-        return lineedit.text() or lineedit.placeholderText()
+        self.ui.genPushButton.pressed.connect(self.createDocument)  # type: ignore
 
     def createDocument(self):
-        self.model = self.getLineEditValue(self.ui.modelLineEdit)
+        self.model = self.ui.modelLineEdit.getText()
         model_config = self.modelConfig["models"][self.model]
 
         if not self.model:
@@ -250,7 +242,8 @@ class frontEnd:
             QMessageBox.critical(
                 self.window,
                 f"Damysos - {__version__} - Modèle",
-                f"Le modèle: {self.model} n'a pas été trouvé.\n\nVeuillez vous assurez qu'il est bien dans l'emplacement sélectionné",
+                f"Le modèle: {self.model} n'a pas été trouvé.\n\n"
+                + "Veuillez vous assurez qu'il est bien dans l'emplacement sélectionné",
             )
             return FileNotFoundError
 
@@ -259,7 +252,7 @@ class frontEnd:
                 self.window, self.filepaths[2]
             )
 
-            if msg.exec_(): # If user rejects
+            if msg.exec_():  # If user rejects
                 return FileExistsError
 
         if not os.path.isdir(self.filepaths[0]) and not os.path.exists(
@@ -268,22 +261,18 @@ class frontEnd:
             os.mkdir(self.filepaths[0])
 
         values = {
-            "titre": self.getLineEditValue(self.ui.titreLineEdit),
-            "soustitre": self.getLineEditValue(self.ui.soustitreLineEdit),
+            "titre": self.ui.titreLineEdit.getText(),
+            "soustitre": self.ui.soustitreLineEdit.getText(),
             "matiere": self.matiere,
             "numero": self.numero,
-            "section": self.getLineEditValue(self.ui.sectionLineEdit),
+            "section": self.ui.sectionLineEdit.getText(),
             "auteur": self.auteur,
             "niveau": self.niveau,
         }
 
         values = {i: values[i] for i in values if model_config["values"][i]}
 
-        document = Document(
-            values,
-            self.modelConfig["models"][self.model]["filepath"],
-            self.filepaths[2],
-        )
+        document = Document(values, model_config["filepath"], self.filepaths[2])
 
         document.packWord()
 
@@ -294,7 +283,7 @@ class frontEnd:
             if selection.text() == "Personnaliser":
                 self.ui.matLineEdit.setEnabled(True)
                 self.ui.matLineEdit.clear()
-                self.ui.matLineEdit.setFocus()
+                self.ui.matLineEdit.setFocus(QtCore.Qt.FocusReason.MenuBarFocusReason)
                 self.customMatName = True
             else:
                 self.customMatName = False
@@ -302,7 +291,7 @@ class frontEnd:
                 self.ui.matLineEdit.setText(self.matieres[selection.text()][0])
 
                 if selection.text() == "Automatique":
-                    self.checkNumMat(automatic=True)
+                    self.checkNumMat()
 
         self.matiere = "PHY"
 
@@ -332,12 +321,11 @@ class frontEnd:
 
     def checkNumMat(self, connection="", prefix="CHP"):
         def findFiles(prefix):
-            self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
+            self.matiere = self.ui.matLineEdit.getText().translate(
                 {ord(i): None for i in r'\/:*?"<>|'}
             )
             matpath = os.path.join(
-                self.checkCustomMatNamePath(),
-                self.getLineEditValue(self.ui.modelLineEdit),
+                self.checkCustomMatNamePath(), self.ui.modelLineEdit.getText(),
             )
 
             try:
@@ -359,44 +347,37 @@ class frontEnd:
             if matched_files:
                 prefix = "MOD"
 
-        newName = str()
+        new_name = str()
 
         if matched_files:
-            new_suggested_file = (
-                int(
-                    max(matched_files)
-                    .replace(f"{self.matiere}-{prefix}", "")
-                    .replace(".docx", "")
+            new_name = prefix + (
+                str(
+                    int(
+                        max(matched_files)
+                        .replace(f"{self.matiere}-{prefix}", "")
+                        .replace(".docx", "")
+                    )
+                    + 1
                 )
-                + 1
             )
 
             if not self.autoNumAction.isChecked():
-                numMatMessageBox = QMessageBox(self.window)
-                numMatMessageBox.setIcon(QMessageBox.Information)
-                numMatMessageBox.setWindowTitle(
-                    f"Damysos - {__version__} - Fichiers Trouvés"
+                auto_num = AutomaticNumberMessageBox(
+                    self.window, f"{self.matiere}-{new_name}"
                 )
-                numMatMessageBox.setText(
-                    f"Damysos a trouvé des documents existants pour cette matière.\nSouhaitez-vous poursuivre la numérotation trouvée?\n\n\tNouveau fichier: {self.matiere}-{prefix}{new_suggested_file}"
-                )
-                buttonOpen = numMatMessageBox.addButton(QMessageBox.Yes)
-                buttonOpen.setText("Oui")
-                buttonIgnore = numMatMessageBox.addButton(QMessageBox.No)
-                buttonIgnore.setText("Non")
-                numMatMessageBox.exec_()
 
-                if numMatMessageBox.clickedButton().text() == buttonIgnore.text():
+                if auto_num.exec_():  # If user rejects
+                    self.autoNumAction.setChecked(False)
                     return
-
-            newName = f"{prefix}{new_suggested_file}"
+                else:
+                    self.autoNumAction.setChecked(True)
 
         elif self.autoNumAction.isChecked():
-            newName = f"{prefix}1"
+            new_name = f"{prefix}1"
 
-        if newName:
+        if new_name:
             self.ui.numLineEdit.setEnabled(False)
-            self.ui.numLineEdit.setText(newName)
+            self.ui.numLineEdit.setText(new_name)
 
         self.defaultFilePathChanged()
 
@@ -422,7 +403,9 @@ class frontEnd:
             elif selection.text() == personalizeNumAction.text():
                 self.ui.numLineEdit.setEnabled(True)
                 self.ui.numLineEdit.clear()
-                self.ui.numLineEdit.setFocus()
+                self.ui.numLineEdit.setFocus(QtCore.Qt.FocusReason.MenuBarFocusReason)
+            elif selection.text() == self.autoNumAction.text():
+                self.checkNumMat()
             else:
                 self.ui.numLineEdit.setEnabled(False)
                 self.ui.numLineEdit.setText(selection.text())
@@ -472,11 +455,11 @@ class frontEnd:
         self.ui.numLineEdit.textChanged.connect(self.defaultFilePathChanged)
 
     def defaultFilePathChanged(self):
-        self.matiere = self.getLineEditValue(self.ui.matLineEdit).translate(
+        self.matiere = self.ui.matLineEdit.getText().translate(
             {ord(i): None for i in '\\/:*?"<>|'}
         )
 
-        self.numero = self.getLineEditValue(self.ui.numLineEdit).translate(
+        self.numero = self.ui.numLineEdit.getText().translate(
             {ord(i): None for i in '\\/:*?"<>|'}
         )
 
@@ -484,9 +467,9 @@ class frontEnd:
         self.defaultFilePaths = [
             os.path.join(
                 matpath,
-                self.modelConfig["models"][
-                    self.getLineEditValue(self.ui.modelLineEdit)
-                ]["folderpath"],
+                self.modelConfig["models"][self.ui.modelLineEdit.getText()][
+                    "folderpath"
+                ],
             ),  # Chemin
             f"{self.matiere}-{self.numero}.docx",
         ]  # Fichier
@@ -582,8 +565,8 @@ class frontEnd:
 
     def configTab(self):
         def saveVariable():
-            self.auteur = self.getLineEditValue(self.ui.auteurLineEdit).replace("&", "")
-            self.niveau = self.getLineEditValue(self.ui.niveauLineEdit).replace("&", "")
+            self.auteur = self.ui.auteurLineEdit.getText().replace("&", "")
+            self.niveau = self.ui.niveauLineEdit.getText().replace("&", "")
 
             self.matieres = {}
 
@@ -639,19 +622,6 @@ class frontEnd:
                     2,
                     QTableWidgetItem(filename),
                 )
-
-        # for row in range(self.ui.matiereTable.tableWidget.rowCount()):
-        #     self.ui.matiereTable.tableWidget.item(row, 2).setFlags(
-        #         QtCore.Qt.ItemIsEnabled
-        #     )
-
-        # self.ui.matiereTable.plus.clicked.connect(addRow)
-        # self.ui.matiereTable.minus.clicked.connect(delRow)
-        # self.ui.matiereTable.reset.clicked.connect(resetRows)
-
-        # self.ui.matiereTableBrowse.setEnabled(False)
-        # self.ui.matiereTable.tableWidget.currentCellChanged.connect(checkBrowse)
-        # self.ui.matiereTableBrowse.clicked.connect(browseDirectory)
 
     def modelTab(self):
         self.modelForm = {
@@ -790,7 +760,7 @@ class frontEnd:
             model = self.ui.modelListWidget.currentItem().text()
 
             for checkBox, lineEdit in self.modelForm.values():
-                text = self.getLineEditValue(lineEdit)
+                text = lineEdit.getText()
                 lineEdit.setEnabled(checkBox.isChecked())
 
                 if not checkBox.isChecked():
@@ -802,9 +772,9 @@ class frontEnd:
                 self.ui.modelPathModelLabel.text().replace(" > ", os.path.sep)
             )
 
-            self.modelConfig["models"][model]["folderpath"] = self.getLineEditValue(
-                self.ui.modelDestinationLineEdit
-            )
+            self.modelConfig["models"][model][
+                "folderpath"
+            ] = self.ui.modelDestinationLineEdit.getText()
 
         def model_choose_path():
             # Prend le nom du fichier et le nettoie
@@ -845,7 +815,8 @@ class frontEnd:
             QMessageBox.information(
                 self.window,
                 f"Damysos - {__version__} - Modèles par défaut",
-                "Aucun modèle n'a été trouvé.\n\nLes modèles par défaut vont alors être téléchargés et configurés automatiquement.",
+                "Aucun modèle n'a été trouvé.\n\n"
+                + "Les modèles par défaut vont alors être téléchargés et configurés automatiquement.",
             )
 
             for model in self.modelConfig["default_models"]:
