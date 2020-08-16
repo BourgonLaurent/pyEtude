@@ -16,8 +16,10 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
 from PySide2.QtWidgets import *
 
 from .widgets.version_label import VersionLabel
-from .widgets.safe_line_edit import SafeLineEdit
+from .widgets.line_edits import SafeAdvancedLineEdit
 from .widgets.matiere_table import MatiereTable
+from .widgets.line_edits import AdvancedLineEdit
+from .widgets.advanced_tab_widget import AdvancedTabWidget
 
 
 class Ui_MainWindow(object):
@@ -1796,7 +1798,7 @@ class Ui_MainWindow(object):
         MainWindow.setDocumentMode(False)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.tabWidget = QTabWidget(self.centralwidget)
+        self.tabWidget = AdvancedTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setGeometry(QRect(10, 10, 711, 451))
         self.tabWidget.setCursor(QCursor(Qt.ArrowCursor))
@@ -1809,7 +1811,7 @@ class Ui_MainWindow(object):
         self.titreGroupBox = QGroupBox(self.infoGroupBox)
         self.titreGroupBox.setObjectName(u"titreGroupBox")
         self.titreGroupBox.setGeometry(QRect(10, 20, 300, 61))
-        self.titreLineEdit = QLineEdit(self.titreGroupBox)
+        self.titreLineEdit = AdvancedLineEdit(self.titreGroupBox)
         self.titreLineEdit.setObjectName(u"titreLineEdit")
         self.titreLineEdit.setGeometry(QRect(12, 25, 281, 29))
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -1827,7 +1829,7 @@ class Ui_MainWindow(object):
         self.soustitreGroupBox.setObjectName(u"soustitreGroupBox")
         self.soustitreGroupBox.setEnabled(True)
         self.soustitreGroupBox.setGeometry(QRect(10, 80, 300, 61))
-        self.soustitreLineEdit = QLineEdit(self.soustitreGroupBox)
+        self.soustitreLineEdit = AdvancedLineEdit(self.soustitreGroupBox)
         self.soustitreLineEdit.setObjectName(u"soustitreLineEdit")
         self.soustitreLineEdit.setGeometry(QRect(12, 25, 281, 29))
         sizePolicy1.setHeightForWidth(self.soustitreLineEdit.sizePolicy().hasHeightForWidth())
@@ -1838,7 +1840,7 @@ class Ui_MainWindow(object):
         self.matGroupBox = QGroupBox(self.infoGroupBox)
         self.matGroupBox.setObjectName(u"matGroupBox")
         self.matGroupBox.setGeometry(QRect(100, 150, 140, 61))
-        self.matLineEdit = SafeLineEdit(self.matGroupBox)
+        self.matLineEdit = SafeAdvancedLineEdit(self.matGroupBox)
         self.matLineEdit.setObjectName(u"matLineEdit")
         self.matLineEdit.setEnabled(False)
         self.matLineEdit.setGeometry(QRect(15, 25, 98, 29))
@@ -1858,7 +1860,7 @@ class Ui_MainWindow(object):
         self.numGroupBox = QGroupBox(self.infoGroupBox)
         self.numGroupBox.setObjectName(u"numGroupBox")
         self.numGroupBox.setGeometry(QRect(100, 210, 140, 61))
-        self.numLineEdit = SafeLineEdit(self.numGroupBox)
+        self.numLineEdit = SafeAdvancedLineEdit(self.numGroupBox)
         self.numLineEdit.setObjectName(u"numLineEdit")
         self.numLineEdit.setEnabled(False)
         self.numLineEdit.setGeometry(QRect(15, 25, 98, 29))
@@ -1885,7 +1887,7 @@ class Ui_MainWindow(object):
         font1.setUnderline(True)
         self.sectionNumLabel.setFont(font1)
         self.sectionNumLabel.setStyleSheet(u"")
-        self.sectionLineEdit = SafeLineEdit(self.sectionGroupBox)
+        self.sectionLineEdit = AdvancedLineEdit(self.sectionGroupBox)
         self.sectionLineEdit.setObjectName(u"sectionLineEdit")
         self.sectionLineEdit.setGeometry(QRect(40, 25, 251, 29))
         sizePolicy1.setHeightForWidth(self.sectionLineEdit.sizePolicy().hasHeightForWidth())
@@ -1978,7 +1980,7 @@ class Ui_MainWindow(object):
         self.modelGroupBox = QGroupBox(self.genTab)
         self.modelGroupBox.setObjectName(u"modelGroupBox")
         self.modelGroupBox.setGeometry(QRect(10, 365, 321, 71))
-        self.modelLineEdit = QLineEdit(self.modelGroupBox)
+        self.modelLineEdit = AdvancedLineEdit(self.modelGroupBox)
         self.modelLineEdit.setObjectName(u"modelLineEdit")
         self.modelLineEdit.setEnabled(False)
         self.modelLineEdit.setGeometry(QRect(27, 30, 251, 29))
@@ -2002,7 +2004,7 @@ class Ui_MainWindow(object):
         self.auteurConfig = QGroupBox(self.infoPerso)
         self.auteurConfig.setObjectName(u"auteurConfig")
         self.auteurConfig.setGeometry(QRect(10, 20, 288, 61))
-        self.auteurLineEdit = QLineEdit(self.auteurConfig)
+        self.auteurLineEdit = AdvancedLineEdit(self.auteurConfig)
         self.auteurLineEdit.setObjectName(u"auteurLineEdit")
         self.auteurLineEdit.setGeometry(QRect(10, 25, 269, 29))
         sizePolicy1.setHeightForWidth(self.auteurLineEdit.sizePolicy().hasHeightForWidth())
@@ -2013,7 +2015,7 @@ class Ui_MainWindow(object):
         self.niveauConfig = QGroupBox(self.infoPerso)
         self.niveauConfig.setObjectName(u"niveauConfig")
         self.niveauConfig.setGeometry(QRect(10, 90, 288, 61))
-        self.niveauLineEdit = QLineEdit(self.niveauConfig)
+        self.niveauLineEdit = AdvancedLineEdit(self.niveauConfig)
         self.niveauLineEdit.setObjectName(u"niveauLineEdit")
         self.niveauLineEdit.setGeometry(QRect(10, 25, 269, 29))
         sizePolicy1.setHeightForWidth(self.niveauLineEdit.sizePolicy().hasHeightForWidth())
@@ -2117,32 +2119,32 @@ class Ui_MainWindow(object):
         self.modelValuesFormLayout = QFormLayout(self.formLayoutWidget_2)
         self.modelValuesFormLayout.setObjectName(u"modelValuesFormLayout")
         self.modelValuesFormLayout.setContentsMargins(0, 0, 0, 0)
-        self.titreModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.titreModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.titreModelLineEdit.setObjectName(u"titreModelLineEdit")
 
         self.modelValuesFormLayout.setWidget(0, QFormLayout.FieldRole, self.titreModelLineEdit)
 
-        self.soustitreModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.soustitreModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.soustitreModelLineEdit.setObjectName(u"soustitreModelLineEdit")
 
         self.modelValuesFormLayout.setWidget(1, QFormLayout.FieldRole, self.soustitreModelLineEdit)
 
-        self.matiereModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.matiereModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.matiereModelLineEdit.setObjectName(u"matiereModelLineEdit")
 
         self.modelValuesFormLayout.setWidget(2, QFormLayout.FieldRole, self.matiereModelLineEdit)
 
-        self.numeroModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.numeroModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.numeroModelLineEdit.setObjectName(u"numeroModelLineEdit")
 
         self.modelValuesFormLayout.setWidget(3, QFormLayout.FieldRole, self.numeroModelLineEdit)
 
-        self.sectionModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.sectionModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.sectionModelLineEdit.setObjectName(u"sectionModelLineEdit")
 
         self.modelValuesFormLayout.setWidget(4, QFormLayout.FieldRole, self.sectionModelLineEdit)
 
-        self.auteurModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.auteurModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.auteurModelLineEdit.setObjectName(u"auteurModelLineEdit")
 
         self.modelValuesFormLayout.setWidget(5, QFormLayout.FieldRole, self.auteurModelLineEdit)
@@ -2199,7 +2201,7 @@ class Ui_MainWindow(object):
 
         self.modelValuesFormLayout.setWidget(6, QFormLayout.LabelRole, self.niveauModelCheckBox)
 
-        self.niveauModelLineEdit = QLineEdit(self.formLayoutWidget_2)
+        self.niveauModelLineEdit = AdvancedLineEdit(self.formLayoutWidget_2)
         self.niveauModelLineEdit.setObjectName(u"niveauModelLineEdit")
         self.niveauModelLineEdit.setEnabled(False)
 
@@ -2222,7 +2224,7 @@ class Ui_MainWindow(object):
 
         self.modelPathsLayout.setWidget(1, QFormLayout.LabelRole, self.modelDestinationLabel)
 
-        self.modelDestinationLineEdit = SafeLineEdit(self.formLayoutWidget)
+        self.modelDestinationLineEdit = SafeAdvancedLineEdit(self.formLayoutWidget)
         self.modelDestinationLineEdit.setObjectName(u"modelDestinationLineEdit")
 
         self.modelPathsLayout.setWidget(1, QFormLayout.FieldRole, self.modelDestinationLineEdit)
@@ -2322,7 +2324,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

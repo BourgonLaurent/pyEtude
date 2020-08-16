@@ -1757,7 +1757,7 @@ PlotWidget {
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="AdvancedTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1773,7 +1773,7 @@ PlotWidget {
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -1806,7 +1806,7 @@ PlotWidget {
        <property name="title">
         <string>Titre</string>
        </property>
-       <widget class="QLineEdit" name="titreLineEdit">
+       <widget class="AdvancedLineEdit" name="titreLineEdit">
         <property name="geometry">
          <rect>
           <x>12</x>
@@ -1853,7 +1853,7 @@ PlotWidget {
        <property name="title">
         <string>Sous-Titre</string>
        </property>
-       <widget class="QLineEdit" name="soustitreLineEdit">
+       <widget class="AdvancedLineEdit" name="soustitreLineEdit">
         <property name="geometry">
          <rect>
           <x>12</x>
@@ -1897,7 +1897,7 @@ PlotWidget {
        <property name="title">
         <string>Matière</string>
        </property>
-       <widget class="SafeLineEdit" name="matLineEdit">
+       <widget class="SafeAdvancedLineEdit" name="matLineEdit">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -1974,7 +1974,7 @@ PlotWidget {
        <property name="title">
         <string>Numéro</string>
        </property>
-       <widget class="SafeLineEdit" name="numLineEdit">
+       <widget class="SafeAdvancedLineEdit" name="numLineEdit">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -2065,7 +2065,7 @@ PlotWidget {
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;1.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="SafeLineEdit" name="sectionLineEdit">
+       <widget class="AdvancedLineEdit" name="sectionLineEdit">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -2318,7 +2318,7 @@ PlotWidget {
       <property name="title">
        <string>Modèle</string>
       </property>
-      <widget class="QLineEdit" name="modelLineEdit">
+      <widget class="AdvancedLineEdit" name="modelLineEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -2406,7 +2406,7 @@ PlotWidget {
        <property name="title">
         <string>Auteur</string>
        </property>
-       <widget class="QLineEdit" name="auteurLineEdit">
+       <widget class="AdvancedLineEdit" name="auteurLineEdit">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2450,7 +2450,7 @@ PlotWidget {
        <property name="title">
         <string>Niveau</string>
        </property>
-       <widget class="QLineEdit" name="niveauLineEdit">
+       <widget class="AdvancedLineEdit" name="niveauLineEdit">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2737,42 +2737,42 @@ QListView::item:selected:hover {
        </property>
        <layout class="QFormLayout" name="modelValuesFormLayout">
         <item row="0" column="1">
-         <widget class="QLineEdit" name="titreModelLineEdit">
+         <widget class="AdvancedLineEdit" name="titreModelLineEdit">
           <property name="placeholderText">
            <string>Titre</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="soustitreModelLineEdit">
+         <widget class="AdvancedLineEdit" name="soustitreModelLineEdit">
           <property name="placeholderText">
            <string>Sous-Titre</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="matiereModelLineEdit">
+         <widget class="AdvancedLineEdit" name="matiereModelLineEdit">
           <property name="placeholderText">
            <string>Matière</string>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="numeroModelLineEdit">
+         <widget class="AdvancedLineEdit" name="numeroModelLineEdit">
           <property name="placeholderText">
            <string>Numéro</string>
           </property>
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="sectionModelLineEdit">
+         <widget class="AdvancedLineEdit" name="sectionModelLineEdit">
           <property name="placeholderText">
            <string>Section</string>
           </property>
          </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="auteurModelLineEdit">
+         <widget class="AdvancedLineEdit" name="auteurModelLineEdit">
           <property name="placeholderText">
            <string>Auteur</string>
           </property>
@@ -2887,7 +2887,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="niveauModelLineEdit">
+         <widget class="AdvancedLineEdit" name="niveauModelLineEdit">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -2938,7 +2938,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="SafeLineEdit" name="modelDestinationLineEdit"/>
+         <widget class="SafeAdvancedLineEdit" name="modelDestinationLineEdit"/>
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="modelPathModelLabel">
@@ -3118,14 +3118,25 @@ QPushButton:selected {
    <header>/widgets/version_label.h</header>
   </customwidget>
   <customwidget>
-   <class>SafeLineEdit</class>
+   <class>SafeAdvancedLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>/widgets/safe_line_edit.h</header>
+   <header>/widgets/line_edits.h</header>
   </customwidget>
   <customwidget>
    <class>MatiereTable</class>
    <extends>QWidget</extends>
    <header>/widgets/matiere_table.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AdvancedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>/widgets/line_edits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AdvancedTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>/widgets/advanced_tab_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

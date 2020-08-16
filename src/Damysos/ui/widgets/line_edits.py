@@ -1,5 +1,5 @@
-## safe_line_edit.py - damysos.ui.widgets
-# Label that prevents using dangerous and breaking characters
+## line_edit.py - damysos.ui.widgets
+# Various modified Line Edits
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,21 +26,37 @@ from damysos.helpers.utilities import SAFE_CHARACTERS_QREGEXP
 
 # External packages
 from PySide2.QtGui import QRegExpValidator
-from PySide2.QtCore import QRegExp
 from PySide2.QtWidgets import QWidget, QLineEdit
 
 
-class SafeLineEdit(QLineEdit):
-    """QLabel that prevents using dangerous and breaking characters"""
-
-    def __init__(self, parent: QWidget):
+class AdvancedLineEdit(QLineEdit):
+    def __init__(self, parent: QWidget) -> None:
         """
-        Creates the QLabel and sets its text
+        Creates the QLineEdit and sets its text
 
         Parameters
         ----------
         parent : QWidget
-            Any Widget that will be parent of the QLabel
+            Any Widget that will be parent of the QLineEdit
+        """
+
+        super().__init__(parent=parent)
+
+    def getText(self) -> str:
+        return self.text() or self.placeholderText()
+
+
+class SafeAdvancedLineEdit(AdvancedLineEdit):
+    """AdvancedLineEdit that prevents using dangerous and breaking characters"""
+
+    def __init__(self, parent: QWidget):
+        """
+        Creates the QLineEdit and sets its text
+
+        Parameters
+        ----------
+        parent : QWidget
+            Any Widget that will be parent of the QLineEdit
         """
 
         super().__init__(parent=parent)
