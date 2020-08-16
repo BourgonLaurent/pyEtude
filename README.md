@@ -83,8 +83,12 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Avoir plusieurs modèles qui peuvent être choisis.
 - [x] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [x] Utiliser Qt for Python au lieu de PyQt5
-- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install Damysos`)
+- [x] Trouver un nouveau nom
+- [ ] Réarranger tout le projet pour permettre un meilleur ajouts de fonctionnalités et de maintenance
 - [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
+- [ ] Création d'une version installable
+- [ ] Possibilité de mises à jours automatiques
+- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install Damysos`)
 
 ## 🏁 Bien Démarrer<a name="démarrer"></a>
 

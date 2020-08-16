@@ -29,9 +29,15 @@ from typing import cast
 import os, sys
 
 # External packages
-from PySide2.QtCore import QDate, Qt, Slot
+from PySide2.QtCore import QDate, QFile, Qt, Slot
 from PySide2.QtGui import QColor, QTextCharFormat
-from PySide2.QtWidgets import QMessageBox, QWidget, QDialog, QCalendarWidget
+from PySide2.QtWidgets import (
+    QFileDialog,
+    QMessageBox,
+    QWidget,
+    QDialog,
+    QCalendarWidget,
+)
 
 
 class UpdateMessageBox(QMessageBox):
@@ -237,3 +243,13 @@ class AutomaticNumberMessageBox(QMessageBox):
 
         self.buttonAccept = self.addButton("Oui", QMessageBox.ButtonRole.AcceptRole)
         self.buttonReject = self.addButton("Non", QMessageBox.ButtonRole.RejectRole)
+
+
+class WordSaveFileDialog(QFileDialog):
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent=parent)
+
+        self.setFileMode(QFileDialog.FileMode.AnyFile)
+        self.setNameFilter("Microsoft Word (*.docx)")
+        self.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
+

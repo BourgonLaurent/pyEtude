@@ -21,6 +21,7 @@ from .ui.dialogs import (
     AutomaticNumberMessageBox,
     CalendarDialog,
     DocumentCreatedMessageBox,
+    WordSaveFileDialog,
 )
 
 # Default packages
@@ -183,21 +184,18 @@ class frontEnd:
         json_data["auteur"] = self.auteur
         json_data["niveau"] = self.niveau
         json_data["matieres"] = dict()
-        if (
-            self.ui.matieresConfig.isChecked() == True
-        ):  # Vérifie s'il y a des matières personnalisées
+        # Vérifie s'il y a des matières personnalisées
+        if self.ui.matieresConfig.isChecked() == True:
             for key, value in self.matieres.items():
                 json_data["matieres"][key] = value
 
         if hasattr(self, "modelConfig"):
             json_data["modeles"] = self.modelConfig
 
-        with open(
-            CONFIG_FILE, "w", encoding="utf-8"
-        ) as json_f:  # Crée le fichier de configuration
-            json.dump(
-                json_data, json_f, sort_keys=True, indent=4
-            )  # Formatte le fichier JSON
+        # Crée le fichier de configuration
+        with open(CONFIG_FILE, "w", encoding="utf-8") as json_f:
+            # Formatte le fichier JSON
+            json.dump(json_data, json_f, sort_keys=True, indent=4)
 
         QMessageBox.information(
             self.window,
@@ -217,8 +215,8 @@ class frontEnd:
         self.ui.auteurPersoLabel.setText(self.auteur)
         self.ui.niveauPersoLabel.setText(self.niveau)
         # Applique le style à l'entrée de texte
-        for le in (self.ui.matLineEdit, self.ui.numLineEdit):
-            le.setStyleSheet(CustomStyles.LINE_EDIT)
+        # for le in (self.ui.matLineEdit, self.ui.numLineEdit):
+        #     le.setStyleSheet(CustomStyles.LINE_EDIT)
 
         # Mise en place de l'emplacement de sauvegarde
         self.pathGenTab()
@@ -484,18 +482,16 @@ class frontEnd:
     def pathGenTab(self):
         def isChecked(selection):
             if selection.text() == openPathAction.text():
-                if sys.platform == "win32":
+                if sys.platform.startswith("win"):
                     try:
-                        os.startfile(self.filepaths[0])
+                        os.startfile(self.filepaths[0])  # type: ignore
                     except:
                         pass
                 else:
                     os.system(fr"open {self.filepaths[0]}")
 
             elif selection.text() == customPathAction.text():
-                getSaveFilePath = QFileDialog()
-                getSaveFilePath.setNameFilters(["Microsoft Word (*.docx)"])
-                getSaveFilePath.setAcceptMode(QFileDialog.AcceptSave)
+                getSaveFilePath = WordSaveFileDialog(parent=self.window)
                 getSaveFilePath.exec_()
                 if getSaveFilePath.selectedFiles():
                     self.filepaths = [
@@ -565,8 +561,8 @@ class frontEnd:
 
     def configTab(self):
         def saveVariable():
-            self.auteur = self.ui.auteurLineEdit.getText().replace("&", "")
-            self.niveau = self.ui.niveauLineEdit.getText().replace("&", "")
+            self.auteur = self.ui.auteurLineEdit.getText()
+            self.niveau = self.ui.niveauLineEdit.getText()
 
             self.matieres = {}
 
@@ -576,9 +572,9 @@ class frontEnd:
                 path = self.ui.matiereTable.tableWidget.item(row, 2)
                 if matiere and mat:
                     if matiere.text() and mat.text():
-                        path_text = path.text().replace("&", "") if path else ""
-                        self.matieres[matiere.text().replace("&", "")] = [
-                            mat.text().replace("&", ""),
+                        path_text = path.text() if path else ""
+                        self.matieres[matiere.text()] = [
+                            mat.text(),
                             path_text,
                         ]
 
@@ -586,42 +582,6 @@ class frontEnd:
             self.firstLaunch()
 
         self.ui.configSaveButton.clicked.connect(saveVariable)
-
-        self.matieresConfig()
-
-    def matieresConfig(self):
-        def addRow():
-            new_row = self.ui.matiereTable.tableWidget.rowCount()
-            self.ui.matiereTable.tableWidget.insertRow(new_row)
-            self.ui.matiereTable.tableWidget.item(new_row, 2).setFlags(
-                QtCore.Qt.ItemIsEnabled
-            )
-
-        def delRow():
-            self.ui.matiereTable.tableWidget.removeRow(
-                (
-                    self.ui.matiereTable.tableWidget.rowCount() - 1
-                    if self.ui.matiereTable.tableWidget.currentRow() == -1
-                    else self.ui.matiereTable.tableWidget.currentRow()
-                )
-            )
-
-        def resetRows():
-            self.setMatieres(self.matieresDefault)
-
-        # def checkBrowse():
-        #     self.ui.matiereTableBrowse.setEnabled(
-        #         self.ui.matiereTable.tableWidget.currentColumn() == 2
-        #     )
-
-        def browseDirectory():
-            if self.ui.matiereTable.tableWidget.currentColumn() == 2:
-                filename = QFileDialog.getExistingDirectory()
-                self.ui.matiereTable.tableWidget.setItem(
-                    self.ui.matiereTable.tableWidget.currentRow(),
-                    2,
-                    QTableWidgetItem(filename),
-                )
 
     def modelTab(self):
         self.modelForm = {
@@ -656,7 +616,7 @@ class frontEnd:
 
             if ok and text_entered:
                 if not self.ui.modelListWidget.findItems(
-                    text_entered, QtCore.Qt.MatchExactly
+                    text_entered, QtCore.Qt.MatchFlags.MatchExactly
                 ):
                     self.ui.modelListWidget.addItem(text_entered)
 
