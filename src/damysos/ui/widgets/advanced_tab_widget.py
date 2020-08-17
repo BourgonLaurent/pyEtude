@@ -21,9 +21,6 @@
 #    SOFTWARE.
 
 ## Imports
-# Project packages
-from damysos.helpers.utilities import SAFE_CHARACTERS_QREGEXP
-
 # External packages
 from PySide2.QtWidgets import QWidget, QTabWidget
 
