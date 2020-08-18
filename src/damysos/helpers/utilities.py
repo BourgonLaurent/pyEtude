@@ -22,7 +22,6 @@
 
 ## Imports
 # External packages
-from PySide2.QtGui import QRegExpValidator
 from PySide2.QtCore import QRegExp
 
 # Allow only safe, path-friendly characters

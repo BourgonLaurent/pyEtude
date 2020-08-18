@@ -11,7 +11,7 @@
 """
 ## Imports
 # Project packages
-from damysos import __version__, CONFIG_FILE
+from . import __version__, CONFIG_FILE
 from .document import Document
 from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
