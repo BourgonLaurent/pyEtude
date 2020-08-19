@@ -23,12 +23,11 @@
 ## Imports
 # Project packages
 from .ui.window import DamysosMainWindow
-from .ui.main_ui import Ui_MainWindow
 
 # Default packages
 
 # Externals packages
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtWidgets import QApplication
 
 
 class DamysosApp(QApplication):

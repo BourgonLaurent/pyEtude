@@ -22,7 +22,7 @@
 
 ## Imports
 # Project packages
-from .main_ui import Ui_MainWindow
+from .designer_ui import Ui_MainWindow
 
 # Default packages
 

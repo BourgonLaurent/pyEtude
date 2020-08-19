@@ -31,7 +31,7 @@ chdir(path.realpath(__file__).replace(path.basename(__file__), ""))
 
 # MODIFY THIS TO CHANGE COMPILING
 BASE_FOLDER: Text = path.join("./", "src", "damysos", "ui")
-FILES: List[str] = ["main"]
+FILES: List[str] = ["designer"]
 
 # Create an empty Dict that will hold the success codes
 SUCCESS: Dict[str, Dict[str, CompletedProcess]] = {"qrc": {}, "ui": {}}

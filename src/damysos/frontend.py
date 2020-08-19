@@ -15,7 +15,7 @@ from . import __version__, CONFIG_FILE
 from .document import Document
 from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
-from .ui.main_ui import Ui_MainWindow
+from .ui.designer_ui import Ui_MainWindow
 from .ui.styles_ui import CustomStyles
 from .ui.dialogs import (
     AutomaticNumberMessageBox,
