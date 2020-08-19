@@ -1,4 +1,5 @@
-# Damysos.py: damysos launcher
+## window.py - damysos.ui
+# Windows used by Damysos
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,19 +20,19 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-
-## Librairies
+## Imports
 # Project packages
-import damysos.frontend
-from damysos.app import DamysosApp
+from .main_ui import Ui_MainWindow
 
 # Default packages
-import os
 
-# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
-os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
+# Externals packages
+from PySide2.QtWidgets import QMainWindow
 
-if __name__ == "__main__":
-    # fe = damysos.frontend.frontEnd()
-    # fe.executeGUI()
-    DamysosApp().exec_()
+
+class DamysosMainWindow(QMainWindow):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)

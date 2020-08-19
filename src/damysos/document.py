@@ -1,4 +1,4 @@
-## Document.py - damysos.document
+## Document.py - damysos
 # Document exporter
 #
 # MIT (c) 2020 Laurent Bourgon
