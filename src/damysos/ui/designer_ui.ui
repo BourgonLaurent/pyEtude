@@ -1773,7 +1773,7 @@ PlotWidget {
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -2509,7 +2509,7 @@ PlotWidget {
         <number>50</number>
        </property>
        <item>
-        <widget class="QPushButton" name="configSaveButton">
+        <widget class="ConfigPushButton" name="configSaveButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -3138,6 +3138,11 @@ QPushButton:selected {
    <extends>QTabWidget</extends>
    <header>/widgets/advanced_tab_widget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ConfigPushButton</class>
+   <extends>QPushButton</extends>
+   <header>/widgets/push_buttons.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

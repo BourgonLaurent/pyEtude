@@ -1,5 +1,5 @@
-## window_ui.py - damysos.ui
-# Modified UI of DamysosMainWindow
+## push_buttons.py - damysos.ui.widgets
+# Various modified Push Buttons
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,23 +22,40 @@
 
 ## Imports
 # Project packages
-import damysos.ui.window
+import damysos.ui.designer_ui
 from damysos.config.settings import Settings
-from .designer_ui import Ui_MainWindow
+from damysos.config.matieres import Matiere
+
+# Default packages
+from typing import cast
+
+# External packages
+from PySide2.QtWidgets import QWidget, QPushButton
 
 
-class DamysosMWUI(Ui_MainWindow):
-    def __init__(self, window: "damysos.ui.window.DamysosMainWindow"):
-        super().__init__()
-        self.setupUi(window)
+class ConfigPushButton(QPushButton):
+    ui: "damysos.ui.designer_ui.Ui_MainWindow"
 
-        self.settings = window.settings
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(text="", parent=parent)
 
-        self.configSaveButton.ui = self
+        self.clicked.connect(self.save_config)  # type: ignore
 
-        self.set_settings_values()
+    def save_config(self):
+        settings = cast(Settings, self.ui.settings)  # type: ignore
 
-    def set_settings_values(self):
-        self.auteurLineEdit.setText(self.settings.auteur)
-        self.niveauLineEdit.setText(self.settings.niveau)
+        settings.auteur = self.ui.auteurLineEdit.getText()
+        settings.niveau = self.ui.niveauLineEdit.getText()
+
+        settings.matieres.clear()
+
+        for row in range(self.ui.matiereTable.tableWidget.rowCount()):
+            name = self.ui.matiereTable.tableWidget.item(row, 0)
+            alias = self.ui.matiereTable.tableWidget.item(row, 1)
+            path = self.ui.matiereTable.tableWidget.item(row, 2)
+
+            if name and alias:
+                settings.matieres[name.text()] = Matiere(alias.text(), path.text())
+
+        settings.dump_config_file()
 

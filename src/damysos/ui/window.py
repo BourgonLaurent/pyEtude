@@ -37,7 +37,6 @@ class DamysosMainWindow(QMainWindow):
         super().__init__()
         self.settings = settings
 
-        self.ui = DamysosMWUI(self.settings)
-        self.ui.setupUi(self)
+        self.ui = DamysosMWUI(self)
 
         self.setWindowTitle(f"Damysos - v{__version__}")

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_ui.ui'
+## Form generated from reading UI file 'designer_ui.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -20,6 +20,7 @@ from .widgets.line_edits import SafeAdvancedLineEdit
 from .widgets.matiere_table import MatiereTable
 from .widgets.line_edits import AdvancedLineEdit
 from .widgets.advanced_tab_widget import AdvancedTabWidget
+from .widgets.push_buttons import ConfigPushButton
 
 
 class Ui_MainWindow(object):
@@ -2030,7 +2031,7 @@ class Ui_MainWindow(object):
         self.configSaveLayout.setSpacing(0)
         self.configSaveLayout.setObjectName(u"configSaveLayout")
         self.configSaveLayout.setContentsMargins(30, 50, 30, 50)
-        self.configSaveButton = QPushButton(self.verticalLayoutWidget_4)
+        self.configSaveButton = ConfigPushButton(self.verticalLayoutWidget_4)
         self.configSaveButton.setObjectName(u"configSaveButton")
         sizePolicy5 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         sizePolicy5.setHorizontalStretch(0)
@@ -2324,7 +2325,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
