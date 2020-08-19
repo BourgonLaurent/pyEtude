@@ -26,15 +26,21 @@ import damysos.ui.window
 from damysos.config.settings import Settings
 from .designer_ui import Ui_MainWindow
 
+# External packages
+from PySide2.QtWidgets import QMainWindow
+
 
 class DamysosMWUI(Ui_MainWindow):
-    def __init__(self, window: "damysos.ui.window.DamysosMainWindow"):
+    def __init__(self, window: QMainWindow):
         super().__init__()
         self.setupUi(window)
 
-        self.settings = window.settings
+        self.settings = Settings.load_config_file(tab_widget=self.tabWidget)
 
         self.configSaveButton.ui = self
+        self.configSaveButton.config_done.connect(
+            lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
+        )
 
         self.set_settings_values()
 

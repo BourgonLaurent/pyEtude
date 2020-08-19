@@ -22,7 +22,6 @@
 
 ## Imports
 # Project packages
-from damysos.config.settings import Settings
 from .ui.window import DamysosMainWindow
 
 # Default packages
@@ -34,9 +33,8 @@ from PySide2.QtWidgets import QApplication
 class DamysosApp(QApplication):
     def __init__(self) -> None:
         super().__init__([])
-        self.settings = Settings.load_config_file()
 
-        self.window = DamysosMainWindow(self.settings)
+        self.window = DamysosMainWindow()
 
     def exec_(self) -> int:
         self.window.show()

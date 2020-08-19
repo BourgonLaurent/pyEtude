@@ -30,16 +30,19 @@ from damysos.config.matieres import Matiere
 from typing import cast
 
 # External packages
+from PySide2.QtCore import Signal, SignalInstance
 from PySide2.QtWidgets import QWidget, QPushButton
 
 
 class ConfigPushButton(QPushButton):
     ui: "damysos.ui.designer_ui.Ui_MainWindow"
+    clicked = cast(SignalInstance, Signal())
+    config_done = cast(SignalInstance, Signal())
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(text="", parent=parent)
 
-        self.clicked.connect(self.save_config)  # type: ignore
+        self.clicked.connect(self.save_config)
 
     def save_config(self):
         settings = cast(Settings, self.ui.settings)  # type: ignore
@@ -58,4 +61,6 @@ class ConfigPushButton(QPushButton):
                 settings.matieres[name.text()] = Matiere(alias.text(), path.text())
 
         settings.dump_config_file()
+
+        self.config_done.emit()
 

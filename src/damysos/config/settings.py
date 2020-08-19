@@ -31,6 +31,9 @@ import json
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict
 
+# External packages
+from damysos.ui.widgets.advanced_tab_widget import AdvancedTabWidget
+
 
 @dataclass
 class Settings:
@@ -75,14 +78,17 @@ class Settings:
             )
 
     @staticmethod
-    def load_config_file():
+    def load_config_file(tab_widget: AdvancedTabWidget = None):
         try:
             with open(CONFIG_FILE, mode="r", encoding="utf-8") as config_file:
                 config: Dict[str, Any] = json.load(config_file)
 
+            tab_widget.setConfigurationMode(in_configuration_mode=False)
             return Settings.rebuild_from_dict(config)
 
         except FileNotFoundError:
+            if tab_widget:
+                tab_widget.setConfigurationMode(in_configuration_mode=True)
             return Settings()
 
     @staticmethod
@@ -103,14 +109,17 @@ class Settings:
         settings = Settings()
 
         for key, value in rebuild_dict.items():
-            if key == "matieres":
-                value = {
-                    name: Matiere.rebuild_from_dict(matiere)
-                    for name, matiere in value.items()
-                }
-            elif key == "modeles":
-                value = ModelConfig.rebuild_from_dict(value)
+            try:
+                if key == "matieres":
+                    value = {
+                        name: Matiere.rebuild_from_dict(matiere)
+                        for name, matiere in value.items()
+                    }
+                elif key == "modeles":
+                    value = ModelConfig.rebuild_from_dict(value)
 
-            settings.__setattr__(key, value)
+                settings.__setattr__(key, value)
+            except:
+                assert KeyError
 
         return settings
