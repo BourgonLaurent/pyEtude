@@ -170,9 +170,7 @@ class DocumentCreatedMessageBox(QMessageBox):
 
     def exec_(self):
         """Show the alert"""
-        super().exec_()
-
-        if self.clickedButton() == self.buttonAccept:
+        if not super().exec_():  # if exited with Success (0)
             self.openFile()
         else:
             assert ConnectionRefusedError

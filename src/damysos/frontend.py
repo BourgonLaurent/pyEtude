@@ -16,7 +16,6 @@ from .document import Document
 from .helpers.downloader import FileDownloader
 from .helpers.updater import check_updates
 from .ui.designer_ui import Ui_MainWindow
-from .ui.styles_ui import CustomStyles
 from .ui.dialogs import (
     AutomaticNumberMessageBox,
     CalendarDialog,

@@ -1,4 +1,5 @@
-# Damysos.py: damysos launcher
+## window_ui.py - damysos.ui
+# Modified UI of DamysosMainWindow
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,18 +20,15 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-
-## Librairies
+## Imports
 # Project packages
-import damysos.frontend
-from damysos.app import DamysosApp
+from typing import Set
+from damysos.config.settings import Settings
+from .designer_ui import Ui_MainWindow
 
-# Default packages
-import os
 
-# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
-os.chdir(os.path.realpath(__file__).replace(os.path.basename(__file__), ""))
+class DamysosMWUI(Ui_MainWindow):
+    def __init__(self, settings: Settings) -> None:
+        super().__init__()
+        self.settings = settings
 
-if __name__ == "__main__":
-    # damysos.frontend.frontEnd().executeGUI()
-    DamysosApp().exec_()

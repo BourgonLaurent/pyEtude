@@ -22,7 +22,9 @@
 
 ## Imports
 # Project packages
-from .designer_ui import Ui_MainWindow
+from damysos import __version__
+from damysos.config.settings import Settings
+from .window_ui import DamysosMWUI
 
 # Default packages
 
@@ -31,8 +33,11 @@ from PySide2.QtWidgets import QMainWindow
 
 
 class DamysosMainWindow(QMainWindow):
-    def __init__(self) -> None:
+    def __init__(self, settings: Settings) -> None:
         super().__init__()
+        self.settings = settings
 
-        self.ui = Ui_MainWindow()
+        self.ui = DamysosMWUI(self.settings)
         self.ui.setupUi(self)
+
+        self.setWindowTitle(f"Damysos - v{__version__}")
