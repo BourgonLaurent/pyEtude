@@ -36,7 +36,8 @@ from PySide2.QtWidgets import QTableWidgetItem, QWidget, QPushButton
 
 class ConfigPushButton(QPushButton):
     ui: "damysos.ui.designer_ui.Ui_MainWindow"
-    clicked = cast(SignalInstance, Signal())
+
+    clicked: SignalInstance
     config_done = cast(SignalInstance, Signal())
 
     def __init__(self, parent: QWidget) -> None:
@@ -45,6 +46,7 @@ class ConfigPushButton(QPushButton):
         self.clicked.connect(self.save_config)
 
     def save_config(self):
+        print("hi")
         settings = cast(Settings, self.ui.settings)  # type: ignore
 
         settings.auteur = self.ui.auteurLineEdit.getText()

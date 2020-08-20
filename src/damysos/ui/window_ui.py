@@ -38,7 +38,7 @@ class DamysosMWUI(Ui_MainWindow):
         self.setupUi(window)
 
         self.settings = Settings.load_config_file(tab_widget=self.tabWidget)
-        self.set_settings_values()
+        # self.set_settings_values()
 
         self.configSaveButton.ui = self
         self.configSaveButton.config_done.connect(

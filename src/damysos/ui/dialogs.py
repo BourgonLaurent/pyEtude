@@ -108,7 +108,7 @@ class CalendarDialog(QDialog):
     class CustomCalendar(QCalendarWidget):
         """Modified QCalendarWidget"""
 
-        clicked = cast(SignalInstance, Signal())
+        clicked: SignalInstance
 
         def __init__(self, parent: QDialog) -> None:
             """

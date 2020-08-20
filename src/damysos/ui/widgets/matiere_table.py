@@ -21,6 +21,13 @@
 #    SOFTWARE.
 
 ## Imports
+# Project packages
+from PySide2.QtGui import QCursor
+from damysos.config.settings import DEFAULT_MATIERES
+
+# Default packages
+import locale
+
 # External packages
 from typing import cast, Tuple
 from PySide2.QtCore import Signal, SignalInstance, Slot, Qt
@@ -71,8 +78,10 @@ class MatiereTable(QWidget):
         self.tableWidget = MatiereTableWidget(parent=self)
         self.verticalLayout.addWidget(self.tableWidget)
 
-        self.control = MatiereTableControl(self)
+        self.control = MatiereTableControl(parent=self)
         self.verticalLayout.addLayout(self.control.boxlayout)
+
+        self.control.reset.pressed.connect(lambda: print("hi"))
 
 
 class MatiereTableWidget(QTableWidget):
@@ -91,7 +100,7 @@ class MatiereTableWidget(QTableWidget):
         The buttons under the MatiereTableWidget
     """
 
-    itemDoubleClicked = cast(SignalInstance, Signal())
+    itemDoubleClicked: SignalInstance
 
     def __init__(self, parent: QWidget):
         """
@@ -181,9 +190,20 @@ class MatiereTableWidget(QTableWidget):
             self.currentRow() if self.currentRow() > 0 else self.rowCount() - 1
         )
 
-    def clear(self):
+    def clear(self, set_default=False):
         """(Override) Remove everything in the table"""
         super().clear()
+
+        while self.rowCount() > 0:
+            self.remove_row()
+
+        if set_default:
+            for i, name in enumerate(sorted(DEFAULT_MATIERES, key=locale.strxfrm)):
+                self.add_row()
+                self.setTextAt((i, 0), name)
+                self.setTextAt((i, 1), DEFAULT_MATIERES[name].alias)
+                self.setTextAt((i, 2), DEFAULT_MATIERES[name].path)
+
         self.set_headers()
 
     def setTextAt(self, coords: Tuple[int, int], text: str):
@@ -239,20 +259,22 @@ class MatiereTableControl(QWidget):
 
         self.plus = QPushButton(text="+", parent=self)
         self.plus.setFixedSize(21, 24)
-        self.plus.clicked.connect(parent.tableWidget.add_row)  # type: ignore
+        # self.plus.pressed.connect(
+        #     lambda: print("hi")
+        # )  # parent.tableWidget.add_row)  # type: ignore
         self.boxlayout.addWidget(self.plus)
 
-        self.minus = QPushButton(text="-", parent=self)
-        self.minus.setFixedSize(21, 24)
-        self.minus.clicked.connect(parent.tableWidget.remove_row)  # type: ignore
-        self.boxlayout.addWidget(self.minus)
+        # self.minus = QPushButton(text="-", parent=self)
+        # self.minus.setFixedSize(21, 24)
+        # self.minus.clicked.connect(parent.tableWidget.remove_row)  # type: ignore
+        # self.boxlayout.addWidget(self.minus)
 
-        self.spacer = QSpacerItem(
-            100, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-        self.boxlayout.addItem(self.spacer)
+        # self.spacer = QSpacerItem(
+        #     100, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+        # )
+        # self.boxlayout.addItem(self.spacer)
 
         self.reset = QPushButton(text="Réinitialiser", parent=self)
         self.reset.setFixedSize(85, 24)
-        self.reset.clicked.connect(parent.tableWidget.clear)  # type: ignore
+        # self.reset.clicked.connect(parent.tableWidget.clear)  # type: ignore
         self.boxlayout.addWidget(self.reset)
