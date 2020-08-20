@@ -30,7 +30,7 @@ import locale
 
 # External packages
 from typing import cast, Tuple
-from PySide2.QtCore import Signal, SignalInstance, Slot, Qt
+from PySide2.QtCore import SignalInstance, Slot, Qt
 from PySide2.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
@@ -80,8 +80,6 @@ class MatiereTable(QWidget):
 
         self.control = MatiereTableControl(parent=self)
         self.verticalLayout.addLayout(self.control.boxlayout)
-
-        self.control.reset.pressed.connect(lambda: print("hi"))
 
 
 class MatiereTableWidget(QTableWidget):
@@ -134,7 +132,6 @@ class MatiereTableWidget(QTableWidget):
 
         super().__init__(parent=parent)  # type: ignore
         self.setColumnCount(3)
-        self.setRowCount(15)
 
         self.set_headers()
         self.set_connections()
@@ -257,24 +254,22 @@ class MatiereTableControl(QWidget):
 
         self.boxlayout = QHBoxLayout()  # type: ignore
 
-        self.plus = QPushButton(text="+", parent=self)
+        self.plus = QPushButton("+", parent=self)
         self.plus.setFixedSize(21, 24)
-        # self.plus.pressed.connect(
-        #     lambda: print("hi")
-        # )  # parent.tableWidget.add_row)  # type: ignore
+        self.plus.pressed.connect(parent.tableWidget.add_row)  # type: ignore
         self.boxlayout.addWidget(self.plus)
 
-        # self.minus = QPushButton(text="-", parent=self)
-        # self.minus.setFixedSize(21, 24)
-        # self.minus.clicked.connect(parent.tableWidget.remove_row)  # type: ignore
-        # self.boxlayout.addWidget(self.minus)
+        self.minus = QPushButton("-", parent=self)
+        self.minus.setFixedSize(21, 24)
+        self.minus.clicked.connect(parent.tableWidget.remove_row)  # type: ignore
+        self.boxlayout.addWidget(self.minus)
 
-        # self.spacer = QSpacerItem(
-        #     100, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        # )
-        # self.boxlayout.addItem(self.spacer)
+        self.spacer = QSpacerItem(
+            100, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+        )
+        self.boxlayout.addItem(self.spacer)
 
-        self.reset = QPushButton(text="Réinitialiser", parent=self)
+        self.reset = QPushButton("Réinitialiser", parent=self)
         self.reset.setFixedSize(85, 24)
-        # self.reset.clicked.connect(parent.tableWidget.clear)  # type: ignore
+        self.reset.clicked.connect(parent.tableWidget.clear)  # type: ignore
         self.boxlayout.addWidget(self.reset)

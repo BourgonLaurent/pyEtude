@@ -35,6 +35,7 @@ class DamysosApp(QApplication):
         super().__init__([])
 
         self.window = DamysosMainWindow()
+        self.setStyle("Fusion")
 
     def exec_(self) -> int:
         self.window.show()
