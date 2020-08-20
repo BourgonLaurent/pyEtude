@@ -3,6 +3,7 @@
     <file>designer_styles.qss</file>
   </qresource>
   <qresource prefix="fonts">
+    <file>fonts/Garamond_Bold.ttf</file>
     <file>fonts/Garamond_Italic.ttf</file>
     <file>fonts/Garamond_Regular.ttf</file>
     <file>fonts/Consolas_Regular.ttf</file>

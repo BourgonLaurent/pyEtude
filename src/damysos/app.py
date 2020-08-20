@@ -40,7 +40,12 @@ class DamysosApp(QApplication):
         self.setStyle("Fusion")
 
         # Load fonts
-        _fonts: List[str] = ["Garamond_Regular", "Garamond_Italic", "Consolas_Regular"]
+        _fonts: List[str] = [
+            "Garamond_Regular",
+            "Garamond_Italic",
+            "Garamond_Bold",
+            "Consolas_Regular",
+        ]
         for font in _fonts:
             QFontDatabase.addApplicationFont(f":/fonts/fonts/{font}.ttf")
 
