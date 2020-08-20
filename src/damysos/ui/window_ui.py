@@ -23,7 +23,7 @@
 ## Imports
 # Project packages
 from damysos.config.settings import Settings
-from .designer_ui import Ui_MainWindow
+from .designer.designer_ui import Ui_MainWindow
 
 # Default packages
 import locale

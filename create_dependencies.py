@@ -30,7 +30,7 @@ from typing import Dict, List, Text
 chdir(path.realpath(__file__).replace(path.basename(__file__), ""))
 
 # MODIFY THIS TO CHANGE COMPILING
-BASE_FOLDER: Text = path.join("./", "src", "damysos", "ui")
+BASE_FOLDER: str = path.join("./", "src", "damysos", "ui", "designer")
 FILES: List[str] = ["designer"]
 
 # Create an empty Dict that will hold the success codes

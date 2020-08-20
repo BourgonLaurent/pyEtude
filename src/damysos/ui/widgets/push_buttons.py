@@ -22,7 +22,7 @@
 
 ## Imports
 # Project packages
-import damysos.ui.designer_ui
+import damysos.ui.designer.designer_ui
 from damysos.config.settings import Settings
 from damysos.config.matieres import Matiere
 
@@ -35,7 +35,7 @@ from PySide2.QtWidgets import QTableWidgetItem, QWidget, QPushButton
 
 
 class ConfigPushButton(QPushButton):
-    ui: "damysos.ui.designer_ui.Ui_MainWindow"
+    ui: "damysos.ui.designer.designer_ui.Ui_MainWindow"
 
     clicked: SignalInstance
     config_done = cast(SignalInstance, Signal())

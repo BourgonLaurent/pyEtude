@@ -28,7 +28,7 @@ from .window_ui import DamysosMWUI
 # Default packages
 
 # Externals packages
-from PySide2.QtWidgets import QMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow
 
 
 class DamysosMainWindow(QMainWindow):

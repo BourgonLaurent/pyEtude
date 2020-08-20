@@ -25,17 +25,28 @@
 from .ui.window import DamysosMainWindow
 
 # Default packages
+from typing import cast
 
 # Externals packages
+from PySide2.QtCore import QFile, QIODevice, QTextStream
 from PySide2.QtWidgets import QApplication
 
 
 class DamysosApp(QApplication):
     def __init__(self) -> None:
         super().__init__([])
-
-        self.window = DamysosMainWindow()
+        # Set the global theme
         self.setStyle("Fusion")
+
+        # Load the stylesheet inside resources
+        _stylesheet = QFile(self)
+        _stylesheet.setFileName(":/styles/designer_styles.qss")
+        _stylesheet.open(cast(QIODevice.OpenMode, QIODevice.OpenModeFlag.ReadOnly))
+        self.setStyleSheet(QTextStream(_stylesheet).readAll())
+        _stylesheet.close()
+
+        # Create the mainwindow
+        self.window = DamysosMainWindow()
 
     def exec_(self) -> int:
         self.window.show()
