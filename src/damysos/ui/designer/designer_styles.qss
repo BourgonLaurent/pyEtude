@@ -1728,3 +1728,6 @@ QAbstractView:selected {
   // Fix cut labels in plots #134
   padding: 0px;
 } */
+QGroupBox:hover {
+  border-color: red;
+}

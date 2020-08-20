@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Laurent Bourgon</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="enabled">
@@ -57,7 +58,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -93,10 +94,10 @@
        <widget class="AdvancedLineEdit" name="titreLineEdit">
         <property name="geometry">
          <rect>
-          <x>12</x>
-          <y>25</y>
-          <width>281</width>
-          <height>29</height>
+          <x>0</x>
+          <y>21</y>
+          <width>301</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -107,8 +108,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
          </font>
         </property>
         <property name="alignment">
@@ -154,8 +154,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
          </font>
         </property>
         <property name="alignment">
@@ -207,8 +206,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
          </font>
         </property>
         <property name="text">
@@ -278,8 +276,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
          </font>
         </property>
         <property name="text">
@@ -337,7 +334,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
+          <family>Garamond</family>
           <pointsize>14</pointsize>
           <underline>true</underline>
          </font>
@@ -366,8 +363,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
           <underline>true</underline>
          </font>
         </property>
@@ -409,6 +405,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Garamond</family>
         <underline>true</underline>
        </font>
       </property>
@@ -478,7 +475,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
+          <family>Garamond</family>
           <pointsize>18</pointsize>
           <italic>true</italic>
          </font>
@@ -520,7 +517,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
+          <family>Garamond</family>
           <pointsize>17</pointsize>
           <italic>true</italic>
          </font>
@@ -575,7 +572,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>12</pointsize>
+           <family>Garamond</family>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -622,8 +619,7 @@
        </property>
        <property name="font">
         <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
+         <family>Garamond</family>
         </font>
        </property>
        <property name="text">
@@ -707,8 +703,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
          </font>
         </property>
         <property name="alignment">
@@ -751,8 +746,7 @@
         </property>
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Garamond</family>
          </font>
         </property>
         <property name="alignment">
@@ -799,11 +793,6 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
@@ -957,6 +946,7 @@ QListView::item:selected:hover {
       </property>
       <property name="font">
        <font>
+        <family>Garamond</family>
         <pointsize>12</pointsize>
        </font>
       </property>
@@ -1331,6 +1321,7 @@ QPushButton:selected {
       </property>
       <property name="font">
        <font>
+        <family>Garamond</family>
         <pointsize>12</pointsize>
        </font>
       </property>

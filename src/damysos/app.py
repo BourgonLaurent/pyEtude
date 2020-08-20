@@ -25,10 +25,11 @@
 from .ui.window import DamysosMainWindow
 
 # Default packages
-from typing import cast
+from typing import cast, List
 
 # Externals packages
 from PySide2.QtCore import QFile, QIODevice, QTextStream
+from PySide2.QtGui import QFontDatabase, QFont
 from PySide2.QtWidgets import QApplication
 
 
@@ -37,6 +38,11 @@ class DamysosApp(QApplication):
         super().__init__([])
         # Set the global theme
         self.setStyle("Fusion")
+
+        # Load fonts
+        _fonts: List[str] = ["Garamond_Regular", "Garamond_Italic", "Consolas_Regular"]
+        for font in _fonts:
+            QFontDatabase.addApplicationFont(f":/fonts/fonts/{font}.ttf")
 
         # Load the stylesheet inside resources
         _stylesheet = QFile(self)

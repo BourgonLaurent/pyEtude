@@ -23,7 +23,7 @@
 
 ## General parameters
 # Current version
-__version__ = r"4.0.0b10"
+__version__ = r"4.0.0b15"
 # Important files
 CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
 # Assets
