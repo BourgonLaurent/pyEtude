@@ -343,7 +343,7 @@ class Ui_MainWindow(object):
         self.modelValuesGroupBox.setGeometry(QRect(220, 5, 451, 237))
         self.formLayoutWidget_2 = QWidget(self.modelValuesGroupBox)
         self.formLayoutWidget_2.setObjectName(u"formLayoutWidget_2")
-        self.formLayoutWidget_2.setGeometry(QRect(10, 30, 431, 209))
+        self.formLayoutWidget_2.setGeometry(QRect(10, 27, 431, 201))
         self.modelValuesFormLayout = QFormLayout(self.formLayoutWidget_2)
         self.modelValuesFormLayout.setObjectName(u"modelValuesFormLayout")
         self.modelValuesFormLayout.setLabelAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
@@ -447,6 +447,7 @@ class Ui_MainWindow(object):
         self.formLayoutWidget.setGeometry(QRect(10, 30, 431, 81))
         self.modelPathsLayout = QFormLayout(self.formLayoutWidget)
         self.modelPathsLayout.setObjectName(u"modelPathsLayout")
+        self.modelPathsLayout.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)
         self.modelPathsLayout.setFormAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
         self.modelPathsLayout.setContentsMargins(0, 0, 0, 0)
         self.modelDestinationLabel = QLabel(self.formLayoutWidget)
@@ -554,7 +555,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

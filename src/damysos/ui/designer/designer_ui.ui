@@ -58,7 +58,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -985,9 +985,9 @@ QListView::item:selected:hover {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>30</y>
+         <y>27</y>
          <width>431</width>
-         <height>209</height>
+         <height>201</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="modelValuesFormLayout">
@@ -1188,6 +1188,9 @@ QListView::item:selected:hover {
         </rect>
        </property>
        <layout class="QFormLayout" name="modelPathsLayout">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
         <property name="formAlignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
