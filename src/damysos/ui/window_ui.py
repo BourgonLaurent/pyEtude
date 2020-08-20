@@ -22,9 +22,11 @@
 
 ## Imports
 # Project packages
-import damysos.ui.window
 from damysos.config.settings import Settings
 from .designer_ui import Ui_MainWindow
+
+# Default packages
+import locale
 
 # External packages
 from PySide2.QtWidgets import QMainWindow
@@ -36,15 +38,24 @@ class DamysosMWUI(Ui_MainWindow):
         self.setupUi(window)
 
         self.settings = Settings.load_config_file(tab_widget=self.tabWidget)
+        self.set_settings_values()
 
         self.configSaveButton.ui = self
         self.configSaveButton.config_done.connect(
             lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
         )
 
-        self.set_settings_values()
-
     def set_settings_values(self):
         self.auteurLineEdit.setText(self.settings.auteur)
         self.niveauLineEdit.setText(self.settings.niveau)
 
+        self.matiereTable.tableWidget.clear()
+        for i, name in enumerate(sorted(self.settings.matieres, key=locale.strxfrm)):
+            self.matiereTable.tableWidget.add_row()
+            self.matiereTable.tableWidget.setTextAt((i, 0), name)
+            self.matiereTable.tableWidget.setTextAt(
+                (i, 1), self.settings.matieres[name].alias
+            )
+            self.matiereTable.tableWidget.setTextAt(
+                (i, 2), self.settings.matieres[name].path
+            )

@@ -29,7 +29,7 @@ from typing import cast
 import os, sys
 
 # External packages
-from PySide2.QtCore import QDate, QFile, Qt, Slot
+from PySide2.QtCore import QDate, QFile, Qt, Signal, SignalInstance, Slot
 from PySide2.QtGui import QColor, QTextCharFormat
 from PySide2.QtWidgets import (
     QFileDialog,
@@ -90,7 +90,7 @@ class CalendarDialog(QDialog):
         )
 
         self.calendar = CalendarDialog.CustomCalendar(parent=self)
-        self.calendar.clicked.connect(self.QDateToString)  # type: ignore
+        self.calendar.clicked.connect(self.QDateToString)
 
     @Slot(QDate)  # type: ignore
     def QDateToString(self, qdate: QDate):
@@ -107,6 +107,8 @@ class CalendarDialog(QDialog):
 
     class CustomCalendar(QCalendarWidget):
         """Modified QCalendarWidget"""
+
+        clicked = cast(SignalInstance, Signal())
 
         def __init__(self, parent: QDialog) -> None:
             """
@@ -157,7 +159,7 @@ class DocumentCreatedMessageBox(QMessageBox):
 
         self.filepath = filepath
 
-        self.setIcon(QMessageBox.Information)  # type: ignore
+        self.setIcon(QMessageBox.Icon.Information)
         self.setWindowTitle(f"Damysos - {__version__} - Document généré")
 
         self.setText(f"Le document a été créé:\n{filepath}\n\nVoulez-vous l'ouvrir?")

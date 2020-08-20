@@ -23,7 +23,7 @@
 ## Imports
 # External packages
 from typing import cast, Tuple
-from PySide2.QtCore import Slot, Qt
+from PySide2.QtCore import Signal, SignalInstance, Slot, Qt
 from PySide2.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
@@ -90,6 +90,8 @@ class MatiereTableWidget(QTableWidget):
     control: MatiereTableControl
         The buttons under the MatiereTableWidget
     """
+
+    itemDoubleClicked = cast(SignalInstance, Signal())
 
     def __init__(self, parent: QWidget):
         """
@@ -167,7 +169,7 @@ class MatiereTableWidget(QTableWidget):
 
     def set_connections(self):
         """Connects the Signals and Slots of components"""
-        self.itemDoubleClicked.connect(self.browse_directory)  # type: ignore
+        self.itemDoubleClicked.connect(self.browse_directory)
 
     def add_row(self):
         """Add a row to the bottom of the table"""

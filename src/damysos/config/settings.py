@@ -22,17 +22,48 @@
 
 ## Imports
 # Project packages
-from .. import CONFIG_FILE
+from damysos import CONFIG_FILE
 from .matieres import Matiere
-from .models import ModelConfig
+from .models import Model, ModelConfig, ModelValues
 
 # Default packages
 import json
+import os
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict
 
 # External packages
 from damysos.ui.widgets.advanced_tab_widget import AdvancedTabWidget
+
+DEFAULT_MATIERES: Dict[str, Matiere] = {
+    "Anglais": Matiere("ANG", ""),
+    "Arts": Matiere("ART", ""),
+    "Chimie": Matiere("CHM", ""),
+    "Éducation Financière": Matiere("EFI", ""),
+    "Éducation Physique": Matiere("EDP", ""),
+    "Éthique et Culture Religieuse": Matiere("ECR", ""),
+    "Français": Matiere("FRA", ""),
+    "Mathématiques": Matiere("MAT", ""),
+    "Monde Contemporain": Matiere("MDC", ""),
+    "Physique": Matiere("PHY", ""),
+}
+
+_doc_de_rev = Model(
+    "Documents de Révision",
+    filepath=os.path.join(os.getcwd(), "Documents de Révision.docx"),
+    export_name="Documents de Révision",
+    values=ModelValues(
+        auteur="Auteur",
+        niveau="Niveau",
+        titre="Titre",
+        soustitre="Sous-Titre",
+        matiere="Matière",
+        numero="Numéro",
+        section="Section",
+    ),
+)
+
+DEFAULT_MODELS = ModelConfig(models=[_doc_de_rev], default=_doc_de_rev)
 
 
 @dataclass
@@ -89,7 +120,7 @@ class Settings:
         except FileNotFoundError:
             if tab_widget:
                 tab_widget.setConfigurationMode(in_configuration_mode=True)
-            return Settings()
+            return Settings(matieres=DEFAULT_MATIERES, modeles=DEFAULT_MODELS)
 
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, Any]):

@@ -32,7 +32,7 @@ class Matiere:
     Matière Object that represents a Word document containing Jinja2 tags
 
     Parameters
-    ----------    
+    ----------
     alias: str
         (Optional) Short name of the matière
     

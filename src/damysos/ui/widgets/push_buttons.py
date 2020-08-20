@@ -31,7 +31,7 @@ from typing import cast
 
 # External packages
 from PySide2.QtCore import Signal, SignalInstance
-from PySide2.QtWidgets import QWidget, QPushButton
+from PySide2.QtWidgets import QTableWidgetItem, QWidget, QPushButton
 
 
 class ConfigPushButton(QPushButton):
@@ -58,9 +58,10 @@ class ConfigPushButton(QPushButton):
             path = self.ui.matiereTable.tableWidget.item(row, 2)
 
             if name and alias:
-                settings.matieres[name.text()] = Matiere(alias.text(), path.text())
+                settings.matieres[name.text()] = Matiere(
+                    alias.text(), path.text() if path else ""
+                )
 
         settings.dump_config_file()
 
         self.config_done.emit()
-
