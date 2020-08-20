@@ -1218,6 +1218,12 @@ QTabWidget::pane:selected {
   border: 1px solid #605e5c;
 }
 
+#infoGroupBox QLineEdit,
+#infoConfigGroupBox QLineEdit,
+#modelGroupBox QLineEdit {
+  border: 0px solid;
+}
+
 /* QTabBar ----------------------------------------------------------------
 
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtabwidget-and-qtabbar
@@ -1722,12 +1728,4 @@ QAbstractView:hover {
 QAbstractView:selected {
   background: none;
   color: #32414B;
-}
-
-/* PlotWidget {
-  // Fix cut labels in plots #134
-  padding: 0px;
-} */
-QGroupBox:hover {
-  border-color: red;
 }
