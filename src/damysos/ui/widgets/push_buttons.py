@@ -31,7 +31,7 @@ from typing import cast
 
 # External packages
 from PySide2.QtCore import Signal, SignalInstance
-from PySide2.QtWidgets import QTableWidgetItem, QWidget, QPushButton
+from PySide2.QtWidgets import QWidget, QPushButton
 
 
 class ConfigPushButton(QPushButton):
@@ -46,7 +46,6 @@ class ConfigPushButton(QPushButton):
         self.clicked.connect(self.save_config)
 
     def save_config(self):
-        print("hi")
         settings = cast(Settings, self.ui.settings)  # type: ignore
 
         settings.auteur = self.ui.auteurLineEdit.getText()

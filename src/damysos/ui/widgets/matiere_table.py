@@ -33,6 +33,7 @@ from typing import cast, Tuple
 from PySide2.QtCore import SignalInstance, Slot, Qt
 from PySide2.QtWidgets import (
     QFileDialog,
+    QGroupBox,
     QHBoxLayout,
     QSizePolicy,
     QSpacerItem,
@@ -62,7 +63,7 @@ class MatiereTable(QWidget):
         The buttons under the MatiereTableWidget
     """
 
-    def __init__(self, parent: QWidget) -> None:
+    def __init__(self, parent: QGroupBox) -> None:
         """
         Initialize the Widget
 
@@ -80,6 +81,8 @@ class MatiereTable(QWidget):
 
         self.control = MatiereTableControl(parent=self)
         self.verticalLayout.addLayout(self.control.boxlayout)
+
+        parent.toggled.connect(self.tableWidget.clearSelection)
 
 
 class MatiereTableWidget(QTableWidget):

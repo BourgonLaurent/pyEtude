@@ -58,7 +58,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -987,7 +987,7 @@ QListView::item:selected:hover {
          <x>10</x>
          <y>27</y>
          <width>431</width>
-         <height>201</height>
+         <height>209</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="modelValuesFormLayout">
