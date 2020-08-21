@@ -63,7 +63,7 @@ _doc_de_rev = Model(
     ),
 )
 
-DEFAULT_MODELS = ModelConfig(models=[_doc_de_rev], default=_doc_de_rev)
+DEFAULT_MODELS = ModelConfig(models=[_doc_de_rev], default=_doc_de_rev.name)
 
 
 @dataclass
@@ -96,6 +96,7 @@ class Settings:
 
     auteur: str = ""
     niveau: str = ""
+    custom_matieres: bool = False
     matieres: Dict[str, Matiere] = field(default_factory=lambda: {})
     modeles: ModelConfig = ModelConfig()
 
@@ -108,13 +109,17 @@ class Settings:
                 asdict(self), config_file, sort_keys=True, indent=4, ensure_ascii=False
             )
 
+    def reset_matieres(self):
+        self.matieres = DEFAULT_MATIERES
+
     @staticmethod
     def load_config_file(tab_widget: AdvancedTabWidget = None):
         try:
             with open(CONFIG_FILE, mode="r", encoding="utf-8") as config_file:
                 config: Dict[str, Any] = json.load(config_file)
 
-            tab_widget.setConfigurationMode(in_configuration_mode=False)
+            if tab_widget:
+                tab_widget.setConfigurationMode(in_configuration_mode=False)
             return Settings.rebuild_from_dict(config)
 
         except FileNotFoundError:

@@ -274,5 +274,5 @@ class MatiereTableControl(QWidget):
 
         self.reset = QPushButton("Réinitialiser", parent=self)
         self.reset.setFixedSize(85, 24)
-        self.reset.clicked.connect(parent.tableWidget.clear)  # type: ignore
+        self.reset.clicked.connect(lambda: parent.tableWidget.clear(set_default=True))  # type: ignore
         self.boxlayout.addWidget(self.reset)

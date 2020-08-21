@@ -29,6 +29,7 @@ from .designer.designer_ui import Ui_MainWindow
 import locale
 
 # External packages
+from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QMainWindow
 
 
@@ -45,9 +46,13 @@ class DamysosMWUI(Ui_MainWindow):
             lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
         )
 
+        self.matieresConfig.toggled.connect(self.check_matieres_status)  # type: ignore
+
     def set_settings_values(self):
         self.auteurLineEdit.setText(self.settings.auteur)
         self.niveauLineEdit.setText(self.settings.niveau)
+
+        self.matieresConfig.setChecked(self.settings.custom_matieres)
 
         self.matiereTable.tableWidget.clear()
         for i, name in enumerate(sorted(self.settings.matieres, key=locale.strxfrm)):
@@ -59,3 +64,8 @@ class DamysosMWUI(Ui_MainWindow):
             self.matiereTable.tableWidget.setTextAt(
                 (i, 2), self.settings.matieres[name].path
             )
+
+    @Slot(bool)  # type: ignore
+    def check_matieres_status(self, state: bool):
+        self.matiereTable.setEnabled(state)
+        self.settings.custom_matieres = state

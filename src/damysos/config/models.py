@@ -144,7 +144,7 @@ class ModelConfig:
     models: List[Model] | None
         (Optional) List containing Model objects that can be selected
     
-    default: Model | None
+    default: str
         (Optional) The default model that is set, (must also be part of the models)
 
     Static Methods
@@ -154,7 +154,7 @@ class ModelConfig:
     """
 
     models: List[Model] = field(default_factory=lambda: [])
-    default: Optional[Model] = None
+    default: Optional[str] = None
 
     def __bool__(self):
         return bool([v for v in self.__dict__.values() if v])
