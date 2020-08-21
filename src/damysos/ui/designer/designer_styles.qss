@@ -365,7 +365,6 @@ QScrollBar:vertical {
 
 QScrollBar::handle:vertical {
   background-color: #787878;
-  /* border: 1px solid #787878; */
   min-height: 8px;
   border-radius: 4px;
 }
@@ -1706,7 +1705,8 @@ QAbstractView:selected {
   color: #32414B;
 }
 
-PlotWidget {
-  /* Fix cut labels in plots #134 */
-  padding: 0px;
+#infoGroupBox QLineEdit,
+#infoConfigGroupBox QLineEdit,
+#modelGroupBox QLineEdit {
+  border: 0px solid;
 }

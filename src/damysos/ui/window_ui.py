@@ -45,6 +45,10 @@ class DamysosMWUI(Ui_MainWindow):
             lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
         )
 
+        self.matieresConfig.toggled.connect(  # type: ignore
+            self.matiereTable.tableWidget.clearSelection
+        )
+
     def set_settings_values(self):
         self.auteurLineEdit.setText(self.settings.auteur)
         self.niveauLineEdit.setText(self.settings.niveau)
