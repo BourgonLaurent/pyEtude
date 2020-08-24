@@ -287,9 +287,6 @@ class frontEnd:
                 self.ui.matLineEdit.setEnabled(False)
                 self.ui.matLineEdit.setText(self.matieres[selection.text()][0])
 
-                if selection.text() == "Automatique":
-                    self.checkNumMat()
-
         self.matiere = "PHY"
 
         matMenu = QMenu("matMenu", self.window)

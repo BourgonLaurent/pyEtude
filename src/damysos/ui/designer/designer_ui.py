@@ -21,7 +21,7 @@ from damysos.ui.widgets.matiere_table import MatiereTable
 from damysos.ui.widgets.line_edits import AdvancedLineEdit
 from damysos.ui.widgets.advanced_tab_widget import AdvancedTabWidget
 from damysos.ui.widgets.push_buttons import ConfigPushButton
-from damysos.ui.widgets.push_buttons import MenuPushButton
+from damysos.ui.widgets.push_buttons import MatiereMenuPushButton
 
 from  . import designer_resources_rc
 
@@ -95,11 +95,11 @@ class Ui_MainWindow(object):
         self.matLineEdit.setFrame(True)
         self.matLineEdit.setAlignment(Qt.AlignCenter)
         self.matLineEdit.setClearButtonEnabled(False)
-        self.matToolButton = MenuPushButton(self.matGroupBox)
-        self.matToolButton.setObjectName(u"matToolButton")
-        self.matToolButton.setGeometry(QRect(106, 25, 20, 29))
-        self.matToolButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.matToolButton.raise_()
+        self.matMenuButton = MatiereMenuPushButton(self.matGroupBox)
+        self.matMenuButton.setObjectName(u"matMenuButton")
+        self.matMenuButton.setGeometry(QRect(106, 25, 20, 29))
+        self.matMenuButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.matMenuButton.raise_()
         self.matLineEdit.raise_()
         self.numGroupBox = QGroupBox(self.infoGroupBox)
         self.numGroupBox.setObjectName(u"numGroupBox")
@@ -113,11 +113,11 @@ class Ui_MainWindow(object):
         self.numLineEdit.setFont(font)
         self.numLineEdit.setAlignment(Qt.AlignCenter)
         self.numLineEdit.setClearButtonEnabled(False)
-        self.numToolButton = QPushButton(self.numGroupBox)
-        self.numToolButton.setObjectName(u"numToolButton")
-        self.numToolButton.setGeometry(QRect(106, 25, 21, 29))
-        self.numToolButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.numToolButton.raise_()
+        self.numMenuButton = MatiereMenuPushButton(self.numGroupBox)
+        self.numMenuButton.setObjectName(u"numMenuButton")
+        self.numMenuButton.setGeometry(QRect(106, 25, 21, 29))
+        self.numMenuButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.numMenuButton.raise_()
         self.numLineEdit.raise_()
         self.sectionGroupBox = QGroupBox(self.infoGroupBox)
         self.sectionGroupBox.setObjectName(u"sectionGroupBox")
@@ -571,11 +571,11 @@ class Ui_MainWindow(object):
         self.matGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"Mati\u00e8re", None))
         self.matLineEdit.setText("")
         self.matLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"PHY", None))
-        self.matToolButton.setText("")
+        self.matMenuButton.setText("")
         self.numGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"Num\u00e9ro", None))
         self.numLineEdit.setText("")
         self.numLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"0624", None))
-        self.numToolButton.setText("")
+        self.numMenuButton.setText("")
         self.sectionGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"Premi\u00e8re Section", None))
         self.sectionNumLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:14pt; text-decoration: underline;\">1.</span></p></body></html>", None))
         self.sectionLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"La Loi de l'Inertie", None))

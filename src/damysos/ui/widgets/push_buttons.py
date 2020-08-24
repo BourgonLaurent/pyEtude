@@ -28,11 +28,18 @@ from damysos.config.settings import Settings
 from damysos.config.matieres import Matiere
 
 # Default packages
+import locale
 from typing import cast
 
 # External packages
-from PySide2.QtCore import Signal, SignalInstance, Slot
-from PySide2.QtWidgets import QActionGroup, QLineEdit, QMenu, QWidget, QPushButton
+from PySide2.QtCore import Qt, Signal, SignalInstance, Slot
+from PySide2.QtWidgets import (
+    QAction,
+    QActionGroup,
+    QMenu,
+    QWidget,
+    QPushButton,
+)
 
 
 class ConfigPushButton(QPushButton):
@@ -47,7 +54,7 @@ class ConfigPushButton(QPushButton):
         self.clicked.connect(self.save_config)
 
     def save_config(self):
-        settings = cast(Settings, self.ui.settings)  # type: ignore
+        settings: Settings = self.ui.settings  # type: ignore
 
         settings.auteur = self.ui.auteurLineEdit.getText()
         settings.niveau = self.ui.niveauLineEdit.getText()
@@ -69,19 +76,45 @@ class ConfigPushButton(QPushButton):
         self.config_done.emit()
 
 
-class MenuPushButton(QPushButton):
-    pressed: SignalInstance
-
-    settings: Settings
+class MatiereMenuPushButton(QPushButton):
+    # ui: "damysos.ui.designer.designer_ui.Ui_MainWindow"
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(text="", parent=parent)
 
-        self.line_edit = cast(
-            SafeAdvancedLineEdit, self.parentWidget().findChild(QLineEdit)
-        )
-
-        self.setMenu(QMenu("custom_menu", self))
+        self.setMenu(QMenu("matMenu", self))
 
         self.action_group = QActionGroup(self.menu())
         self.action_group.setExclusive(True)
+
+        self.menu().triggered.connect(self.action_changed)  # type: ignore
+
+    def refresh_menu(self, ui: "damysos.ui.designer.designer_ui.Ui_MainWindow"):
+        self.ui = ui
+        self.settings: Settings = self.ui.settings  # type: ignore
+
+        for _action in self.menu().actions():
+            self.menu().removeAction(_action)
+
+        for matiere in sorted(self.settings.matieres.keys(), key=locale.strxfrm):
+            self.add_action(QAction(matiere))
+
+        self.menu().addSeparator()
+        self.action_personalize = self.add_action(QAction("Personnaliser"))
+
+    def add_action(self, action: QAction) -> QAction:
+        action.setCheckable(True)
+        self.menu().addAction(self.action_group.addAction(action))  # type: ignore
+        return action
+
+    @Slot(str)  # type: ignore
+    def action_changed(self, selection: QAction):
+        if selection == self.action_personalize:
+            self.ui.matLineEdit.setEnabled(True)
+            self.ui.matLineEdit.clear()
+            self.ui.matLineEdit.setFocus(Qt.FocusReason.MenuBarFocusReason)
+        else:
+            self.ui.matLineEdit.setEnabled(False)
+            _alias = self.settings.matieres[selection.text()].alias
+            self.ui.matLineEdit.setText(_alias)
+

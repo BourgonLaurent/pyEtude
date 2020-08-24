@@ -225,7 +225,7 @@
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="MenuPushButton" name="matToolButton">
+       <widget class="MatiereMenuPushButton" name="matMenuButton">
         <property name="geometry">
          <rect>
           <x>106</x>
@@ -241,7 +241,7 @@
          <string/>
         </property>
        </widget>
-       <zorder>matToolButton</zorder>
+       <zorder>matMenuButton</zorder>
        <zorder>matLineEdit</zorder>
       </widget>
       <widget class="QGroupBox" name="numGroupBox">
@@ -292,7 +292,7 @@
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="numToolButton">
+       <widget class="MatiereMenuPushButton" name="numMenuButton">
         <property name="geometry">
          <rect>
           <x>106</x>
@@ -308,7 +308,7 @@
          <string/>
         </property>
        </widget>
-       <zorder>numToolButton</zorder>
+       <zorder>numMenuButton</zorder>
        <zorder>numLineEdit</zorder>
       </widget>
       <widget class="QGroupBox" name="sectionGroupBox">
@@ -1410,7 +1410,7 @@ QPushButton:selected {
    <header>damysos/ui/widgets/push_buttons.h</header>
   </customwidget>
   <customwidget>
-   <class>MenuPushButton</class>
+   <class>MatiereMenuPushButton</class>
    <extends>QPushButton</extends>
    <header>damysos/ui/widgets/push_buttons.h</header>
   </customwidget>

@@ -29,8 +29,8 @@ from .designer.designer_ui import Ui_MainWindow
 import locale
 
 # External packages
-from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QMainWindow
+from PySide2.QtCore import Slot, Qt
+from PySide2.QtWidgets import QAction, QMainWindow
 
 
 class DamysosMWUI(Ui_MainWindow):
@@ -41,9 +41,14 @@ class DamysosMWUI(Ui_MainWindow):
         self.settings = Settings.load_config_file(tab_widget=self.tabWidget)
         self.set_settings_values()
 
+        self.matMenuButton.refresh_menu(self)
+
         self.configSaveButton.ui = self
         self.configSaveButton.config_done.connect(
             lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
+        )
+        self.configSaveButton.config_done.connect(
+            lambda: self.matMenuButton.refresh_menu(self)
         )
 
         self.matieresConfig.toggled.connect(self.check_matieres_status)  # type: ignore
