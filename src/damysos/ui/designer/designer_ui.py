@@ -22,6 +22,7 @@ from damysos.ui.widgets.line_edits import AdvancedLineEdit
 from damysos.ui.widgets.advanced_tab_widget import AdvancedTabWidget
 from damysos.ui.widgets.push_buttons import ConfigPushButton
 from damysos.ui.widgets.push_buttons import MatiereMenuPushButton
+from damysos.ui.widgets.push_buttons import NumeroMenuPushButton
 
 from  . import designer_resources_rc
 
@@ -113,7 +114,7 @@ class Ui_MainWindow(object):
         self.numLineEdit.setFont(font)
         self.numLineEdit.setAlignment(Qt.AlignCenter)
         self.numLineEdit.setClearButtonEnabled(False)
-        self.numMenuButton = MatiereMenuPushButton(self.numGroupBox)
+        self.numMenuButton = NumeroMenuPushButton(self.numGroupBox)
         self.numMenuButton.setObjectName(u"numMenuButton")
         self.numMenuButton.setGeometry(QRect(106, 25, 21, 29))
         self.numMenuButton.setCursor(QCursor(Qt.PointingHandCursor))
@@ -324,7 +325,7 @@ class Ui_MainWindow(object):
         self.modelListMinus.setCursor(QCursor(Qt.PointingHandCursor))
         self.modelWikiLink = QLabel(self.modelTab)
         self.modelWikiLink.setObjectName(u"modelWikiLink")
-        self.modelWikiLink.setGeometry(QRect(16, 409, 280, 31))
+        self.modelWikiLink.setGeometry(QRect(16, 409, 191, 31))
         font5 = QFont()
         font5.setFamily(u"Garamond")
         font5.setPointSize(12)
@@ -513,12 +514,12 @@ class Ui_MainWindow(object):
         self.modelDefaultPushButton = QPushButton(self.modelTab)
         self.modelDefaultPushButton.setObjectName(u"modelDefaultPushButton")
         self.modelDefaultPushButton.setEnabled(False)
-        self.modelDefaultPushButton.setGeometry(QRect(220, 370, 111, 21))
+        self.modelDefaultPushButton.setGeometry(QRect(220, 370, 131, 21))
         self.modelDefaultPushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.modelApplyPushButton = QPushButton(self.modelTab)
         self.modelApplyPushButton.setObjectName(u"modelApplyPushButton")
         self.modelApplyPushButton.setEnabled(True)
-        self.modelApplyPushButton.setGeometry(QRect(470, 370, 201, 61))
+        self.modelApplyPushButton.setGeometry(QRect(470, 370, 201, 63))
         self.modelApplyPushButton.setFont(font5)
         self.modelApplyPushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.tabWidget.addTab(self.modelTab, "")
@@ -556,7 +557,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

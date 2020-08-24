@@ -58,7 +58,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -292,7 +292,7 @@
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="MatiereMenuPushButton" name="numMenuButton">
+       <widget class="NumeroMenuPushButton" name="numMenuButton">
         <property name="geometry">
          <rect>
           <x>106</x>
@@ -921,7 +921,7 @@ QListView::item:selected:hover {
        <rect>
         <x>16</x>
         <y>409</y>
-        <width>280</width>
+        <width>191</width>
         <height>31</height>
        </rect>
       </property>
@@ -1280,7 +1280,7 @@ QPushButton:selected {
        <rect>
         <x>220</x>
         <y>370</y>
-        <width>111</width>
+        <width>131</width>
         <height>21</height>
        </rect>
       </property>
@@ -1300,7 +1300,7 @@ QPushButton:selected {
         <x>470</x>
         <y>370</y>
         <width>201</width>
-        <height>61</height>
+        <height>63</height>
        </rect>
       </property>
       <property name="font">
@@ -1411,6 +1411,11 @@ QPushButton:selected {
   </customwidget>
   <customwidget>
    <class>MatiereMenuPushButton</class>
+   <extends>QPushButton</extends>
+   <header>damysos/ui/widgets/push_buttons.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumeroMenuPushButton</class>
    <extends>QPushButton</extends>
    <header>damysos/ui/widgets/push_buttons.h</header>
   </customwidget>
