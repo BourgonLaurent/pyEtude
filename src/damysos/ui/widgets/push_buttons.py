@@ -77,10 +77,13 @@ class ConfigPushButton(QPushButton):
 
 
 class MatiereMenuPushButton(QPushButton):
-    # ui: "damysos.ui.designer.designer_ui.Ui_MainWindow"
+    settings: Settings
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(text="", parent=parent)
+        self.line_edit = cast(
+            SafeAdvancedLineEdit, self.parent().findChild(SafeAdvancedLineEdit)
+        )
 
         self.setMenu(QMenu("matMenu", self))
 
@@ -89,9 +92,8 @@ class MatiereMenuPushButton(QPushButton):
 
         self.menu().triggered.connect(self.action_changed)  # type: ignore
 
-    def refresh_menu(self, ui: "damysos.ui.designer.designer_ui.Ui_MainWindow"):
-        self.ui = ui
-        self.settings: Settings = self.ui.settings  # type: ignore
+    def refresh_menu(self, settings: Settings):
+        self.settings = settings
 
         for _action in self.menu().actions():
             self.menu().removeAction(_action)
@@ -110,11 +112,11 @@ class MatiereMenuPushButton(QPushButton):
     @Slot(str)  # type: ignore
     def action_changed(self, selection: QAction):
         if selection == self.action_personalize:
-            self.ui.matLineEdit.setEnabled(True)
-            self.ui.matLineEdit.clear()
-            self.ui.matLineEdit.setFocus(Qt.FocusReason.MenuBarFocusReason)
+            self.line_edit.setEnabled(True)
+            self.line_edit.clear()
+            self.line_edit.setFocus(Qt.FocusReason.MenuBarFocusReason)
         else:
-            self.ui.matLineEdit.setEnabled(False)
+            self.line_edit.setEnabled(False)
             _alias = self.settings.matieres[selection.text()].alias
-            self.ui.matLineEdit.setText(_alias)
+            self.line_edit.setText(_alias)
 
