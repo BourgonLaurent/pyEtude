@@ -120,3 +120,47 @@ class MatiereMenuPushButton(QPushButton):
             _alias = self.settings.matieres[selection.text()].alias
             self.line_edit.setText(_alias)
 
+
+class NumeroMenuPushButton(QPushButton):
+    settings: Settings
+
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(text="", parent=parent)
+        self.line_edit = cast(
+            SafeAdvancedLineEdit, self.parent().findChild(SafeAdvancedLineEdit)
+        )
+
+        self.setMenu(QMenu("numMenu", self))
+
+        self.action_group = QActionGroup(self.menu())
+        self.action_group.setExclusive(True)
+
+        self.menu().triggered.connect(self.action_changed)  # type: ignore
+
+    def refresh_menu(self, settings: Settings):
+        self.settings = settings
+
+        for _action in self.menu().actions():
+            self.menu().removeAction(_action)
+
+        for matiere in sorted(self.settings.matieres.keys(), key=locale.strxfrm):
+            self.add_action(QAction(matiere))
+
+        self.menu().addSeparator()
+        self.action_personalize = self.add_action(QAction("Personnaliser"))
+
+    def add_action(self, action: QAction) -> QAction:
+        action.setCheckable(True)
+        self.menu().addAction(self.action_group.addAction(action))  # type: ignore
+        return action
+
+    @Slot(str)  # type: ignore
+    def action_changed(self, selection: QAction):
+        if selection == self.action_personalize:
+            self.line_edit.setEnabled(True)
+            self.line_edit.clear()
+            self.line_edit.setFocus(Qt.FocusReason.MenuBarFocusReason)
+        else:
+            self.line_edit.setEnabled(False)
+            _alias = self.settings.matieres[selection.text()].alias
+            self.line_edit.setText(_alias)

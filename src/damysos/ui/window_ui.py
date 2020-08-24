@@ -42,13 +42,17 @@ class DamysosMWUI(Ui_MainWindow):
         self.set_settings_values()
 
         self.matMenuButton.refresh_menu(self.settings)
+        self.numMenuButton.refresh_menu(self.settings)
 
         self.configSaveButton.ui = self
         self.configSaveButton.config_done.connect(
             lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
         )
         self.configSaveButton.config_done.connect(
-            lambda: self.matMenuButton.refresh_menu(self)
+            lambda: self.matMenuButton.refresh_menu(self.settings)
+        )
+        self.configSaveButton.config_done.connect(
+            lambda: self.numMenuButton.refresh_menu(self.settings)
         )
 
         self.matieresConfig.toggled.connect(self.check_matieres_status)  # type: ignore
@@ -69,6 +73,12 @@ class DamysosMWUI(Ui_MainWindow):
             self.matiereTable.tableWidget.setTextAt(
                 (i, 2), self.settings.matieres[name].path
             )
+
+    @Slot()  # type: ignore
+    def refresh_configuration(self):
+        self.tabWidget.setConfigurationMode(in_configuration_mode=False)
+        self.matMenuButton.refresh_menu(self.settings)
+        self.numMenuButton.refresh_menu(self.settings)
 
     @Slot(bool)  # type: ignore
     def check_matieres_status(self, state: bool):
