@@ -23,6 +23,7 @@
 ## Imports
 # Project packages
 import damysos.ui.designer.designer_ui
+from damysos.ui.widgets.line_edits import SafeAdvancedLineEdit
 from damysos.config.settings import Settings
 from damysos.config.matieres import Matiere
 
@@ -30,8 +31,8 @@ from damysos.config.matieres import Matiere
 from typing import cast
 
 # External packages
-from PySide2.QtCore import Signal, SignalInstance
-from PySide2.QtWidgets import QWidget, QPushButton
+from PySide2.QtCore import Signal, SignalInstance, Slot
+from PySide2.QtWidgets import QActionGroup, QLineEdit, QMenu, QWidget, QPushButton
 
 
 class ConfigPushButton(QPushButton):
@@ -66,3 +67,21 @@ class ConfigPushButton(QPushButton):
         settings.dump_config_file()
 
         self.config_done.emit()
+
+
+class MenuPushButton(QPushButton):
+    pressed: SignalInstance
+
+    settings: Settings
+
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(text="", parent=parent)
+
+        self.line_edit = cast(
+            SafeAdvancedLineEdit, self.parentWidget().findChild(QLineEdit)
+        )
+
+        self.setMenu(QMenu("custom_menu", self))
+
+        self.action_group = QActionGroup(self.menu())
+        self.action_group.setExclusive(True)

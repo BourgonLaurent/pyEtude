@@ -225,7 +225,7 @@
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="matToolButton">
+       <widget class="MenuPushButton" name="matToolButton">
         <property name="geometry">
          <rect>
           <x>106</x>
@@ -1406,6 +1406,11 @@ QPushButton:selected {
   </customwidget>
   <customwidget>
    <class>ConfigPushButton</class>
+   <extends>QPushButton</extends>
+   <header>damysos/ui/widgets/push_buttons.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MenuPushButton</class>
    <extends>QPushButton</extends>
    <header>damysos/ui/widgets/push_buttons.h</header>
   </customwidget>

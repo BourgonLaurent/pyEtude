@@ -21,6 +21,7 @@ from damysos.ui.widgets.matiere_table import MatiereTable
 from damysos.ui.widgets.line_edits import AdvancedLineEdit
 from damysos.ui.widgets.advanced_tab_widget import AdvancedTabWidget
 from damysos.ui.widgets.push_buttons import ConfigPushButton
+from damysos.ui.widgets.push_buttons import MenuPushButton
 
 from  . import designer_resources_rc
 
@@ -94,7 +95,7 @@ class Ui_MainWindow(object):
         self.matLineEdit.setFrame(True)
         self.matLineEdit.setAlignment(Qt.AlignCenter)
         self.matLineEdit.setClearButtonEnabled(False)
-        self.matToolButton = QPushButton(self.matGroupBox)
+        self.matToolButton = MenuPushButton(self.matGroupBox)
         self.matToolButton.setObjectName(u"matToolButton")
         self.matToolButton.setGeometry(QRect(106, 25, 20, 29))
         self.matToolButton.setCursor(QCursor(Qt.PointingHandCursor))
