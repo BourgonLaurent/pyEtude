@@ -22,11 +22,15 @@
 
 ## Imports
 # Project packages
+from typing import List
 from damysos.config.settings import Settings
+from damysos.ui.dialogs import AutomaticNumberMessageBox
 from .designer.designer_ui import Ui_MainWindow
 
 # Default packages
 import locale
+import os
+from typing import Union
 
 # External packages
 from PySide2.QtCore import Slot, Qt
@@ -37,23 +41,17 @@ class DamysosMWUI(Ui_MainWindow):
     def __init__(self, window: QMainWindow):
         super().__init__()
         self.setupUi(window)
+        self.window = window
 
         self.settings = Settings.load_config_file(tab_widget=self.tabWidget)
         self.set_settings_values()
 
         self.matMenuButton.refresh_menu(self.settings)
-        self.numMenuButton.refresh_menu(self.settings)
+        self.matMenuButton.requestAutomaticCheck.connect(self.check_automatic_file)
+        self.numMenuButton.requestAutomaticCheck.connect(self.check_automatic_file)
 
         self.configSaveButton.ui = self
-        self.configSaveButton.config_done.connect(
-            lambda: self.tabWidget.setConfigurationMode(in_configuration_mode=False)
-        )
-        self.configSaveButton.config_done.connect(
-            lambda: self.matMenuButton.refresh_menu(self.settings)
-        )
-        self.configSaveButton.config_done.connect(
-            lambda: self.numMenuButton.refresh_menu(self.settings)
-        )
+        self.configSaveButton.config_done.connect(self.refresh_configuration)
 
         self.matieresConfig.toggled.connect(self.check_matieres_status)  # type: ignore
 
@@ -74,11 +72,77 @@ class DamysosMWUI(Ui_MainWindow):
                 (i, 2), self.settings.matieres[name].path
             )
 
+    def get_matiere_path(self) -> str:
+        if not self.matMenuButton.action_personalize.isChecked():
+            for matiere in self.settings.matieres.values():
+                if matiere.alias == self.matLineEdit.getText() and matiere.path:
+                    return matiere.path
+
+        return os.getcwd()
+
     @Slot()  # type: ignore
     def refresh_configuration(self):
         self.tabWidget.setConfigurationMode(in_configuration_mode=False)
         self.matMenuButton.refresh_menu(self.settings)
-        self.numMenuButton.refresh_menu(self.settings)
+
+    @Slot(str)  # type: ignore
+    def check_automatic_file(self, prefix: Union[str, None]):
+        def findFiles(prefix) -> List[str]:
+            matpath = os.path.join(self.get_matiere_path(), "Documents de Révision")
+            try:
+                return [
+                    f
+                    for f in os.listdir(matpath)
+                    if os.path.isfile(os.path.join(matpath, f))
+                    and f.startswith(f"{matiere}-{prefix}")
+                    and f.endswith(".docx")
+                ]
+
+            except FileNotFoundError:
+                return []
+
+        matiere = self.matLineEdit.getText()
+        if not prefix:
+            prefix = "CHP"
+
+        matched_files = findFiles(prefix)
+        if not matched_files:
+            matched_files = findFiles("MOD")
+
+            if matched_files:
+                prefix = "MOD"
+
+        new_name = str()
+
+        if matched_files:
+            new_name = prefix + (
+                str(
+                    int(
+                        max(matched_files)
+                        .replace(f"{matiere}-{prefix}", "")
+                        .replace(".docx", "")
+                    )
+                    + 1
+                )
+            )
+
+            if not self.numMenuButton.action_automatic.isChecked():
+                auto_num = AutomaticNumberMessageBox(
+                    self.window, f"{matiere}-{new_name}"
+                )
+
+                if auto_num.exec_():
+                    self.numMenuButton.action_automatic.setChecked(False)
+                    return
+                else:
+                    self.numMenuButton.action_automatic.setChecked(True)
+
+        elif self.numMenuButton.action_automatic.isChecked():
+            new_name = f"{prefix}1"
+
+        if new_name:
+            self.numLineEdit.setEnabled(False)
+            self.numLineEdit.setText(new_name)
 
     @Slot(bool)  # type: ignore
     def check_matieres_status(self, state: bool):

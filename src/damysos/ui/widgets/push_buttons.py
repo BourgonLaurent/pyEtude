@@ -23,6 +23,7 @@
 ## Imports
 # Project packages
 import damysos.ui.designer.designer_ui
+from damysos.ui.dialogs import CalendarDialog
 from damysos.ui.widgets.line_edits import SafeAdvancedLineEdit
 from damysos.config.settings import Settings
 from damysos.config.matieres import Matiere
@@ -78,11 +79,12 @@ class ConfigPushButton(QPushButton):
 
 class MatiereMenuPushButton(QPushButton):
     settings: Settings
+    requestAutomaticCheck = cast(SignalInstance, Signal(str))
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(text="", parent=parent)
         self.line_edit = cast(
-            SafeAdvancedLineEdit, self.parent().findChild(SafeAdvancedLineEdit)
+            SafeAdvancedLineEdit, parent.findChild(SafeAdvancedLineEdit)
         )
 
         self.setMenu(QMenu("matMenu", self))
@@ -99,12 +101,13 @@ class MatiereMenuPushButton(QPushButton):
             self.menu().removeAction(_action)
 
         for matiere in sorted(self.settings.matieres.keys(), key=locale.strxfrm):
-            self.add_action(QAction(matiere))
+            self.add_action(matiere)
 
         self.menu().addSeparator()
-        self.action_personalize = self.add_action(QAction("Personnaliser"))
+        self.action_personalize = self.add_action("Personnaliser")
 
-    def add_action(self, action: QAction) -> QAction:
+    def add_action(self, text: str) -> QAction:
+        action = QAction(text)
         action.setCheckable(True)
         self.menu().addAction(self.action_group.addAction(action))  # type: ignore
         return action
@@ -119,15 +122,16 @@ class MatiereMenuPushButton(QPushButton):
             self.line_edit.setEnabled(False)
             _alias = self.settings.matieres[selection.text()].alias
             self.line_edit.setText(_alias)
+            self.requestAutomaticCheck.emit(None)
 
 
 class NumeroMenuPushButton(QPushButton):
-    settings: Settings
+    requestAutomaticCheck = cast(SignalInstance, Signal(str))
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(text="", parent=parent)
         self.line_edit = cast(
-            SafeAdvancedLineEdit, self.parent().findChild(SafeAdvancedLineEdit)
+            SafeAdvancedLineEdit, parent.findChild(SafeAdvancedLineEdit)
         )
 
         self.setMenu(QMenu("numMenu", self))
@@ -135,32 +139,54 @@ class NumeroMenuPushButton(QPushButton):
         self.action_group = QActionGroup(self.menu())
         self.action_group.setExclusive(True)
 
+        # Content prefix
+        self.action_chapter = self.menu().addMenu("Chapitre")
+        self.action_module = self.menu().addMenu("Module")
+
+        for alias, action_menu in {
+            "CHP": self.action_chapter,
+            "MOD": self.action_module,
+        }.items():
+            for i in range(20):
+                _action = QAction(f"{alias}{i}")
+                _action.setCheckable(True)
+                action_menu.addAction(self.action_group.addAction(_action))  # type: ignore
+
+        # Date prefix
+        self.action_calendar = self.add_action("Choisir une date")
+        self.menu().addSeparator()
+        # Automatic
+        self.action_automatic = self.add_action("Automatique")
+        # Custom
+        self.action_personalize = self.add_action("Personnaliser")
+
         self.menu().triggered.connect(self.action_changed)  # type: ignore
 
-    def refresh_menu(self, settings: Settings):
-        self.settings = settings
-
-        for _action in self.menu().actions():
-            self.menu().removeAction(_action)
-
-        for matiere in sorted(self.settings.matieres.keys(), key=locale.strxfrm):
-            self.add_action(QAction(matiere))
-
-        self.menu().addSeparator()
-        self.action_personalize = self.add_action(QAction("Personnaliser"))
-
-    def add_action(self, action: QAction) -> QAction:
+    def add_action(self, text: str) -> QAction:
+        action = QAction(text)
         action.setCheckable(True)
         self.menu().addAction(self.action_group.addAction(action))  # type: ignore
         return action
 
     @Slot(str)  # type: ignore
     def action_changed(self, selection: QAction):
-        if selection == self.action_personalize:
+        if selection == self.action_calendar:
+            calendar_dialog = CalendarDialog(self)
+            calendar_dialog.exec_()
+            try:
+                self.line_edit.setText(calendar_dialog.date)
+            except AttributeError:
+                return
+
+        if selection == self.action_automatic:
+            self.requestAutomaticCheck.emit(None)
+
+        elif selection == self.action_personalize:
             self.line_edit.setEnabled(True)
             self.line_edit.clear()
             self.line_edit.setFocus(Qt.FocusReason.MenuBarFocusReason)
+
         else:
             self.line_edit.setEnabled(False)
-            _alias = self.settings.matieres[selection.text()].alias
-            self.line_edit.setText(_alias)
+            self.line_edit.setText(selection.text())
+            self.requestAutomaticCheck.emit(selection.text()[:3])
