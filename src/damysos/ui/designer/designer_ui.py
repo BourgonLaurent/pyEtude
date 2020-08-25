@@ -15,7 +15,7 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
     QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 
-from damysos.ui.widgets.version_label import VersionLabel
+from damysos.ui.widgets.labels import VersionLabel
 from damysos.ui.widgets.line_edits import SafeAdvancedLineEdit
 from damysos.ui.widgets.matiere_table import MatiereTable
 from damysos.ui.widgets.line_edits import AdvancedLineEdit
@@ -23,6 +23,7 @@ from damysos.ui.widgets.advanced_tab_widget import AdvancedTabWidget
 from damysos.ui.widgets.push_buttons import ConfigPushButton
 from damysos.ui.widgets.push_buttons import MatiereMenuPushButton
 from damysos.ui.widgets.push_buttons import NumeroMenuPushButton
+from damysos.ui.widgets.labels import PathMenuLabel
 
 from  . import designer_resources_rc
 
@@ -140,27 +141,14 @@ class Ui_MainWindow(object):
         self.sectionLineEdit.setMaxLength(32767)
         self.sectionLineEdit.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
         self.sectionLineEdit.setClearButtonEnabled(True)
-        self.pathPathLabel = QLabel(self.genTab)
-        self.pathPathLabel.setObjectName(u"pathPathLabel")
-        self.pathPathLabel.setGeometry(QRect(350, 170, 321, 211))
-        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.pathPathLabel.sizePolicy().hasHeightForWidth())
-        self.pathPathLabel.setSizePolicy(sizePolicy2)
-        self.pathPathLabel.setMaximumSize(QSize(321, 16777215))
-        self.pathPathLabel.setCursor(QCursor(Qt.ArrowCursor))
-        self.pathPathLabel.setAlignment(Qt.AlignBottom|Qt.AlignJustify)
-        self.pathPathLabel.setWordWrap(True)
-        self.pathPathLabel.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
         self.infoPersoGroupBox = QGroupBox(self.genTab)
         self.infoPersoGroupBox.setObjectName(u"infoPersoGroupBox")
         self.infoPersoGroupBox.setGeometry(QRect(350, 10, 319, 151))
-        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.infoPersoGroupBox.sizePolicy().hasHeightForWidth())
-        self.infoPersoGroupBox.setSizePolicy(sizePolicy3)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.infoPersoGroupBox.sizePolicy().hasHeightForWidth())
+        self.infoPersoGroupBox.setSizePolicy(sizePolicy2)
         self.infoPersoGroupBox.setMinimumSize(QSize(0, 0))
         self.auteurPersoGroupBox = QGroupBox(self.infoPersoGroupBox)
         self.auteurPersoGroupBox.setObjectName(u"auteurPersoGroupBox")
@@ -212,11 +200,11 @@ class Ui_MainWindow(object):
         self.genPushButton = QPushButton(self.genTab)
         self.genPushButton.setObjectName(u"genPushButton")
         self.genPushButton.setGeometry(QRect(440, 381, 150, 55))
-        sizePolicy4 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.genPushButton.sizePolicy().hasHeightForWidth())
-        self.genPushButton.setSizePolicy(sizePolicy4)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.genPushButton.sizePolicy().hasHeightForWidth())
+        self.genPushButton.setSizePolicy(sizePolicy3)
         self.genPushButton.setMinimumSize(QSize(150, 0))
         font4 = QFont()
         font4.setFamily(u"Garamond")
@@ -225,6 +213,34 @@ class Ui_MainWindow(object):
         font4.setWeight(75)
         self.genPushButton.setFont(font4)
         self.genPushButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.verticalLayoutWidget_2 = QWidget(self.genTab)
+        self.verticalLayoutWidget_2.setObjectName(u"verticalLayoutWidget_2")
+        self.verticalLayoutWidget_2.setGeometry(QRect(350, 170, 323, 211))
+        self.pathLayout = QVBoxLayout(self.verticalLayoutWidget_2)
+        self.pathLayout.setObjectName(u"pathLayout")
+        self.pathLayout.setContentsMargins(0, 0, 0, 5)
+        self.pathSpacer = QSpacerItem(0, 1000, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.pathLayout.addItem(self.pathSpacer)
+
+        self.pathPathLabel = PathMenuLabel(self.verticalLayoutWidget_2)
+        self.pathPathLabel.setObjectName(u"pathPathLabel")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.MinimumExpanding)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.pathPathLabel.sizePolicy().hasHeightForWidth())
+        self.pathPathLabel.setSizePolicy(sizePolicy4)
+        self.pathPathLabel.setMaximumSize(QSize(321, 16777215))
+        font5 = QFont()
+        font5.setUnderline(True)
+        self.pathPathLabel.setFont(font5)
+        self.pathPathLabel.setCursor(QCursor(Qt.ArrowCursor))
+        self.pathPathLabel.setAlignment(Qt.AlignBottom|Qt.AlignJustify)
+        self.pathPathLabel.setWordWrap(True)
+        self.pathPathLabel.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
+
+        self.pathLayout.addWidget(self.pathPathLabel)
+
         self.tabWidget.addTab(self.genTab, "")
         self.configTab = QWidget()
         self.configTab.setObjectName(u"configTab")
@@ -326,10 +342,10 @@ class Ui_MainWindow(object):
         self.modelWikiLink = QLabel(self.modelTab)
         self.modelWikiLink.setObjectName(u"modelWikiLink")
         self.modelWikiLink.setGeometry(QRect(16, 409, 191, 31))
-        font5 = QFont()
-        font5.setFamily(u"Garamond")
-        font5.setPointSize(12)
-        self.modelWikiLink.setFont(font5)
+        font6 = QFont()
+        font6.setFamily(u"Garamond")
+        font6.setPointSize(12)
+        self.modelWikiLink.setFont(font6)
         self.modelWikiLink.setCursor(QCursor(Qt.PointingHandCursor))
         self.modelWikiLink.setTextFormat(Qt.RichText)
         self.modelWikiLink.setOpenExternalLinks(True)
@@ -383,51 +399,51 @@ class Ui_MainWindow(object):
 
         self.titreModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.titreModelCheckBox.setObjectName(u"titreModelCheckBox")
-        font6 = QFont()
-        font6.setFamily(u"Consolas")
-        self.titreModelCheckBox.setFont(font6)
+        font7 = QFont()
+        font7.setFamily(u"Consolas")
+        self.titreModelCheckBox.setFont(font7)
         self.titreModelCheckBox.setChecked(True)
 
         self.modelValuesFormLayout.setWidget(0, QFormLayout.LabelRole, self.titreModelCheckBox)
 
         self.soustitreModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.soustitreModelCheckBox.setObjectName(u"soustitreModelCheckBox")
-        self.soustitreModelCheckBox.setFont(font6)
+        self.soustitreModelCheckBox.setFont(font7)
         self.soustitreModelCheckBox.setChecked(True)
 
         self.modelValuesFormLayout.setWidget(1, QFormLayout.LabelRole, self.soustitreModelCheckBox)
 
         self.matiereModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.matiereModelCheckBox.setObjectName(u"matiereModelCheckBox")
-        self.matiereModelCheckBox.setFont(font6)
+        self.matiereModelCheckBox.setFont(font7)
         self.matiereModelCheckBox.setChecked(True)
 
         self.modelValuesFormLayout.setWidget(2, QFormLayout.LabelRole, self.matiereModelCheckBox)
 
         self.numeroModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.numeroModelCheckBox.setObjectName(u"numeroModelCheckBox")
-        self.numeroModelCheckBox.setFont(font6)
+        self.numeroModelCheckBox.setFont(font7)
         self.numeroModelCheckBox.setChecked(True)
 
         self.modelValuesFormLayout.setWidget(3, QFormLayout.LabelRole, self.numeroModelCheckBox)
 
         self.sectionModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.sectionModelCheckBox.setObjectName(u"sectionModelCheckBox")
-        self.sectionModelCheckBox.setFont(font6)
+        self.sectionModelCheckBox.setFont(font7)
         self.sectionModelCheckBox.setChecked(True)
 
         self.modelValuesFormLayout.setWidget(4, QFormLayout.LabelRole, self.sectionModelCheckBox)
 
         self.auteurModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.auteurModelCheckBox.setObjectName(u"auteurModelCheckBox")
-        self.auteurModelCheckBox.setFont(font6)
+        self.auteurModelCheckBox.setFont(font7)
         self.auteurModelCheckBox.setChecked(True)
 
         self.modelValuesFormLayout.setWidget(5, QFormLayout.LabelRole, self.auteurModelCheckBox)
 
         self.niveauModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.niveauModelCheckBox.setObjectName(u"niveauModelCheckBox")
-        self.niveauModelCheckBox.setFont(font6)
+        self.niveauModelCheckBox.setFont(font7)
         self.niveauModelCheckBox.setStyleSheet(u"")
         self.niveauModelCheckBox.setChecked(True)
 
@@ -464,7 +480,7 @@ class Ui_MainWindow(object):
 
         self.modelPathModelLabel = QLabel(self.formLayoutWidget)
         self.modelPathModelLabel.setObjectName(u"modelPathModelLabel")
-        self.modelPathModelLabel.setFont(font6)
+        self.modelPathModelLabel.setFont(font7)
         self.modelPathModelLabel.setAlignment(Qt.AlignJustify|Qt.AlignVCenter)
         self.modelPathModelLabel.setWordWrap(True)
 
@@ -520,7 +536,7 @@ class Ui_MainWindow(object):
         self.modelApplyPushButton.setObjectName(u"modelApplyPushButton")
         self.modelApplyPushButton.setEnabled(True)
         self.modelApplyPushButton.setGeometry(QRect(470, 370, 201, 63))
-        self.modelApplyPushButton.setFont(font5)
+        self.modelApplyPushButton.setFont(font6)
         self.modelApplyPushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.tabWidget.addTab(self.modelTab, "")
         self.aboutTab = QWidget()
@@ -557,7 +573,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -580,7 +596,6 @@ class Ui_MainWindow(object):
         self.sectionGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"Premi\u00e8re Section", None))
         self.sectionNumLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:14pt; text-decoration: underline;\">1.</span></p></body></html>", None))
         self.sectionLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"La Loi de l'Inertie", None))
-        self.pathPathLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><a href=\"none\"><span style=\"text-decoration: underline; color: #f0f0f0;\">Aucun chemin de sauvegarde</span></a></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.infoPersoGroupBox.setToolTip(QCoreApplication.translate("MainWindow", u"Pour modifier les informations, veuillez aller dans le Configurateur", None))
 #endif // QT_CONFIG(tooltip)
@@ -594,6 +609,7 @@ class Ui_MainWindow(object):
         self.modelLineEdit.setPlaceholderText("")
         self.modelToolButton.setText("")
         self.genPushButton.setText(QCoreApplication.translate("MainWindow", u"G\u00e9n\u00e9rer", None))
+        self.pathPathLabel.setText(QCoreApplication.translate("MainWindow", u"Aucun chemin de sauvegarde", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.genTab), QCoreApplication.translate("MainWindow", u"G\u00e9n\u00e9rateur", None))
 #if QT_CONFIG(tooltip)
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.genTab), QCoreApplication.translate("MainWindow", u"Cr\u00e9er un document", None))

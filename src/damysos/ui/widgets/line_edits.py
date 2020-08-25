@@ -25,11 +25,14 @@
 from damysos.helpers.utilities import SAFE_CHARACTERS_QREGEXP
 
 # External packages
+from PySide2.QtCore import SignalInstance
 from PySide2.QtGui import QRegExpValidator
 from PySide2.QtWidgets import QWidget, QLineEdit
 
 
 class AdvancedLineEdit(QLineEdit):
+    textChanged: SignalInstance
+
     def __init__(self, parent: QWidget) -> None:
         """
         Creates the QLineEdit and sets its text

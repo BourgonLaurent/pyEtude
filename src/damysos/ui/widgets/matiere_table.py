@@ -259,7 +259,7 @@ class MatiereTableControl(QWidget):
 
         self.plus = QPushButton("+", parent=self)
         self.plus.setFixedSize(21, 24)
-        self.plus.pressed.connect(parent.tableWidget.add_row)  # type: ignore
+        self.plus.clicked.connect(parent.tableWidget.add_row)  # type: ignore
         self.boxlayout.addWidget(self.plus)
 
         self.minus = QPushButton("-", parent=self)

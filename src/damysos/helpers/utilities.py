@@ -21,6 +21,10 @@
 #    SOFTWARE.
 
 ## Imports
+# Default packages
+import os
+import sys
+
 # External packages
 from PySide2.QtCore import QRegExp
 
@@ -28,3 +32,12 @@ from PySide2.QtCore import QRegExp
 SAFE_CHARACTERS = r"[^#%&{}j\\<>*?/$!'\":@+`|=]+"
 SAFE_CHARACTERS_QREGEXP = QRegExp(SAFE_CHARACTERS)
 
+
+def execute_file(file_to_open: str):
+    if sys.platform.startswith("win"):
+        try:
+            os.startfile(file_to_open)  # type: ignore
+        except:
+            pass
+    else:
+        os.system(f'open "{file_to_open}"')

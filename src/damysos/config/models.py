@@ -156,8 +156,17 @@ class ModelConfig:
     models: List[Model] = field(default_factory=lambda: [])
     default: Optional[str] = None
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return bool([v for v in self.__dict__.values() if v])
+
+    def get_model(self, name: Optional[str]) -> Optional[Model]:
+        try:
+            if not name:
+                return
+
+            return [m for m in self.models if m.name == name][0]
+        except IndexError:
+            return
 
     @staticmethod
     def rebuild_from_dict(rebuild_dict: Dict[str, Any]):

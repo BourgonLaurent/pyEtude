@@ -22,19 +22,20 @@
 
 ## Imports
 # Project packages
-from typing import List
 from damysos.config.settings import Settings
-from damysos.ui.dialogs import AutomaticNumberMessageBox
+from damysos.helpers.utilities import execute_file
+from damysos.ui.dialogs import AutomaticNumberMessageBox, WordSaveFileDialog
 from .designer.designer_ui import Ui_MainWindow
 
 # Default packages
 import locale
 import os
 from typing import Union
+from typing import List
 
 # External packages
-from PySide2.QtCore import Slot, Qt
-from PySide2.QtWidgets import QAction, QMainWindow
+from PySide2.QtCore import Slot
+from PySide2.QtWidgets import QAction, QFileDialog, QMainWindow
 
 
 class DamysosMWUI(Ui_MainWindow):
@@ -50,10 +51,17 @@ class DamysosMWUI(Ui_MainWindow):
         self.matMenuButton.requestAutomaticCheck.connect(self.check_automatic_file)
         self.numMenuButton.requestAutomaticCheck.connect(self.check_automatic_file)
 
+        self.matLineEdit.textChanged.connect(self.update_path_label)
+        self.numLineEdit.textChanged.connect(self.update_path_label)
+
+        self.pathPathLabel.menu.triggered.connect(self.path_menu_response)  # type: ignore
+
         self.configSaveButton.ui = self
         self.configSaveButton.config_done.connect(self.refresh_configuration)
 
         self.matieresConfig.toggled.connect(self.check_matieres_status)  # type: ignore
+
+        self.update_path_label()
 
     def set_settings_values(self):
         self.auteurLineEdit.setText(self.settings.auteur)
@@ -72,6 +80,13 @@ class DamysosMWUI(Ui_MainWindow):
                 (i, 2), self.settings.matieres[name].path
             )
 
+        if not self.settings.modeles.default or not self.settings.modeles.get_model(
+            self.settings.modeles.default
+        ):
+            self.settings.modeles.default = self.settings.modeles.models[0].name
+
+        self.modelLineEdit.setText(self.settings.modeles.default)
+
     def get_matiere_path(self) -> str:
         if not self.matMenuButton.action_personalize.isChecked():
             for matiere in self.settings.matieres.values():
@@ -79,6 +94,41 @@ class DamysosMWUI(Ui_MainWindow):
                     return matiere.path
 
         return os.getcwd()
+
+    def update_path_label(self, set_directory=True):
+        if set_directory:
+            self.pathPathLabel.directory = self.get_matiere_path()
+
+        self.pathPathLabel.set_filepath(
+            os.path.join(
+                self.settings.modeles.get_model(
+                    self.settings.modeles.default
+                ).export_name,
+                f"{self.matLineEdit.getText()}-{self.numLineEdit.getText()}.docx",
+            )
+        )
+
+    @Slot(QAction)  # type: ignore
+    def path_menu_response(self, selection: QAction):
+        if selection == self.pathPathLabel.action_open_folder:
+            execute_file(file_to_open=self.pathPathLabel.directory)
+
+        elif selection == self.pathPathLabel.action_choose_folder:
+            self.pathPathLabel.directory = QFileDialog.getExistingDirectory()
+            self.update_path_label(set_directory=False)
+
+        elif selection == self.pathPathLabel.action_choose_file:
+            getSaveFilePath = WordSaveFileDialog(parent=self.window)
+            getSaveFilePath.exec_()
+
+            if getSaveFilePath.selectedFiles():
+                self.pathPathLabel.directory = getSaveFilePath.directory().path()
+                self.pathPathLabel.set_filepath(
+                    os.path.basename(getSaveFilePath.selectedFiles()[0])
+                )
+
+        elif selection == self.pathPathLabel.action_restore_default:
+            self.update_path_label()
 
     @Slot()  # type: ignore
     def refresh_configuration(self):
@@ -88,7 +138,12 @@ class DamysosMWUI(Ui_MainWindow):
     @Slot(str)  # type: ignore
     def check_automatic_file(self, prefix: Union[str, None]):
         def findFiles(prefix) -> List[str]:
-            matpath = os.path.join(self.get_matiere_path(), "Documents de Révision")
+            matpath = os.path.join(
+                self.get_matiere_path(),
+                self.settings.modeles.get_model(
+                    self.settings.modeles.default
+                ).export_name,
+            )
             try:
                 return [
                     f

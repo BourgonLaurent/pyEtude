@@ -112,7 +112,7 @@ class MatiereMenuPushButton(QPushButton):
         self.menu().addAction(self.action_group.addAction(action))  # type: ignore
         return action
 
-    @Slot(str)  # type: ignore
+    @Slot(QAction)  # type: ignore
     def action_changed(self, selection: QAction):
         if selection == self.action_personalize:
             self.line_edit.setEnabled(True)
@@ -178,7 +178,7 @@ class NumeroMenuPushButton(QPushButton):
             except AttributeError:
                 return
 
-        if selection == self.action_automatic:
+        elif selection == self.action_automatic:
             self.requestAutomaticCheck.emit(None)
 
         elif selection == self.action_personalize:

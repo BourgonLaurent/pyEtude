@@ -1,5 +1,5 @@
-## version_label.py - damysos.ui.widgets
-# Label that shows the current version (damysos.__version__)
+## labels.py - damysos.ui.widgets
+# Various modified Labels
 #
 # MIT (c) 2020 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,9 +24,16 @@
 # Project packages
 from damysos import __version__, GITHUB_REPO
 from damysos.helpers.updater import check_new_version
+from damysos.helpers.utilities import execute_file
+
+# Default packages
+import os
+from typing import cast
 
 # External packages
-from PySide2.QtWidgets import QWidget, QLabel
+from PySide2.QtCore import QPoint, Signal, SignalInstance, Slot
+from PySide2.QtGui import QMouseEvent
+from PySide2.QtWidgets import QAction, QActionGroup, QFileDialog, QLabel, QMenu, QWidget
 
 
 class VersionLabel(QLabel):
@@ -57,3 +64,50 @@ class VersionLabel(QLabel):
             + "</body></html>",
             parent=parent,
         )
+
+
+class ClickableLabel(QLabel):
+    clicked = cast(SignalInstance, Signal())
+
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(text="", parent=parent)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        self.clicked.emit()
+
+
+class PathMenuLabel(ClickableLabel):
+    directory: str = ""
+    filepath: str = ""
+
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent=parent)
+
+        self.menu = QMenu("pathMenu", parent)
+        self.action_group = QActionGroup(self.menu)
+
+        self.action_open_folder = self.add_action("Ouvrir le dossier sélectionné")
+        self.menu.addSeparator()
+        self.action_choose_folder = self.add_action("Choisir le dossier de sortie")
+        self.action_choose_file = self.add_action("Enregister sous...")
+        self.menu.addSeparator()
+        self.action_restore_default = self.add_action("Restaurer la valeur par défaut")
+
+        self.clicked.connect(
+            lambda: self.menu.exec_(
+                self.mapToGlobal(QPoint(0, self.geometry().height()))
+            )
+        )
+
+    def add_action(self, text: str) -> QAction:
+        action = QAction(text)
+        self.menu.addAction(self.action_group.addAction(action))  # type: ignore
+        return action
+
+    def set_filepath(self, file_name: str):
+        self.filepath = os.path.join(self.directory, file_name)
+        _filepath_formatted = self.filepath
+        if _filepath_formatted.startswith(os.sep):
+            _filepath_formatted = _filepath_formatted.replace(os.sep, "", 1)
+
+        self.setText(_filepath_formatted.replace(os.sep, " > "))

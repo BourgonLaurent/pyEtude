@@ -58,7 +58,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -380,43 +380,6 @@
        </widget>
       </widget>
      </widget>
-     <widget class="QLabel" name="pathPathLabel">
-      <property name="geometry">
-       <rect>
-        <x>350</x>
-        <y>170</y>
-        <width>321</width>
-        <height>211</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>321</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;none&quot;&gt;&lt;span style=&quot;text-decoration: underline; color: #f0f0f0;&quot;&gt;Aucun chemin de sauvegarde&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignBottom|Qt::AlignJustify</set>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-      <property name="textInteractionFlags">
-       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="infoPersoGroupBox">
       <property name="geometry">
        <rect>
@@ -634,6 +597,73 @@
       <property name="text">
        <string>Générer</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>170</y>
+        <width>323</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="pathLayout">
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
+       <item>
+        <spacer name="pathSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>1000</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="PathMenuLabel" name="pathPathLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>321</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>ArrowCursor</cursorShape>
+         </property>
+         <property name="text">
+          <string>Aucun chemin de sauvegarde</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignJustify</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="configTab">
@@ -1380,7 +1410,7 @@ QPushButton:selected {
   <customwidget>
    <class>VersionLabel</class>
    <extends>QLabel</extends>
-   <header>damysos/ui/widgets/version_label.h</header>
+   <header>damysos/ui/widgets/labels.h</header>
   </customwidget>
   <customwidget>
    <class>SafeAdvancedLineEdit</class>
@@ -1418,6 +1448,11 @@ QPushButton:selected {
    <class>NumeroMenuPushButton</class>
    <extends>QPushButton</extends>
    <header>damysos/ui/widgets/push_buttons.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PathMenuLabel</class>
+   <extends>QLabel</extends>
+   <header>damysos/ui/widgets/labels.h</header>
   </customwidget>
  </customwidgets>
  <resources>
