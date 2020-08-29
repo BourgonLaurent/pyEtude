@@ -31,7 +31,7 @@ from typing import Dict
 from docxtpl import DocxTemplate
 
 
-class Document:
+class Document(DocxTemplate):
     """
     Create a word document with specific values
 
@@ -53,13 +53,11 @@ class Document:
     """
 
     def __init__(self, values: Dict[str, str], model: str, filepath: str):
+        super().__init__(model)
         self.values = values
-        self.model = model
         self.filepath = filepath
-
-        self.document = DocxTemplate(self.model)
 
     def packWord(self):
         """Export the Word Document with the values given earlier"""
-        self.document.render(self.values)
-        self.document.save(self.filepath)
+        self.render(self.values)
+        self.save(self.filepath)
