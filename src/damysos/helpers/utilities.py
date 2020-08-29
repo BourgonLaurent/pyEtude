@@ -29,7 +29,7 @@ import sys
 from PySide2.QtCore import QRegExp
 
 # Allow only safe, path-friendly characters
-SAFE_CHARACTERS = r"[^#%&{}j\\<>*?/$!'\":@+`|=]+"
+SAFE_CHARACTERS = r"[^#%&{}\\<>*?/$!'\":@+`|=]+"
 SAFE_CHARACTERS_QREGEXP = QRegExp(SAFE_CHARACTERS)
 
 
