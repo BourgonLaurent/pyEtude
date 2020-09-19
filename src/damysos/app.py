@@ -29,7 +29,7 @@ from typing import cast, List
 
 # Externals packages
 from PySide2.QtCore import QFile, QIODevice, QTextStream
-from PySide2.QtGui import QFontDatabase, QFont
+from PySide2.QtGui import QFontDatabase, QIcon, QPixmap
 from PySide2.QtWidgets import QApplication
 
 
@@ -47,17 +47,22 @@ class DamysosApp(QApplication):
             "Consolas_Regular",
         ]
         for font in _fonts:
-            QFontDatabase.addApplicationFont(f":/fonts/fonts/{font}.ttf")
+            QFontDatabase.addApplicationFont(f":/assets/fonts/{font}.ttf")
 
         # Load the stylesheet inside resources
         _stylesheet = QFile(self)
-        _stylesheet.setFileName(":/styles/designer_styles.qss")
+        _stylesheet.setFileName(":/assets/designer_styles.qss")
         _stylesheet.open(cast(QIODevice.OpenMode, QIODevice.OpenModeFlag.ReadOnly))
         self.setStyleSheet(QTextStream(_stylesheet).readAll())
         _stylesheet.close()
 
         # Create the mainwindow
         self.window = DamysosMainWindow()
+
+        # Set window icon
+        _icon = QIcon(cast(QPixmap, ":/assets/icons/Damysos.icns"))
+        self.setWindowIcon(_icon)
+        self.window.setWindowIcon(_icon)
 
     def exec_(self) -> int:
         self.window.show()
