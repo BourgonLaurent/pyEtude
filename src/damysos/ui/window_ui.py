@@ -56,7 +56,7 @@ class DamysosMWUI(Ui_MainWindow):
 
         self.pathPathLabel.menu.triggered.connect(self.path_menu_response)  # type: ignore
 
-        self.configSaveButton.ui = self
+        self.configSaveButton.ui = self  # type: ignore
         self.configSaveButton.config_done.connect(self.refresh_configuration)
 
         self.matieresConfig.toggled.connect(self.check_matieres_status)  # type: ignore
