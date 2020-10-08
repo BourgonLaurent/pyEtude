@@ -111,21 +111,21 @@ class DamysosMWUI(Ui_MainWindow):
     @Slot(QAction)  # type: ignore
     def path_menu_response(self, selection: QAction):
         if selection == self.pathPathLabel.action_open_folder:
-            execute_file(file_to_open=self.pathPathLabel.directory)
+            execute_file(self.pathPathLabel.directory)
 
         elif selection == self.pathPathLabel.action_choose_folder:
             self.pathPathLabel.directory = QFileDialog.getExistingDirectory()
-            self.update_path_label(set_directory=False)
+            if self.pathPathLabel.directory:  # Only if clicks on 'Open'
+                self.update_path_label(set_directory=False)
 
         elif selection == self.pathPathLabel.action_choose_file:
             getSaveFilePath = WordSaveFileDialog(parent=self.window)
-            getSaveFilePath.exec_()
-
-            if getSaveFilePath.selectedFiles():
-                self.pathPathLabel.directory = getSaveFilePath.directory().path()
-                self.pathPathLabel.set_filepath(
-                    os.path.basename(getSaveFilePath.selectedFiles()[0])
-                )
+            if getSaveFilePath.exec_():  # Only if clicks on 'Open'
+                if getSaveFilePath.selectedFiles():
+                    self.pathPathLabel.directory = getSaveFilePath.directory().path()
+                    self.pathPathLabel.set_filepath(
+                        os.path.basename(getSaveFilePath.selectedFiles()[0])
+                    )
 
         elif selection == self.pathPathLabel.action_restore_default:
             self.update_path_label()
