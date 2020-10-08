@@ -207,7 +207,6 @@ class Ui_MainWindow(object):
         self.genPushButton.setSizePolicy(sizePolicy3)
         self.genPushButton.setMinimumSize(QSize(150, 0))
         font4 = QFont()
-        font4.setFamily(u"Garamond")
         font4.setPointSize(18)
         font4.setBold(True)
         font4.setWeight(75)

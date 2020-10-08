@@ -585,7 +585,6 @@
       </property>
       <property name="font">
        <font>
-        <family>Garamond</family>
         <pointsize>18</pointsize>
         <weight>75</weight>
         <bold>true</bold>
