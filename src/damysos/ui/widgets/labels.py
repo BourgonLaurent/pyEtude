@@ -106,8 +106,8 @@ class PathMenuLabel(ClickableLabel):
 
     def set_filepath(self, file_name: str):
         self.filepath = os.path.join(self.directory, file_name)
-        _filepath_formatted = self.filepath
-        if _filepath_formatted.startswith(os.sep):
-            _filepath_formatted = _filepath_formatted.replace(os.sep, "", 1)
+        filepath_formatted = self.filepath
+        if filepath_formatted.startswith(os.sep):
+            filepath_formatted = filepath_formatted.replace(os.sep, "", 1)
 
-        self.setText(_filepath_formatted.replace(os.sep, " > "))
+        self.setText(filepath_formatted.replace(os.sep, " > "))
