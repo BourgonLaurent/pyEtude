@@ -25,14 +25,19 @@
 from damysos.config.settings import Settings
 from damysos.document import Document
 from damysos.helpers.utilities import execute_file
-from damysos.ui.dialogs import AutomaticNumberMessageBox, WordSaveFileDialog
+from damysos.ui.dialogs import (
+    AutomaticNumberMessageBox,
+    DocumentCreatedMessageBox,
+    WordSaveFileDialog,
+)
 from .designer.designer_ui import Ui_MainWindow
 
 # Default packages
-import locale
-import os
 from typing import Union
 from typing import List
+from pathlib import Path
+import locale
+import os
 
 # External packages
 from PySide2.QtCore import Slot
@@ -230,7 +235,21 @@ class DamysosMWUI(Ui_MainWindow):
             if name
         }
 
+        # Checks if destination folder exists
+        # print(os.path.dirname(self.pathPathLabel.filepath))
+        filepath = Path(self.pathPathLabel.filepath)
+
+        if filepath.exists():  # If the document already exists
+            if DocumentCreatedMessageBox.DocumentExistsMessageBox(
+                self.window, str(filepath)
+            ).exec_():  # Execution code not successful
+                return
+
+        elif not filepath.parent.exists():  # If the directory doesn't exists
+            filepath.parent.mkdir(parents=True)
+
         # Create document and export it
-        document = Document(model.filepath, values, self.pathPathLabel.filepath)
+        document = Document(model.filepath, values, str(filepath))
         document.packWord()
 
+        DocumentCreatedMessageBox(str(filepath), self.window).exec_()
