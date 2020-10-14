@@ -73,7 +73,10 @@ class DamysosMWUI(Ui_MainWindow):
 
     def set_settings_values(self):
         self.auteurLineEdit.setText(self.settings.auteur)
+        self.auteurPersoLabel.setText(self.settings.auteur)
         self.niveauLineEdit.setText(self.settings.niveau)
+        self.niveauPersoLabel.setText(self.settings.niveau)
+        
 
         self.matieresConfig.setChecked(self.settings.custom_matieres)
 
