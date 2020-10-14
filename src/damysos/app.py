@@ -22,7 +22,8 @@
 
 ## Imports
 # Project packages
-from .ui.window import DamysosMainWindow
+from damysos.helpers.updater import check_updates
+from damysos.ui.window import DamysosMainWindow
 
 # Default packages
 from typing import cast, List
@@ -63,6 +64,9 @@ class DamysosApp(QApplication):
         _icon = QIcon(cast(QPixmap, ":/assets/icons/damysos.icns"))
         self.setWindowIcon(_icon)
         self.window.setWindowIcon(_icon)
+
+        # Check updates
+        check_updates(self.window)
 
     def exec_(self) -> int:
         self.window.show()
