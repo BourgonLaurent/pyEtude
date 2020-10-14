@@ -26,6 +26,7 @@ from damysos import __version__
 
 # Default packages
 from typing import Dict
+import os
 
 # External packages
 from docxtpl import DocxTemplate
@@ -37,11 +38,11 @@ class Document(DocxTemplate):
 
     Parameters
     ----------
-    values : Dict[str, str]
-        Dictionnary containing the values to replace {"placeholder": "replaced"}
-    
     model : str
         Path to the document model
+    
+    values : Dict[str, str]
+        Dictionnary containing the values to replace {"placeholder": "replaced"}
     
     filepath : str
         Path to the export destination
@@ -52,7 +53,7 @@ class Document(DocxTemplate):
         Export the Word Document
     """
 
-    def __init__(self, values: Dict[str, str], model: str, filepath: str):
+    def __init__(self, model: str, values: Dict[str, str], filepath: str):
         super().__init__(model)
         self.values = values
         self.filepath = filepath
@@ -60,4 +61,12 @@ class Document(DocxTemplate):
     def packWord(self):
         """Export the Word Document with the values given earlier"""
         self.render(self.values)
+
+        folderpath = os.path.realpath(self.filepath).replace(
+            os.path.basename(self.filepath), ""
+        )
+
+        if not os.path.isdir(folderpath):
+            os.mkdir(folderpath)
+
         self.save(self.filepath)
