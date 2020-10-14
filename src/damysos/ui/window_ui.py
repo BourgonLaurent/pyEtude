@@ -23,6 +23,7 @@
 ## Imports
 # Project packages
 from damysos.config.settings import Settings
+from damysos.document import Document
 from damysos.helpers.utilities import execute_file
 from damysos.ui.dialogs import AutomaticNumberMessageBox, WordSaveFileDialog
 from .designer.designer_ui import Ui_MainWindow
@@ -55,6 +56,8 @@ class DamysosMWUI(Ui_MainWindow):
         self.numLineEdit.textChanged.connect(self.update_path_label)
 
         self.pathPathLabel.menu.triggered.connect(self.path_menu_response)  # type: ignore
+
+        self.genPushButton.clicked.connect(self.generateDocument)  # type: ignore
 
         self.configSaveButton.ui = self  # type: ignore
         self.configSaveButton.config_done.connect(self.refresh_configuration)
@@ -203,3 +206,31 @@ class DamysosMWUI(Ui_MainWindow):
     def check_matieres_status(self, state: bool):
         self.matiereTable.setEnabled(state)
         self.settings.custom_matieres = state
+
+    @Slot()  # type: ignore
+    def generateDocument(self):
+        # Get model name
+        model = self.settings.modeles.get_model(self.settings.modeles.default)
+
+        # Get all the values
+        access_values = {
+            "auteur": self.settings.auteur,
+            "niveau": self.settings.niveau,
+            "titre": self.titreLineEdit.getText(),
+            "soustitre": self.soustitreLineEdit.getText(),
+            "matiere": self.matLineEdit.getText(),
+            "numero": self.numLineEdit.getText(),
+            "section": self.sectionLineEdit.getText(),
+        }
+
+        # Only use the values needed
+        values = {
+            tag: access_values.get(tag, "")
+            for tag, name in model.values.__dict__.items()
+            if name
+        }
+
+        # Create document and export it
+        document = Document(model.filepath, values, self.pathPathLabel.filepath)
+        document.packWord()
+
