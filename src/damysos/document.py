@@ -45,7 +45,7 @@ class Document(DocxTemplate):
         Dictionnary containing the values to replace {"placeholder": "replaced"}
     
     filepath : str
-        Path to the export destination
+        Path to the export destination, the destination folder must exists
     
     Methods
     ----------
@@ -61,12 +61,4 @@ class Document(DocxTemplate):
     def packWord(self):
         """Export the Word Document with the values given earlier"""
         self.render(self.values)
-
-        folderpath = os.path.realpath(self.filepath).replace(
-            os.path.basename(self.filepath), ""
-        )
-
-        if not os.path.isdir(folderpath):
-            os.mkdir(folderpath)
-
         self.save(self.filepath)
