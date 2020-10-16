@@ -76,7 +76,6 @@ class DamysosMWUI(Ui_MainWindow):
         self.auteurPersoLabel.setText(self.settings.auteur)
         self.niveauLineEdit.setText(self.settings.niveau)
         self.niveauPersoLabel.setText(self.settings.niveau)
-        
 
         self.matieresConfig.setChecked(self.settings.custom_matieres)
 
