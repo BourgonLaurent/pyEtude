@@ -40,13 +40,13 @@ class Document(DocxTemplate):
     ----------
     model : str
         Path to the document model
-    
+
     values : Dict[str, str]
         Dictionnary containing the values to replace {"placeholder": "replaced"}
-    
+
     filepath : str
         Path to the export destination, the destination folder must exists
-    
+
     Methods
     ----------
     packWord : () -> ()

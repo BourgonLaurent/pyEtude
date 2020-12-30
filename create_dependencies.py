@@ -47,7 +47,12 @@ for f in FILES:
     qrc_py = path.join(BASE_FOLDER, f"{f}_resources_rc.py")  # File to create
     if path.exists(qrc):  # Check if a .qrc file needs to be compiled
         SUCCESS["qrc"][f] = run(
-            [f"{PYTHON_PATH}/pyside2-rcc", qrc, "-o", qrc_py,]
+            [
+                f"{PYTHON_PATH}/pyside2-rcc",
+                qrc,
+                "-o",
+                qrc_py,
+            ]
         )  # Run the compile command
 
     # UI files
@@ -55,7 +60,13 @@ for f in FILES:
     ui_py = path.join(BASE_FOLDER, f"{f}_ui.py")  # File to create
     if path.exists(ui):  # Check if a .ui file needs to be compiled
         SUCCESS["ui"][f] = run(
-            [f"{PYTHON_PATH}/pyside2-rcc", ui, "--from-imports", "-o", ui_py,]
+            [
+                f"{PYTHON_PATH}/pyside2-rcc",
+                ui,
+                "--from-imports",
+                "-o",
+                ui_py,
+            ]
         )  # Run the compile command
 
 # Print success

@@ -148,7 +148,7 @@ class frontEnd:
 
     def setMatieres(self, datadict: dict):
         """## Insère le dictionnaire donné dans le tableau self.ui.matiereTable.tableWidget
-        
+
         ### Arguments:\n
             \tdatadict {dict} -- Dictionnaire des matières
         """
@@ -319,7 +319,8 @@ class frontEnd:
                 {ord(i): None for i in r'\/:*?"<>|'}
             )
             matpath = os.path.join(
-                self.checkCustomMatNamePath(), self.ui.modelLineEdit.getText(),
+                self.checkCustomMatNamePath(),
+                self.ui.modelLineEdit.getText(),
             )
 
             try:
