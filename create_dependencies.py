@@ -22,12 +22,16 @@
 
 ## Librairies
 # Default packages
+import sys
 from os import chdir, path
 from subprocess import CompletedProcess, run
 from typing import Dict, List, Text
 
 # Access files through the root of this file, not the root of the shell
 chdir(path.realpath(__file__).replace(path.basename(__file__), ""))
+
+# Get python environment executable
+PYTHON_PATH = sys.argv[-1].replace("/python", "", 1)
 
 # MODIFY THIS TO CHANGE COMPILING
 BASE_FOLDER: str = path.join("./", "src", "damysos", "ui", "designer")
@@ -39,19 +43,19 @@ SUCCESS: Dict[str, Dict[str, CompletedProcess]] = {"qrc": {}, "ui": {}}
 # Loop through the files to compile
 for f in FILES:
     # Resources files
-    qrc: Text = path.join(BASE_FOLDER, f"{f}_resources.qrc")  # Get the .qrc file
-    qrc_py: Text = path.join(BASE_FOLDER, f"{f}_resources_rc.py")  # File to create
+    qrc = path.join(BASE_FOLDER, f"{f}_resources.qrc")  # Get the .qrc file
+    qrc_py = path.join(BASE_FOLDER, f"{f}_resources_rc.py")  # File to create
     if path.exists(qrc):  # Check if a .qrc file needs to be compiled
         SUCCESS["qrc"][f] = run(
-            ["pyside2-rcc", qrc, "-o", qrc_py,]
+            [f"{PYTHON_PATH}/pyside2-rcc", qrc, "-o", qrc_py,]
         )  # Run the compile command
 
     # UI files
-    ui: Text = path.join(BASE_FOLDER, f"{f}_ui.ui")  # Get the .ui file
-    ui_py: Text = path.join(BASE_FOLDER, f"{f}_ui.py")  # File to create
+    ui = path.join(BASE_FOLDER, f"{f}_ui.ui")  # Get the .ui file
+    ui_py = path.join(BASE_FOLDER, f"{f}_ui.py")  # File to create
     if path.exists(ui):  # Check if a .ui file needs to be compiled
         SUCCESS["ui"][f] = run(
-            ["pyside2-uic", ui, "--from-imports", "-o", ui_py,]
+            [f"{PYTHON_PATH}/pyside2-rcc", ui, "--from-imports", "-o", ui_py,]
         )  # Run the compile command
 
 # Print success
