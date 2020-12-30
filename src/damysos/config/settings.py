@@ -51,7 +51,7 @@ DEFAULT_MATIERES: Dict[str, Matiere] = {
 _doc_de_rev = Model(
     "Documents de Révision",
     filepath=os.path.join(os.getcwd(), "Documents de Révision.docx"),
-    export_name="Documents de Révision",
+    export_name="",
     values=ModelValues(
         auteur="Auteur",
         niveau="Niveau",
