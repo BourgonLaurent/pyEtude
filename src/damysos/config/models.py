@@ -84,10 +84,10 @@ class Model:
     ----------
     name: str
         (Optional) Name of the model
-    
+
     filepath: str
         (Optional) Filepath of the Word document
-    
+
     export_name: str
         (Optional) Name of the folder that will contain the exported documents
 
@@ -143,7 +143,7 @@ class ModelConfig:
     ----------
     models: List[Model] | None
         (Optional) List containing Model objects that can be selected
-    
+
     default: str
         (Optional) The default model that is set, (must also be part of the models)
 
