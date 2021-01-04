@@ -26,7 +26,6 @@ from damysos import __version__
 
 # Default packages
 from typing import Dict
-import os
 
 # External packages
 from docxtpl import DocxTemplate

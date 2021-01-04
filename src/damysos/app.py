@@ -61,7 +61,7 @@ class DamysosApp(QApplication):
         self.window = DamysosMainWindow()
 
         # Set window icon
-        _icon = QIcon(cast(QPixmap, ":/assets/icons/damysos.icns"))
+        _icon = QIcon(":/assets/icons/damysos.icns")
         self.setWindowIcon(_icon)
         self.window.setWindowIcon(_icon)
 
