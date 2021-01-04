@@ -23,15 +23,21 @@
 ## Librairies
 # Default packages
 import sys
-from os import chdir, path
+from os import chdir, path, environ
 from subprocess import CompletedProcess, run
-from typing import Dict, List, Text
+from typing import Dict, List
 
 # Access files through the root of this file, not the root of the shell
 chdir(path.realpath(__file__).replace(path.basename(__file__), ""))
 
 # Get python environment executable
-PYTHON_PATH = sys.argv[-1].replace("/python", "", 1)
+# PYTHON_PATH = sys.argv[-1].replace("/python", "", 1)
+# print(environ)
+
+if len(sys.argv) > 1:
+    PYTHON_PATH = sys.argv[-1].replace("/python", "", 1)
+else:
+    PYTHON_PATH = path.join(environ.get("VIRTUAL_ENV", ""), "bin")
 
 # MODIFY THIS TO CHANGE COMPILING
 BASE_FOLDER: str = path.join("./", "src", "damysos", "ui", "designer")
@@ -61,12 +67,12 @@ for f in FILES:
     if path.exists(ui):  # Check if a .ui file needs to be compiled
         SUCCESS["ui"][f] = run(
             [
-                f"{PYTHON_PATH}/pyside2-rcc",
+                f"{PYTHON_PATH}/pyside2-uic",
                 ui,
                 "--from-imports",
                 "-o",
                 ui_py,
-            ]
+            ],
         )  # Run the compile command
 
 # Print success
