@@ -47,8 +47,9 @@ from PySide2.QtWidgets import QAction, QFileDialog, QMainWindow
 class DamysosMWUI(Ui_MainWindow):
     def __init__(self, window: QMainWindow):
         super().__init__()
-        self.setupUi(window)
         self.window = window
+
+        self.setupUi(self.window)
 
         self.settings = Settings.load_config_file(tab_widget=self.tabWidget)
         self.set_settings_values()
