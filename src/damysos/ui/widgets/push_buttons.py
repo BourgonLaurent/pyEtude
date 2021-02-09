@@ -46,13 +46,8 @@ from PySide2.QtWidgets import (
 class SignalizedPushButton(QPushButton):
     pressed: SignalInstance
 
-    @overload
-    def __init__(self, parent: QWidget) -> None:
-        ...
-
-    @overload
-    def __init__(self, text: str, parent: QWidget) -> None:
-        super().__init__(text=text or "", parent=parent)
+    def __init__(self, parent: QWidget, text: str = "") -> None:
+        super().__init__(text=text, parent=parent)
 
 
 class ConfigPushButton(SignalizedPushButton):

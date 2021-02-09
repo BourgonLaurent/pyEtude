@@ -257,12 +257,12 @@ class MatiereTableControl(QWidget):
 
         self.boxlayout = QHBoxLayout()  # type: ignore
 
-        self.plus = SignalizedPushButton("+", parent=self)
+        self.plus = SignalizedPushButton(self, "+")
         self.plus.setFixedSize(21, 24)
         self.plus.pressed.connect(parent.tableWidget.add_row)
         self.boxlayout.addWidget(self.plus)
 
-        self.minus = SignalizedPushButton("-", parent=self)
+        self.minus = SignalizedPushButton(self, "-")
         self.minus.setFixedSize(21, 24)
         self.minus.pressed.connect(parent.tableWidget.remove_row)
         self.boxlayout.addWidget(self.minus)
@@ -272,7 +272,7 @@ class MatiereTableControl(QWidget):
         )
         self.boxlayout.addItem(self.spacer)
 
-        self.reset = SignalizedPushButton("Réinitialiser", parent=self)
+        self.reset = SignalizedPushButton(self, "Réinitialiser")
         self.reset.setFixedSize(85, 24)
         self.reset.pressed.connect(lambda: parent.tableWidget.clear(set_default=True))
         self.boxlayout.addWidget(self.reset)
