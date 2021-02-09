@@ -543,7 +543,7 @@
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="modelToolButton">
+      <widget class="SignalizedPushButton" name="modelToolButton">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -562,7 +562,7 @@
       <zorder>modelToolButton</zorder>
       <zorder>modelLineEdit</zorder>
      </widget>
-     <widget class="QPushButton" name="genPushButton">
+     <widget class="SignalizedPushButton" name="genPushButton">
       <property name="geometry">
        <rect>
         <x>440</x>
@@ -907,7 +907,7 @@ QListView::item:selected:hover {
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="modelListPlus">
+     <widget class="SignalizedPushButton" name="modelListPlus">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -926,7 +926,7 @@ QListView::item:selected:hover {
        <string>+</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="modelListMinus">
+     <widget class="SignalizedPushButton" name="modelListMinus">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -976,7 +976,7 @@ QListView::item:selected:hover {
        <set>Qt::LinksAccessibleByMouse</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="modelListReset">
+     <widget class="SignalizedPushButton" name="modelListReset">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -1252,7 +1252,7 @@ QListView::item:selected:hover {
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QPushButton" name="modelPathPushButton">
+         <widget class="SignalizedPushButton" name="modelPathPushButton">
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
@@ -1301,7 +1301,7 @@ QPushButton:selected {
        </layout>
       </widget>
      </widget>
-     <widget class="QPushButton" name="modelDefaultPushButton">
+     <widget class="SignalizedPushButton" name="modelDefaultPushButton">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1320,7 +1320,7 @@ QPushButton:selected {
        <string>Modèle par défaut</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="modelApplyPushButton">
+     <widget class="SignalizedPushButton" name="modelApplyPushButton">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -1452,6 +1452,11 @@ QPushButton:selected {
    <class>PathMenuLabel</class>
    <extends>QLabel</extends>
    <header>damysos/ui/widgets/labels.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SignalizedPushButton</class>
+   <extends>QPushButton</extends>
+   <header>damysos/ui/widgets/push_buttons.h</header>
   </customwidget>
  </customwidgets>
  <resources>

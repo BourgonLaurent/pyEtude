@@ -22,14 +22,14 @@
 
 ## Imports
 # Project packages
-from PySide2.QtGui import QCursor
 from damysos.config.settings import DEFAULT_MATIERES
+from damysos.ui.widgets.push_buttons import SignalizedPushButton
 
 # Default packages
 import locale
+from typing import cast, Tuple
 
 # External packages
-from typing import cast, Tuple
 from PySide2.QtCore import SignalInstance, Slot, Qt
 from PySide2.QtWidgets import (
     QFileDialog,
@@ -39,26 +39,26 @@ from PySide2.QtWidgets import (
     QSpacerItem,
     QVBoxLayout,
     QWidget,
-    QPushButton,
     QTableWidget,
     QTableWidgetItem,
     QAbstractItemView,
     QAbstractScrollArea,
 )
+from PySide2.QtGui import QCursor
 
 
 class MatiereTable(QWidget):
     """
     Group of modified QTableWidget and QPushButton containing additional logic and buttons
-    
+
     Attributes
     ----------
     verticalLayout: QVBoxLayout
         The main layout of the widget, regroups everything
-    
+
     tableWidget: MatiereTableWidget
         The MatiereTableWidget
-    
+
     control: MatiereTableControl
         The buttons under the MatiereTableWidget
     """
@@ -88,15 +88,15 @@ class MatiereTable(QWidget):
 class MatiereTableWidget(QTableWidget):
     """
     Modified QTableWidget containing additional logic
-    
+
     Attributes
     ----------
     verticalLayout: QVBoxLayout
         The main layout of the widget, regroups everything
-    
+
     tableWidget: MatiereTableWidget
         The MatiereTableWidget
-    
+
     control: MatiereTableControl
         The buttons under the MatiereTableWidget
     """
@@ -111,24 +111,24 @@ class MatiereTableWidget(QTableWidget):
         ----------
         parent : QWidget
             QWidget that will be attached to this widget
-        
+
         Methods
         ----------
         set_headers: () -> ()
             Configures and loads the widget inside the table
-        
+
         set_connections: () -> ()
             Connects the Signals and Slots of components
-        
+
         add_row: () -> ()
             Add a row to the bottom of the table
-        
+
         remove_row: () -> ()
             Remove the selected row (or the last one if none are selected) in the table
-        
+
         clear: () -> ()
             (Override) Remove everything in the table
-        
+
         setTextAt: (row: int, column: int, text: str) -> ()
             Set the text on a new item
         """
@@ -257,14 +257,14 @@ class MatiereTableControl(QWidget):
 
         self.boxlayout = QHBoxLayout()  # type: ignore
 
-        self.plus = QPushButton("+", parent=self)
+        self.plus = SignalizedPushButton("+", parent=self)
         self.plus.setFixedSize(21, 24)
-        self.plus.clicked.connect(parent.tableWidget.add_row)  # type: ignore
+        self.plus.pressed.connect(parent.tableWidget.add_row)
         self.boxlayout.addWidget(self.plus)
 
-        self.minus = QPushButton("-", parent=self)
+        self.minus = SignalizedPushButton("-", parent=self)
         self.minus.setFixedSize(21, 24)
-        self.minus.clicked.connect(parent.tableWidget.remove_row)  # type: ignore
+        self.minus.pressed.connect(parent.tableWidget.remove_row)
         self.boxlayout.addWidget(self.minus)
 
         self.spacer = QSpacerItem(
@@ -272,7 +272,7 @@ class MatiereTableControl(QWidget):
         )
         self.boxlayout.addItem(self.spacer)
 
-        self.reset = QPushButton("Réinitialiser", parent=self)
+        self.reset = SignalizedPushButton("Réinitialiser", parent=self)
         self.reset.setFixedSize(85, 24)
-        self.reset.clicked.connect(lambda: parent.tableWidget.clear(set_default=True))  # type: ignore
+        self.reset.pressed.connect(lambda: parent.tableWidget.clear(set_default=True))
         self.boxlayout.addWidget(self.reset)

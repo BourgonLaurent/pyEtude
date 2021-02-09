@@ -144,10 +144,10 @@ class DocumentCreatedMessageBox(QMessageBox):
     ----------
     filepath : str
         Path to file to open
-    
+
     window : QWidget
         Widget that will have the QMessageBox
-    
+
     Methods
     ----------
     openFile: () -> ()
@@ -195,7 +195,7 @@ class DocumentCreatedMessageBox(QMessageBox):
         ----------
         buttonAccept : QPushButton (role: QMessageBox.ButtonRole.AcceptRole)
             Button accepting the overwrite
-        
+
         buttonReject : QPushButton (role: QMessageBox.ButtonRole.RejectRole)
             Button refusing the overwrite
         """
@@ -224,7 +224,7 @@ class AutomaticNumberMessageBox(QMessageBox):
     ----------
     buttonAccept : QPushButton (role: QMessageBox.ButtonRole.AcceptRole)
         Button accepting the overwrite
-    
+
     buttonReject : QPushButton (role: QMessageBox.ButtonRole.RejectRole)
         Button refusing the overwrite
     """
@@ -252,4 +252,3 @@ class WordSaveFileDialog(QFileDialog):
         self.setFileMode(QFileDialog.FileMode.AnyFile)
         self.setNameFilter("Microsoft Word (*.docx)")
         self.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
-

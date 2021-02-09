@@ -30,7 +30,7 @@ from damysos.config.matieres import Matiere
 
 # Default packages
 import locale
-from typing import cast
+from typing import cast, overload
 
 # External packages
 from PySide2.QtCore import Qt, Signal, SignalInstance, Slot
@@ -43,16 +43,27 @@ from PySide2.QtWidgets import (
 )
 
 
-class ConfigPushButton(QPushButton):
+class SignalizedPushButton(QPushButton):
+    pressed: SignalInstance
+
+    @overload
+    def __init__(self, parent: QWidget) -> None:
+        ...
+
+    @overload
+    def __init__(self, text: str, parent: QWidget) -> None:
+        super().__init__(text=text or "", parent=parent)
+
+
+class ConfigPushButton(SignalizedPushButton):
     ui: "damysos.ui.designer.designer_ui.Ui_MainWindow"
 
-    clicked: SignalInstance
     config_done = cast(SignalInstance, Signal())
 
     def __init__(self, parent: QWidget) -> None:
-        super().__init__(text="", parent=parent)
+        super().__init__(parent=parent)
 
-        self.clicked.connect(self.save_config)
+        self.pressed.connect(self.save_config)
 
     def save_config(self):
         settings: Settings = self.ui.settings  # type: ignore
@@ -77,7 +88,7 @@ class ConfigPushButton(QPushButton):
         self.config_done.emit()
 
 
-class MatiereMenuPushButton(QPushButton):
+class MatiereMenuPushButton(SignalizedPushButton):
     settings: Settings
     requestAutomaticCheck = cast(SignalInstance, Signal(str))
 
@@ -125,7 +136,7 @@ class MatiereMenuPushButton(QPushButton):
             self.requestAutomaticCheck.emit(None)
 
 
-class NumeroMenuPushButton(QPushButton):
+class NumeroMenuPushButton(SignalizedPushButton):
     requestAutomaticCheck = cast(SignalInstance, Signal(str))
 
     def __init__(self, parent: QWidget) -> None:

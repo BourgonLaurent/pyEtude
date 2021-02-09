@@ -30,13 +30,13 @@ from PySide2.QtCore import QRegExp
 
 # Allow only safe, path-friendly characters
 SAFE_CHARACTERS = r"[^#%&{}\\<>*?/$!'\":@+`|=]+"
-SAFE_CHARACTERS_QREGEXP = QRegExp(SAFE_CHARACTERS)
+SAFE_CHARACTERS_QREGEXP = QRegExp(SAFE_CHARACTERS)  # type: ignore
 
 
 def execute_file(file_to_open: str):
     if sys.platform.startswith("win"):
         try:
-            os.startfile(file_to_open)  # type: ignore
+            os.startfile(file_to_open)  # type: ignore Pylance throws an error when not on Windows
         except:
             pass
     else:

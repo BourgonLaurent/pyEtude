@@ -21,6 +21,7 @@ from damysos.ui.widgets.push_buttons import ConfigPushButton
 from damysos.ui.widgets.push_buttons import MatiereMenuPushButton
 from damysos.ui.widgets.push_buttons import NumeroMenuPushButton
 from damysos.ui.widgets.labels import PathMenuLabel
+from damysos.ui.widgets.push_buttons import SignalizedPushButton
 
 from  . import designer_resources_rc
 
@@ -188,13 +189,13 @@ class Ui_MainWindow(object):
         self.modelLineEdit.setFont(font)
         self.modelLineEdit.setAlignment(Qt.AlignCenter)
         self.modelLineEdit.setClearButtonEnabled(False)
-        self.modelToolButton = QPushButton(self.modelGroupBox)
+        self.modelToolButton = SignalizedPushButton(self.modelGroupBox)
         self.modelToolButton.setObjectName(u"modelToolButton")
         self.modelToolButton.setGeometry(QRect(270, 30, 21, 29))
         self.modelToolButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.modelToolButton.raise_()
         self.modelLineEdit.raise_()
-        self.genPushButton = QPushButton(self.genTab)
+        self.genPushButton = SignalizedPushButton(self.genTab)
         self.genPushButton.setObjectName(u"genPushButton")
         self.genPushButton.setGeometry(QRect(440, 381, 150, 55))
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
@@ -325,12 +326,12 @@ class Ui_MainWindow(object):
         self.modelListWidget.setSpacing(10)
         self.modelListWidget.setBatchSize(100)
         self.modelListWidget.setSortingEnabled(True)
-        self.modelListPlus = QPushButton(self.modelTab)
+        self.modelListPlus = SignalizedPushButton(self.modelTab)
         self.modelListPlus.setObjectName(u"modelListPlus")
         self.modelListPlus.setEnabled(True)
         self.modelListPlus.setGeometry(QRect(20, 370, 21, 21))
         self.modelListPlus.setCursor(QCursor(Qt.PointingHandCursor))
-        self.modelListMinus = QPushButton(self.modelTab)
+        self.modelListMinus = SignalizedPushButton(self.modelTab)
         self.modelListMinus.setObjectName(u"modelListMinus")
         self.modelListMinus.setEnabled(False)
         self.modelListMinus.setGeometry(QRect(47, 370, 21, 21))
@@ -346,7 +347,7 @@ class Ui_MainWindow(object):
         self.modelWikiLink.setTextFormat(Qt.RichText)
         self.modelWikiLink.setOpenExternalLinks(True)
         self.modelWikiLink.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
-        self.modelListReset = QPushButton(self.modelTab)
+        self.modelListReset = SignalizedPushButton(self.modelTab)
         self.modelListReset.setObjectName(u"modelListReset")
         self.modelListReset.setEnabled(True)
         self.modelListReset.setGeometry(QRect(126, 370, 75, 21))
@@ -482,7 +483,7 @@ class Ui_MainWindow(object):
 
         self.modelPathsLayout.setWidget(0, QFormLayout.FieldRole, self.modelPathModelLabel)
 
-        self.modelPathPushButton = QPushButton(self.formLayoutWidget)
+        self.modelPathPushButton = SignalizedPushButton(self.formLayoutWidget)
         self.modelPathPushButton.setObjectName(u"modelPathPushButton")
         self.modelPathPushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.modelPathPushButton.setStyleSheet(u"QPushButton {\n"
@@ -523,12 +524,12 @@ class Ui_MainWindow(object):
 
         self.modelPathsLayout.setWidget(0, QFormLayout.LabelRole, self.modelPathPushButton)
 
-        self.modelDefaultPushButton = QPushButton(self.modelTab)
+        self.modelDefaultPushButton = SignalizedPushButton(self.modelTab)
         self.modelDefaultPushButton.setObjectName(u"modelDefaultPushButton")
         self.modelDefaultPushButton.setEnabled(False)
         self.modelDefaultPushButton.setGeometry(QRect(220, 370, 131, 21))
         self.modelDefaultPushButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.modelApplyPushButton = QPushButton(self.modelTab)
+        self.modelApplyPushButton = SignalizedPushButton(self.modelTab)
         self.modelApplyPushButton.setObjectName(u"modelApplyPushButton")
         self.modelApplyPushButton.setEnabled(True)
         self.modelApplyPushButton.setGeometry(QRect(470, 370, 201, 63))
