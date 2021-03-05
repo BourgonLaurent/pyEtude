@@ -286,26 +286,33 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qmenu
 
 --------------------------------------------------------------------------- */
 QMenu {
-    border: 0.5px solid #787878;
-    color: #F0F0F0;
-    margin: 0px;
+  border: 0.5px solid #787878;
+  color: #F0F0F0;
+  margin: 0px;
+  padding: 0px;
 }
 
 QMenu::separator {
-    height: 1px;
-    background-color: #444444;
+  height: 1px;
+  background-color: #444444;
 }
 
 QMenu::item {
-    background-color: #262626;
-    padding: 4px 4px 4px 4px;
-    /* Reserve space for selection border */
-    border: 1px transparent #32414B;
+  background-color: #262626;
+  padding: 4px 4px 4px 4px;
+  padding-left: 0px;
+  /* Reserve space for selection border */
+  border: 1px transparent #32414B;
+  border-radius: 4px;
 }
 
 QMenu::item:selected {
-    color: #F0F0F0;
-    background-color: #605e5c;
+  color: #F0F0F0;
+  background-color: #605e5c;
+}
+
+QMenu::indicator {
+  padding-left: 10px;
 }
 
 /* QAbstractItemView ------------------------------------------------------
@@ -1709,8 +1716,22 @@ QAbstractView:selected {
 
 --------------------------------------------------------------------------- */
 
-#infoGroupBox QLineEdit,
-#infoConfigGroupBox QLineEdit,
-#modelGroupBox QLineEdit {
+QGroupBox#infoGroupBox QLineEdit,
+QGroupBox#infoConfigGroupBox QLineEdit,
+QGroupBox#modelGroupBox QLineEdit {
   border: 0px solid;
+}
+
+QLineEdit#matLineEdit,
+QLineEdit#numLineEdit,
+QLineEdit#modelLineEdit {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+QLineEdit:disabled#matLineEdit,
+QLineEdit:disabled#numLineEdit,
+QLineEdit:disabled#modelLineEdit {
+  background-color: #363636;
+  border: 0px;
 }

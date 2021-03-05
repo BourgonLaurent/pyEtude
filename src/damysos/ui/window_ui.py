@@ -72,6 +72,16 @@ class DamysosMWUI(Ui_MainWindow):
 
         self.update_path_label()
 
+        # Get first matière and set it
+        _mat_action = self.matMenuButton.menu().actions()[0]
+        _mat_action.setChecked(True)
+        self.matMenuButton.action_changed(_mat_action)  # Force the refresh of the mat
+
+        # Set Num to Automatic
+        _num_action = self.numMenuButton.action_automatic
+        _num_action.setChecked(True)
+        self.numMenuButton.action_changed(_num_action)  # Force the refresh of the num
+
     def set_settings_values(self):
         self.auteurLineEdit.setText(self.settings.auteur)
         self.auteurPersoLabel.setText(self.settings.auteur)
@@ -204,7 +214,8 @@ class DamysosMWUI(Ui_MainWindow):
                     self.numMenuButton.action_automatic.setChecked(True)
 
         elif self.numMenuButton.action_automatic.isChecked():
-            new_name = f"{prefix}1"
+            parent_folder = os.path.basename(self.pathPathLabel.directory)
+            new_name = parent_folder.replace(f"{self.matLineEdit.getText()}-", "")
 
         if new_name:
             self.numLineEdit.setEnabled(False)

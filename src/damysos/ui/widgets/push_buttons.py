@@ -30,10 +30,11 @@ from damysos.config.matieres import Matiere
 
 # Default packages
 import locale
-from typing import cast, overload
+from typing import cast
 
 # External packages
 from PySide2.QtCore import Qt, Signal, SignalInstance, Slot
+from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import (
     QAction,
     QActionGroup,
@@ -149,6 +150,8 @@ class NumeroMenuPushButton(SignalizedPushButton):
         self.action_chapter = self.menu().addMenu("Chapitre")
         self.action_module = self.menu().addMenu("Module")
 
+        self.action_chapter.setIcon(QIcon(cast(QPixmap, ":/")))
+
         for alias, action_menu in {
             "CHP": self.action_chapter,
             "MOD": self.action_module,
@@ -158,9 +161,13 @@ class NumeroMenuPushButton(SignalizedPushButton):
                 _action.setCheckable(True)
                 action_menu.addAction(self.action_group.addAction(_action))  # type: ignore
 
-        # Date prefix
+        # General
+        self.action_general = self.add_action("Général")
+        # Date
         self.action_calendar = self.add_action("Choisir une date")
+
         self.menu().addSeparator()
+
         # Automatic
         self.action_automatic = self.add_action("Automatique")
         # Custom
