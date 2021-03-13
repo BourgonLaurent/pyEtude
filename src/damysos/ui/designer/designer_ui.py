@@ -397,7 +397,7 @@ class Ui_MainWindow(object):
         self.titreModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.titreModelCheckBox.setObjectName(u"titreModelCheckBox")
         font7 = QFont()
-        font7.setFamily(u"Consolas")
+        font7.setFamily(u"Fira Mono")
         self.titreModelCheckBox.setFont(font7)
         self.titreModelCheckBox.setChecked(True)
 
@@ -570,7 +570,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

@@ -58,7 +58,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="genTab">
      <attribute name="title">
@@ -1072,7 +1072,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="titreModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
@@ -1087,7 +1087,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="soustitreModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
@@ -1102,7 +1102,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="matiereModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
@@ -1117,7 +1117,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="numeroModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
@@ -1132,7 +1132,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="sectionModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
@@ -1147,7 +1147,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="auteurModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
@@ -1162,7 +1162,7 @@ QListView::item:selected:hover {
          <widget class="QCheckBox" name="niveauModelCheckBox">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="styleSheet">
@@ -1237,7 +1237,7 @@ QListView::item:selected:hover {
          <widget class="QLabel" name="modelPathModelLabel">
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>Fira Mono</family>
            </font>
           </property>
           <property name="text">
