@@ -22,7 +22,6 @@
 
 ## Librairies
 # Project packages
-import damysos.frontend
 from damysos.app import DamysosApp
 
 # Default packages
@@ -32,5 +31,4 @@ import os
 os.chdir(os.path.dirname(__file__))
 
 if __name__ == "__main__":
-    # damysos.frontend.frontEnd().executeGUI()
     DamysosApp().exec_()
