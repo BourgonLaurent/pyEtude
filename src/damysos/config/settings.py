@@ -1,7 +1,7 @@
 ## settings.py - damysos.config
 # Settings classes
 #
-# MIT (c) 2020 Laurent Bourgon
+# MIT (c) 2021 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
 #    of this software and associated documentation files (the "Software"), to deal
 #    in the Software without restriction, including without limitation the rights
@@ -81,15 +81,15 @@ class Settings:
 
     matieres: Dict[str, Matiere]
         Dictionary containing the matière, the key is its name
-    
+
     modeles: ModelConfig
         Models that are available to the user
-    
+
     Methods
     ----------
     load_config_file () -> Settings
-        Populate the parameters from damysos.CONFIG_FILE    
-    
+        Populate the parameters from damysos.CONFIG_FILE
+
     rebuild_from_dict: (rebuild_dict: Dict[str, Any]) -> Settings
         Create a new object from the dictionary (to be used with dataclasses.asdict)
     """

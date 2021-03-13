@@ -1,7 +1,7 @@
 ## matieres.py - damysos.config
 # Matières Classes
 #
-# MIT (c) 2020 Laurent Bourgon
+# MIT (c) 2021 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
 #    of this software and associated documentation files (the "Software"), to deal
 #    in the Software without restriction, including without limitation the rights
@@ -35,10 +35,10 @@ class Matiere:
     ----------
     alias: str
         (Optional) Short name of the matière
-    
+
     path: str
         (Optional) Path of where the files for this matière are saved
-    
+
     Static Methods
     ----------
     rebuild_from_dict: (rebuild_dict: Dict[str, str]) -> Matiere
