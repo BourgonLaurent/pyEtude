@@ -24,16 +24,15 @@
 # Project packages
 from damysos import __version__, GITHUB_REPO
 from damysos.helpers.updater import check_new_version
-from damysos.helpers.utilities import execute_file
 
 # Default packages
 import os
 from typing import cast
 
 # External packages
-from PySide2.QtCore import QPoint, Signal, SignalInstance, Slot
+from PySide2.QtCore import QPoint, Signal, SignalInstance
 from PySide2.QtGui import QMouseEvent
-from PySide2.QtWidgets import QAction, QActionGroup, QFileDialog, QLabel, QMenu, QWidget
+from PySide2.QtWidgets import QAction, QActionGroup, QLabel, QMenu, QWidget
 
 
 class VersionLabel(QLabel):
@@ -84,6 +83,8 @@ class PathMenuLabel(ClickableLabel):
         super().__init__(parent=parent)
 
         self.menu = QMenu("pathMenu", parent)
+        self.menu.setObjectName("pathMenu")
+
         self.action_group = QActionGroup(self.menu)
 
         self.action_open_folder = self.add_action("Ouvrir le dossier sélectionné")

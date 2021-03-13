@@ -1735,3 +1735,15 @@ QLineEdit:disabled#modelLineEdit {
   background-color: #363636;
   border: 0px;
 }
+
+QPushButton#matMenuButton,
+QPushButton#numMenuButton,
+QPushButton#modelMenuButton {
+  background-color: rgba(255,255,255,0);
+  border: none;
+}
+
+QMenu::item#pathMenu {
+  padding-left: 10px;
+  padding-right: 10px;
+}

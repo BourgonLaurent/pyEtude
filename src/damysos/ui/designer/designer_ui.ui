@@ -543,7 +543,7 @@
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="SignalizedPushButton" name="modelToolButton">
+      <widget class="SignalizedPushButton" name="modelMenuButton">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -559,7 +559,7 @@
         <string/>
        </property>
       </widget>
-      <zorder>modelToolButton</zorder>
+      <zorder>modelMenuButton</zorder>
       <zorder>modelLineEdit</zorder>
      </widget>
      <widget class="SignalizedPushButton" name="genPushButton">
