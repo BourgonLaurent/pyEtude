@@ -22,7 +22,7 @@
 
 ## Librairies
 # Project packages
-from damysos.app import DamysosApp
+from app import DamysosApp
 
 # Default packages
 import os

@@ -21,14 +21,6 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-## General parameters
-# Current version
-__version__ = r"4.0.0b25"
-# Important files
-CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
-# Assets
-GITHUB_REPO = r"BourgonLaurent/Damysos"
-
 ## Imports
 # Required to import separately
 import sys
@@ -36,8 +28,12 @@ import sys
 # Check if everything is installed correctly
 # Shows an error to the user if not
 try:
-    # Standard library
-    import os, json, locale, typing
+    # Standard library to check
+    import os, importlib, json, locale, typing
+
+    # Used in __init__
+    from typing import Dict
+    from importlib.metadata import metadata
 
     # External libraries
     import PySide2, docxtpl
@@ -45,7 +41,7 @@ try:
 except ImportError as e:
     # Show error message
     print(
-        f"damysos - v{__version__}\n\n"
+        f"damysos\n\n"
         + "[!] Impossible de continuer:\n\n"
         + f"\t{repr(e)}"
         + "\n\n"
@@ -54,7 +50,6 @@ except ImportError as e:
         + "Essayez la commande suivante:"
         + f"\tpip install --update {e.name}\n\n"
         + "Pour plus d'aide référez-vous au README.md sur GitHub:\n"
-        + f"\thttps://github.com/{GITHUB_REPO}"
     )
     # Exit and tell error
     sys.exit(e)
@@ -67,3 +62,14 @@ try:
         locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 except:
     assert EnvironmentError
+
+## Get Project Variables
+_metadata = metadata(__package__)
+
+__version__ = _metadata.get("Version", failobj="0.0.0")
+
+GITHUB_REPO = _metadata.get("Project-URL", failobj="").replace(
+    "Repository, https://github.com/", ""
+)
+
+CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
