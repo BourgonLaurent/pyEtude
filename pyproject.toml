@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "damysos"
+version = "4.0.0-b26"
+description = "📝 Programme Python qui permet de créer des documents personalisés."
+authors = ["Laurent Bourgon <laurent.bourgon@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/BourgonLaurent/Damysos"
+
+[tool.poetry.dependencies]
+python = ">=3.8, <3.10"
+PySide2 = "^5.15.2"
+docxtpl = "^0.11.5"
+
+[tool.poetry.dev-dependencies]
+black = "^21.6b0"
+bandit = "^1.7.0"
+notebook = "^6.4.0"
+ipython = "^7.25.0"
+ipywidgets = "^7.6.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
