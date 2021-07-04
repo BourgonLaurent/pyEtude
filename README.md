@@ -84,20 +84,24 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Avoir plusieurs types de documents (page de présentation, devoirs, etc)
 - [x] Utiliser Qt for Python au lieu de PyQt5
 - [x] Trouver un nouveau nom
-- [ ] Réarranger tout le projet pour permettre un meilleur ajouts de fonctionnalités et de maintenance
+- [x] Réarranger tout le projet pour permettre un meilleur ajouts de fonctionnalités et de maintenance
+- [x] Utiliser `poetry` au lieu d'un `requirements.txt`
+- [ ] Mettre à jour de `PySide2` -> `PySide6`
 - [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
 - [ ] Création d'une version installable
 - [ ] Possibilité de mises à jours automatiques
-- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `pip install Damysos`)
+- [ ] Ajout dans [PyPI](https://pypi.org/) afin de pouvoir le télécharger avec une simple commande (ex. `python3 -m pip install Damysos` & `python3 -m damysos`)
 
 ## 🏁 Bien Démarrer<a name="démarrer"></a>
 
 ### Configuration requise<a name="configuration"></a>
 
+- **MÉTHODE RECOMMANDÉE: Si vous avez [poetry](python-poetry.org) installé, vous pouvez utiliser `poetry install --no-dev` dans la racine du projet et tout sera installé pour vous**
+
 | Catégorie          | Valeur           | Notes additionnelles                                                                         | Installation                                               |
 | ------------------ | ---------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | OS:                | N'importe lequel |                                                                                              |                                                            |
-| Python:            | `Python 3`       | Développé sous Python 3.8.2, veuillez mettre à jour votre version si vous avez des problèmes | [Télécharger `Python3`](https://www.python.org/downloads/) |
+| Python:            | `Python 3.8+`    | Développé sous Python 3.9.6, veuillez mettre à jour votre version si vous avez des problèmes | [Télécharger `Python3`](https://www.python.org/downloads/) |
 | Extensions Python: | `json`           | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
 |                    | `locale`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
 |                    | `os`             | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
@@ -105,8 +109,9 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 |                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
 |                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
 |                    | `PySide2`        | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `python3 -m pip install PySide2`     |
+|                    | `docxtpl`        | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `python3 -m pip install docxtpl`     |
 
-- Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`pip install notebook ipywidgets`)
+- Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`python3 -m pip install notebook ipywidgets`)
 
 ### Installation<a name="installation"></a>
 
