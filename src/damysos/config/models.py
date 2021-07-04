@@ -126,7 +126,7 @@ class Model:
         model = Model()
 
         for key, value in rebuild_dict.items():
-            if key == "values":
+            if isinstance(value, dict):
                 value = ModelValues.rebuild_from_dict(value)
 
             model.__setattr__(key, value)
@@ -186,7 +186,7 @@ class ModelConfig:
         model_config = ModelConfig()
 
         for key, value in rebuild_dict.items():
-            if key == "models":
+            if isinstance(value, list):
                 value = [Model.rebuild_from_dict(m) for m in value]
 
             model_config.__setattr__(key, value)
@@ -214,7 +214,7 @@ class ModelConfig:
 #     ],
 # )
 # model_config_dict = {
-#     "models": {
+#     "models": [{
 #         "name": "Documents de Révision",
 #         "filepath": "Documents de Révision.docx",
 #         "export_name": "Documents de Révision",
@@ -227,6 +227,6 @@ class ModelConfig:
 #             "numero": "Numéro",
 #             "section": "Section",
 #         },
-#     },
+#     }],
 #     "default": None,
 # }
