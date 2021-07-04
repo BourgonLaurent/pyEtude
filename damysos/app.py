@@ -22,8 +22,8 @@
 
 ## Imports
 # Project packages
-from damysos.helpers.updater import check_updates
-from damysos.ui.window import DamysosMainWindow
+from .helpers.updater import check_updates
+from .ui.window import DamysosMainWindow
 
 # Default packages
 from typing import cast, List
@@ -61,7 +61,7 @@ class DamysosApp(QApplication):
         self.window = DamysosMainWindow()
 
         # Set window icon
-        _icon = QIcon(":/assets/icons/damysos.icns")
+        _icon = QIcon(":/assets/icons/damysos.icns")  # type: ignore -- error in stubs
         self.setWindowIcon(_icon)
         self.window.setWindowIcon(_icon)
 

@@ -22,7 +22,7 @@
 
 ## Imports
 # Project packages
-from damysos import __version__
+from . import __version__
 
 # Default packages
 from typing import Dict

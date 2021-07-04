@@ -1,6 +1,7 @@
 ## __init__.py - damysos
 # Set global variables and make global checks
 # Ensures that everything will work correctly after
+# Run this file as "__main__" to launch Damysos
 #
 # MIT (c) 2021 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -66,10 +67,10 @@ except:
 ## Get Project Variables
 _metadata = metadata(__package__)
 
-__version__ = _metadata.get("Version", failobj="0.0.0")
+__version__: str = _metadata.get("Version", failobj="0.0.0")
 
-GITHUB_REPO = _metadata.get("Project-URL", failobj="").replace(
+GITHUB_REPO: str = _metadata.get("Project-URL", failobj="").replace(
     "Repository, https://github.com/", ""
 )
 
-CONFIG_FILE = "damysos.config"  # (format: JSON) généré avec le configurateur
+CONFIG_FILE: str = "damysos.config"  # (format: JSON) généré avec le configurateur

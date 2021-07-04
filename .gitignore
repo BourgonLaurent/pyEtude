@@ -106,9 +106,6 @@ venv.bak/
 # Operating system
 .DS_Store
 
-# VSCode
-.vscode/
-
 # Project related, general
 DEBUG/
 releases/

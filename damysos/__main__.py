@@ -1,4 +1,5 @@
-# Damysos.py: damysos launcher
+## __main__.py - damysos
+# Launch Damysos (`python3 -m damysos`)
 #
 # MIT (c) 2021 Laurent Bourgon
 #    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,16 +20,15 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-
-## Librairies
+## Imports
 # Project packages
-from app import DamysosApp
+from .app import DamysosApp
 
 # Default packages
 import os
 
-# Accède aux fichiers depuis la racine du programme, et non l'endroit du shell
-os.chdir(os.path.dirname(__file__))
+# Move to `Damysos` folder, where the config is
+os.chdir(os.path.dirname(os.path.dirname(__file__)))
 
 if __name__ == "__main__":
     DamysosApp().exec_()
