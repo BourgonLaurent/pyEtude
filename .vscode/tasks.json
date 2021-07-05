@@ -9,7 +9,8 @@
             "command": "poetry",
             "args": [
                 "run",
-                "damysos-build-resources"
+                "python",
+                "build_resources.py"
             ],
             "isBackground": false
         }

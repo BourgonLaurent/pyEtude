@@ -21,7 +21,7 @@
             "name": "Damysos: Compile",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/helpers/build_resources.py",
+            "program": "${workspaceFolder}/build_resources.py",
             "console": "integratedTerminal",
         },
         {
