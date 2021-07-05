@@ -9,7 +9,7 @@
             "command": "poetry",
             "args": [
                 "run",
-                "build-resources"
+                "damysos-build-resources"
             ],
             "isBackground": false
         }

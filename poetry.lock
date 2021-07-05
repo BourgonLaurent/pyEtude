@@ -224,6 +224,7 @@ python-versions = ">=3.7"
 debugpy = ">=1.0.0"
 ipython = ">=7.23.1"
 jupyter-client = "*"
+matplotlib-inline = {version = ">=0.1.0,<0.2.0appnope", markers = "platform_system == \"Darwin\""}
 tornado = ">=4.2"
 traitlets = ">=4.1.0"
 
@@ -249,7 +250,6 @@ pexpect = {version = ">4.3", markers = "sys_platform != \"win32\""}
 pickleshare = "*"
 prompt-toolkit = ">=2.0.0,<3.0.0 || >3.0.0,<3.0.1 || >3.0.1,<3.1.0"
 pygments = "*"
-setuptools = ">=18.5"
 traitlets = ">=4.2"
 
 [package.extras]
@@ -330,7 +330,6 @@ python-versions = "*"
 [package.dependencies]
 attrs = ">=17.4.0"
 pyrsistent = ">=0.14.0"
-setuptools = "*"
 six = ">=1.11.0"
 
 [package.extras]
@@ -767,20 +766,6 @@ python-versions = "*"
 win32 = ["pywin32"]
 
 [[package]]
-name = "setuptools"
-version = "57.0.0"
-description = "Easily download, build, install, upgrade, and uninstall Python packages"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[package.extras]
-certs = ["certifi (==2016.9.26)"]
-docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)", "pygments-github-lexers (==0.0.5)", "sphinx-inline-tabs", "sphinxcontrib-towncrier"]
-ssl = ["wincertstore (==0.2)"]
-testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-cov", "pytest-enabler (>=1.0.1)", "mock", "flake8-2020", "virtualenv (>=13.0.0)", "pytest-virtualenv (>=1.2.7)", "wheel", "paver", "pip (>=19.1)", "jaraco.envs", "pytest-xdist", "sphinx", "jaraco.path (>=3.2.0)", "pytest-black (>=0.3.7)", "pytest-mypy"]
-
-[[package]]
 name = "shiboken2"
 version = "5.15.2"
 description = "Python / C++ bindings helper module"
@@ -902,7 +887,7 @@ notebook = ">=4.4.1"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8, <3.10"
-content-hash = "cb10903b7c66d960aa2e6f458bfed893ad94eaab7a88a9102191303e245647dd"
+content-hash = "f068c64b479296278d5b076f973012104af2b305000c02723f1365ab126f95b9"
 
 [metadata.files]
 appdirs = [
@@ -1481,10 +1466,6 @@ regex = [
 send2trash = [
     {file = "Send2Trash-1.7.1-py3-none-any.whl", hash = "sha256:c20fee8c09378231b3907df9c215ec9766a84ee20053d99fbad854fe8bd42159"},
     {file = "Send2Trash-1.7.1.tar.gz", hash = "sha256:17730aa0a33ab82ed6ca76be3bb25f0433d0014f1ccf63c979bab13a5b9db2b2"},
-]
-setuptools = [
-    {file = "setuptools-57.0.0-py3-none-any.whl", hash = "sha256:c8b9f1a457949002e358fea7d3f2a1e1b94ddc0354b2e40afc066bf95d21bf7b"},
-    {file = "setuptools-57.0.0.tar.gz", hash = "sha256:401cbf33a7bf817d08014d51560fc003b895c4cdc1a5b521ad2969e928a07535"},
 ]
 shiboken2 = [
     {file = "shiboken2-5.15.2-5.15.2-cp27-cp27m-macosx_10_13_intel.whl", hash = "sha256:03f41b0693b91c7f89627f1085a4ecbe8591c03f904118a034854d935e0e766c"},
