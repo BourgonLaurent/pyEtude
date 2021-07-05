@@ -46,6 +46,14 @@ class AdvancedLineEdit(QLineEdit):
         super().__init__(parent=parent)
 
     def getText(self) -> str:
+        """
+        Returns the user's text, or the placeholder if none exists
+
+        Returns
+        -------
+        str
+            Text in the AdvancedLineEdit
+        """
         return self.text() or self.placeholderText()
 
 
@@ -64,4 +72,5 @@ class SafeAdvancedLineEdit(AdvancedLineEdit):
 
         super().__init__(parent=parent)
 
+        # Only allow Safe Characters
         self.setValidator(QRegularExpressionValidator(SAFE_CHARACTERS_QREGEXP, self))
