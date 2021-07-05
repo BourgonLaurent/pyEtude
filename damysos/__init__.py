@@ -37,7 +37,7 @@ try:
     from importlib.metadata import metadata
 
     # External libraries
-    import PySide2, docxtpl
+    import PySide6, docxtpl
 
 except ImportError as e:
     # Show error message

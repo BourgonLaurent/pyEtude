@@ -3,14 +3,14 @@
 ################################################################################
 ## Form generated from reading UI file 'designer_ui.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.1.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import *  # type: ignore
+from PySide6.QtGui import *  # type: ignore
+from PySide6.QtWidgets import *  # type: ignore
 
 from damysos.ui.widgets.labels import VersionLabel
 from damysos.ui.widgets.line_edits import SafeAdvancedLineEdit
@@ -65,7 +65,7 @@ class Ui_MainWindow(object):
         sizePolicy1.setHeightForWidth(self.titreLineEdit.sizePolicy().hasHeightForWidth())
         self.titreLineEdit.setSizePolicy(sizePolicy1)
         font = QFont()
-        font.setFamily(u"Garamond")
+        font.setFamilies([u"Garamond"])
         self.titreLineEdit.setFont(font)
         self.titreLineEdit.setAlignment(Qt.AlignCenter)
         self.titreLineEdit.setClearButtonEnabled(True)
@@ -133,7 +133,7 @@ class Ui_MainWindow(object):
         sizePolicy1.setHeightForWidth(self.sectionLineEdit.sizePolicy().hasHeightForWidth())
         self.sectionLineEdit.setSizePolicy(sizePolicy1)
         font1 = QFont()
-        font1.setFamily(u"Garamond")
+        font1.setFamilies([u"Garamond"])
         font1.setUnderline(True)
         self.sectionLineEdit.setFont(font1)
         self.sectionLineEdit.setMaxLength(32767)
@@ -155,7 +155,7 @@ class Ui_MainWindow(object):
         self.auteurPersoLabel.setObjectName(u"auteurPersoLabel")
         self.auteurPersoLabel.setGeometry(QRect(10, 25, 271, 31))
         font2 = QFont()
-        font2.setFamily(u"Garamond")
+        font2.setFamilies([u"Garamond"])
         font2.setPointSize(18)
         font2.setItalic(True)
         self.auteurPersoLabel.setFont(font2)
@@ -169,7 +169,7 @@ class Ui_MainWindow(object):
         self.niveauPersoLabel.setObjectName(u"niveauPersoLabel")
         self.niveauPersoLabel.setGeometry(QRect(10, 25, 271, 31))
         font3 = QFont()
-        font3.setFamily(u"Garamond")
+        font3.setFamilies([u"Garamond"])
         font3.setPointSize(17)
         font3.setItalic(True)
         self.niveauPersoLabel.setFont(font3)
@@ -207,7 +207,6 @@ class Ui_MainWindow(object):
         font4 = QFont()
         font4.setPointSize(18)
         font4.setBold(True)
-        font4.setWeight(75)
         self.genPushButton.setFont(font4)
         self.genPushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.verticalLayoutWidget_2 = QWidget(self.genTab)
@@ -340,7 +339,7 @@ class Ui_MainWindow(object):
         self.modelWikiLink.setObjectName(u"modelWikiLink")
         self.modelWikiLink.setGeometry(QRect(16, 409, 191, 31))
         font6 = QFont()
-        font6.setFamily(u"Garamond")
+        font6.setFamilies([u"Garamond"])
         font6.setPointSize(12)
         self.modelWikiLink.setFont(font6)
         self.modelWikiLink.setCursor(QCursor(Qt.PointingHandCursor))
@@ -397,7 +396,7 @@ class Ui_MainWindow(object):
         self.titreModelCheckBox = QCheckBox(self.formLayoutWidget_2)
         self.titreModelCheckBox.setObjectName(u"titreModelCheckBox")
         font7 = QFont()
-        font7.setFamily(u"Fira Mono")
+        font7.setFamilies([u"Fira Mono"])
         self.titreModelCheckBox.setFont(font7)
         self.titreModelCheckBox.setChecked(True)
 

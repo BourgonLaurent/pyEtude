@@ -40,8 +40,9 @@ import locale
 import os
 
 # External packages
-from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QAction, QFileDialog, QMainWindow
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QAction
+from PySide6.QtWidgets import QFileDialog, QMainWindow
 
 
 class DamysosMWUI(Ui_MainWindow):
@@ -143,7 +144,7 @@ class DamysosMWUI(Ui_MainWindow):
 
         elif selection == self.pathPathLabel.action_choose_file:
             getSaveFilePath = WordSaveFileDialog(parent=self.window)
-            if getSaveFilePath.exec_():  # Only if clicks on 'Open'
+            if getSaveFilePath.exec():  # Only if clicks on 'Open'
                 if getSaveFilePath.selectedFiles():
                     self.pathPathLabel.directory = getSaveFilePath.directory().path()
                     self.pathPathLabel.set_filepath(
@@ -209,7 +210,7 @@ class DamysosMWUI(Ui_MainWindow):
                     self.window, f"{matiere}-{new_name}"
                 )
 
-                if auto_num.exec_():
+                if auto_num.exec():
                     self.numMenuButton.action_automatic.setChecked(False)
                     return
                 else:
@@ -258,7 +259,7 @@ class DamysosMWUI(Ui_MainWindow):
         if filepath.exists():  # If the document already exists
             if DocumentCreatedMessageBox.DocumentExistsMessageBox(
                 self.window, str(filepath)
-            ).exec_():  # Execution code not successful
+            ).exec():  # Execution code not successful
                 return
 
         elif not filepath.parent.exists():  # If the directory doesn't exists
@@ -268,4 +269,4 @@ class DamysosMWUI(Ui_MainWindow):
         document = Document(model.filepath, values, str(filepath))
         document.packWord()
 
-        DocumentCreatedMessageBox(str(filepath), self.window).exec_()
+        DocumentCreatedMessageBox(str(filepath), self.window).exec()

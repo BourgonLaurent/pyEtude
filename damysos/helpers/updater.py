@@ -54,10 +54,10 @@ def check_updates(window):
     """Vérifie les nouvelles versions du logiciel et affiche une boîte de dialogue
 
     Arguments:\n
-      * window {PySide2.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
+      * window {PySide6.QtWidgets.QWidget} -- Instance QWidget auquel la boîte de dialogue s'attachera
     """
     version = check_new_version()
 
     if version > f"v{__version__}":
         update_msgbox = UpdateMessageBox(parent=window, online_version=version)
-        update_msgbox.exec_()
+        update_msgbox.exec()

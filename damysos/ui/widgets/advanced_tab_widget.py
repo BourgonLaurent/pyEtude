@@ -22,7 +22,7 @@
 
 ## Imports
 # External packages
-from PySide2.QtWidgets import QWidget, QTabWidget
+from PySide6.QtWidgets import QWidget, QTabWidget
 
 
 class AdvancedTabWidget(QTabWidget):

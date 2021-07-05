@@ -29,9 +29,9 @@ from typing import cast
 import os, sys
 
 # External packages
-from PySide2.QtCore import QDate, QFile, Qt, Signal, SignalInstance, Slot
-from PySide2.QtGui import QColor, QTextCharFormat
-from PySide2.QtWidgets import (
+from PySide6.QtCore import QDate, QFile, Qt, Signal, SignalInstance, Slot
+from PySide6.QtGui import QColor, QTextCharFormat
+from PySide6.QtWidgets import (
     QFileDialog,
     QMessageBox,
     QWidget,
@@ -170,9 +170,9 @@ class DocumentCreatedMessageBox(QMessageBox):
 
         self.buttonReject = self.addButton("Non", QMessageBox.ButtonRole.RejectRole)
 
-    def exec_(self):
+    def exec(self):
         """Show the alert"""
-        if not super().exec_():  # if exited with Success (0)
+        if not super().exec():  # if exited with Success (0)
             self.openFile()
         else:
             assert ConnectionRefusedError

@@ -30,8 +30,8 @@ import locale
 from typing import cast, Tuple
 
 # External packages
-from PySide2.QtCore import SignalInstance, Slot, Qt
-from PySide2.QtWidgets import (
+from PySide6.QtCore import SignalInstance, Slot, Qt
+from PySide6.QtWidgets import (
     QFileDialog,
     QGroupBox,
     QHBoxLayout,
@@ -44,7 +44,7 @@ from PySide2.QtWidgets import (
     QAbstractItemView,
     QAbstractScrollArea,
 )
-from PySide2.QtGui import QCursor
+from PySide6.QtGui import QCursor
 
 
 class MatiereTable(QWidget):

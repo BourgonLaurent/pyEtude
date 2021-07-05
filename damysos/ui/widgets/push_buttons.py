@@ -33,15 +33,9 @@ import locale
 from typing import cast
 
 # External packages
-from PySide2.QtCore import Qt, Signal, SignalInstance, Slot
-from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import (
-    QAction,
-    QActionGroup,
-    QMenu,
-    QWidget,
-    QPushButton,
-)
+from PySide6.QtCore import Qt, Signal, SignalInstance, Slot
+from PySide6.QtGui import QAction, QActionGroup, QIcon, QPixmap
+from PySide6.QtWidgets import QMenu, QWidget, QPushButton
 
 
 class SignalizedPushButton(QPushButton):
@@ -185,7 +179,7 @@ class NumeroMenuPushButton(SignalizedPushButton):
     def action_changed(self, selection: QAction):
         if selection == self.action_calendar:
             calendar_dialog = CalendarDialog(self)
-            calendar_dialog.exec_()
+            calendar_dialog.exec()
             try:
                 self.line_edit.setText(calendar_dialog.date)
             except AttributeError:

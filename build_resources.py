@@ -56,7 +56,7 @@ def main():
         if os.path.exists(qrc):  # Check if a .qrc file needs to be compiled
             SUCCESS["qrc"][f] = run(
                 [
-                    f"{PYTHON_PATH}/pyside2-rcc",
+                    f"{PYTHON_PATH}/PySide6-rcc",
                     qrc,
                     "-o",
                     qrc_py,
@@ -69,7 +69,7 @@ def main():
         if os.path.exists(ui):  # Check if a .ui file needs to be compiled
             SUCCESS["ui"][f] = run(
                 [
-                    f"{PYTHON_PATH}/pyside2-uic",
+                    f"{PYTHON_PATH}/PySide6-uic",
                     ui,
                     "--from-imports",
                     "-o",

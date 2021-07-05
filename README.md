@@ -1,6 +1,6 @@
 <div align="center">
 
-  [![DEV](DEV/assets/cover-alt.png)](https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea)
+  [![DEV](DEV/docs/assets/cover-alt.png)](https://dev.to/bourgonlaurent/saving-time-as-a-student-create-custom-documents-in-10-seconds-4hea)
 
 </div>
 
@@ -86,7 +86,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Trouver un nouveau nom
 - [x] Réarranger tout le projet pour permettre un meilleur ajouts de fonctionnalités et de maintenance
 - [x] Utiliser `poetry` au lieu d'un `requirements.txt`
-- [ ] Mettre à jour de `PySide2` -> `PySide6`
+- [x] Mettre à jour de `PySide2` -> `PySide6`
 - [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
 - [ ] Création d'une version installable
 - [ ] Possibilité de mises à jours automatiques
@@ -108,7 +108,7 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 |                    | `urllib`         | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
 |                    | `sys`            | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
 |                    | `zipfile`        | Fait parti des paquets par défaut, pas besoin de l'installer                                 |                                                            |
-|                    | `PySide2`        | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `python3 -m pip install PySide2`     |
+|                    | `PySide6`        | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `python3 -m pip install PySide6`     |
 |                    | `docxtpl`        | **NE FAIT PAS PARTI DES PAQUETS PAR DÉFAUT, À INSTALLER**                                    | Télécharger avec PyPi `python3 -m pip install docxtpl`     |
 
 - Pour utiliser la version `Jupyter Notebook` (web), vous aurez besoin de `notebook` et de `ipywidgets` (`python3 -m pip install notebook ipywidgets`)
@@ -146,7 +146,7 @@ python3 Damysos.pyw
 
 <div align="center">
 
-[![Configurateur](assets/configurator.png)](/assets/configurator.png)
+[![Configurateur](docs/assets/configurator.png)](/docs/assets/configurator.png)
 
 </div>
 
@@ -154,7 +154,7 @@ python3 Damysos.pyw
 
 <div align="center">
 
-[![Générateur](assets/Damysos.png)](/assets/Damysos.png)
+[![Générateur](docs/assets/Damysos.png)](/docs/assets/Damysos.png)
 
 </div>
 
@@ -162,7 +162,7 @@ python3 Damysos.pyw
 
 <div align="center">
 
-[![Configurateur](assets/notebook.gif)](/assets/notebook.gif)
+[![Configurateur](docs/assets/notebook.gif)](/docs/assets/notebook.gif)
 
 </div>
 
@@ -180,9 +180,9 @@ python3 Damysos.pyw
 | Nom du fichier | `PHY-1607.docx`          |
 
 <p align="center">
-  <a href="assets/page_de_garde.png"><img src="assets/page_de_garde.png" width="256"></a>
-  <a href="assets/table_des_matieres.png"><img src="assets/table_des_matieres.png" width="256"></a>
-  <a href="assets/document.png"><img src="assets/document.png" width="256"></a>
+  <a href="docs/assets/page_de_garde.png"><img src="docs/assets/page_de_garde.png" width="256"></a>
+  <a href="docs/assets/table_des_matieres.png"><img src="docs/assets/table_des_matieres.png" width="256"></a>
+  <a href="docs/assets/document.png"><img src="docs/assets/document.png" width="256"></a>
 </p>
 
 ### Exemple réel<a name="exemple_reel"></a>
@@ -199,10 +199,10 @@ python3 Damysos.pyw
 | Nom du fichier | `STE-CHP1.docx`                         |
 
 <p align="center">
-  <a href="assets/e_page_de_garde.png"><img src="assets/e_page_de_garde.png" width="256"></a>
-  <a href="assets/e_table_des_matieres.png"><img src="assets/e_table_des_matieres.png" width="256"></a>
-  <a href="assets/e_doc_1.png"><img src="assets/e_doc_1.png" width="256"></a>
-  <a href="assets/e_doc_2.png"><img src="assets/e_doc_2.png" width="256"></a>
+  <a href="docs/assets/e_page_de_garde.png"><img src="docs/assets/e_page_de_garde.png" width="256"></a>
+  <a href="docs/assets/e_table_des_matieres.png"><img src="docs/assets/e_table_des_matieres.png" width="256"></a>
+  <a href="docs/assets/e_doc_1.png"><img src="docs/assets/e_doc_1.png" width="256"></a>
+  <a href="docs/assets/e_doc_2.png"><img src="docs/assets/e_doc_2.png" width="256"></a>
 </p>
 
 ## ⁉️ Foire Aux Questions<a name="faq"></a>
@@ -225,11 +225,11 @@ python3 Damysos.pyw
 
 <div align="center">
 
-[![Erreur PySide2](assets/pyside2_error.png)](/assets/pyside2_error.png)
+[![Erreur PySide6](docs/assets/PySide6_error.png)](/docs/assets/PySide6_error.png)
 
 </div>
 
-Ceci est dû au fait que `PySide2` (Qt for Python) n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propres à chaque version.
+Ceci est dû au fait que `PySide6` (Qt for Python) n'a pas été trouvé (Voir la [Configuration requise](#configuration)). Assurez-vous de l'avoir installé avec la même version de `Python3` que vous utilisez. Les modules sont indépendants et sont propres à chaque version.
 
 - Comment puis-je utiliser mon propre modèle? [Voir la documentation](../../wiki/Comment-créer-son-propre-modèle%3F)
 - Comment puis-je personaliser mes matières? [Voir la documentation](../../wiki/Comment-créer-ses-propres-matières%3F)

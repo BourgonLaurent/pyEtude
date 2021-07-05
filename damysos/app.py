@@ -29,9 +29,9 @@ from .ui.window import DamysosMainWindow
 from typing import cast, List
 
 # Externals packages
-from PySide2.QtCore import QFile, QIODevice, QTextStream
-from PySide2.QtGui import QFontDatabase, QIcon, QPixmap
-from PySide2.QtWidgets import QApplication
+from PySide6.QtCore import QFile, QIODevice, QTextStream
+from PySide6.QtGui import QFontDatabase, QIcon, QPixmap
+from PySide6.QtWidgets import QApplication
 
 
 class DamysosApp(QApplication):
@@ -68,6 +68,6 @@ class DamysosApp(QApplication):
         # Check updates
         check_updates(self.window)
 
-    def exec_(self) -> int:
+    def exec(self) -> int:
         self.window.show()
-        return super().exec_()
+        return super().exec()

@@ -25,9 +25,9 @@
 from damysos.helpers.utilities import SAFE_CHARACTERS_QREGEXP
 
 # External packages
-from PySide2.QtCore import SignalInstance
-from PySide2.QtGui import QRegExpValidator
-from PySide2.QtWidgets import QWidget, QLineEdit
+from PySide6.QtCore import SignalInstance
+from PySide6.QtGui import QRegularExpressionValidator
+from PySide6.QtWidgets import QWidget, QLineEdit
 
 
 class AdvancedLineEdit(QLineEdit):
@@ -64,4 +64,4 @@ class SafeAdvancedLineEdit(AdvancedLineEdit):
 
         super().__init__(parent=parent)
 
-        self.setValidator(QRegExpValidator(SAFE_CHARACTERS_QREGEXP, self))
+        self.setValidator(QRegularExpressionValidator(SAFE_CHARACTERS_QREGEXP, self))

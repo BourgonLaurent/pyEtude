@@ -30,9 +30,9 @@ import os
 from typing import cast
 
 # External packages
-from PySide2.QtCore import QPoint, Signal, SignalInstance
-from PySide2.QtGui import QMouseEvent
-from PySide2.QtWidgets import QAction, QActionGroup, QLabel, QMenu, QWidget
+from PySide6.QtCore import QPoint, Signal, SignalInstance
+from PySide6.QtGui import QAction, QActionGroup, QMouseEvent
+from PySide6.QtWidgets import QLabel, QMenu, QWidget
 
 
 class VersionLabel(QLabel):
@@ -95,7 +95,7 @@ class PathMenuLabel(ClickableLabel):
         self.action_restore_default = self.add_action("Restaurer la valeur par défaut")
 
         self.clicked.connect(
-            lambda: self.menu.exec_(
+            lambda: self.menu.exec(
                 self.mapToGlobal(QPoint(0, self.geometry().height()))
             )
         )

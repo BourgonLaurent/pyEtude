@@ -31,4 +31,4 @@ import os
 os.chdir(os.path.dirname(os.path.dirname(__file__)))
 
 if __name__ == "__main__":
-    DamysosApp().exec_()
+    DamysosApp().exec()
