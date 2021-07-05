@@ -87,6 +87,8 @@ Afin de remplir ce document facilement, le programme va faire ceci:
 - [x] Réarranger tout le projet pour permettre un meilleur ajouts de fonctionnalités et de maintenance
 - [x] Utiliser `poetry` au lieu d'un `requirements.txt`
 - [x] Mettre à jour de `PySide2` -> `PySide6`
+- [x] Création d'un module pour le lancer de n'importe où avec `python3 -m damysos`
+- [ ] Mettre à jour la FAQ pour Damysos & nouvelles erreurs
 - [ ] Transformer ce programme en version web OU en application mobile pour faciliter l'utilisation sur tablette et à distance
 - [ ] Création d'une version installable
 - [ ] Possibilité de mises à jours automatiques

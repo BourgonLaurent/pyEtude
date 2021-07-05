@@ -20,15 +20,34 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-## Imports
-# Project packages
-from .app import DamysosApp
+from . import __version__, GITHUB_REPO
 
-# Default packages
-import os
+try:
+    ## Imports
+    # Project packages
+    from .app import DamysosApp
 
-# Move to `Damysos` folder, where the config is
-os.chdir(os.path.dirname(os.path.dirname(__file__)))
+    # Default packages
+    import os
 
-if __name__ == "__main__":
-    DamysosApp().exec()
+    # Move to `Damysos` folder, where the config is
+    os.chdir(os.path.dirname(os.path.dirname(__file__)))
+
+    if __name__ == "__main__":
+        DamysosApp().exec()
+
+except ImportError as import_error:
+    # Show error message
+    print(
+        "[!] ERREUR: Impossible de continuer:\n\n"
+        + f"\tMessage: {repr(import_error)}\n\n"
+        + f"\tAvez-vous installé {import_error.name}?\n"
+        + f"\tC'est un module nécessaire au fonctionnement de {__package__}.\n\n"
+        + "\t[*] Essayez la commande suivante:\n"
+        + f"\t\tpython -m pip install --update {import_error.name}\n\n"
+        + "\tPour plus d'aide référez-vous au README.md sur GitHub:\n"
+        + f"\t\thttps://github.com/{GITHUB_REPO}\n"
+    )
+
+    # Re-throw error
+    raise import_error

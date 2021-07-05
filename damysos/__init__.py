@@ -22,55 +22,56 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-## Imports
-# Required to import separately
-import sys
+## IMPORTS
+from importlib.metadata import metadata, PackageNotFoundError
+import locale
 
-# Check if everything is installed correctly
-# Shows an error to the user if not
+## VARIABLES
+# Get Project Variables
+
 try:
-    # Standard library to check
-    import os, importlib, json, locale, typing
+    _metadata = metadata(__package__)
 
-    # Used in __init__
-    from typing import Dict
-    from importlib.metadata import metadata
+    __version__: str = _metadata.get("Version", failobj="0.0.0")
 
-    # External libraries
-    import PySide6, docxtpl
-
-except ImportError as e:
-    # Show error message
-    print(
-        f"damysos\n\n"
-        + "[!] Impossible de continuer:\n\n"
-        + f"\t{repr(e)}"
-        + "\n\n"
-        + f"[*] Avez-vous installé {e.name}?\n"
-        + "C'est un module nécessaire au fonctionnement de Damysos.\n\n"
-        + "Essayez la commande suivante:"
-        + f"\tpip install --update {e.name}\n\n"
-        + "Pour plus d'aide référez-vous au README.md sur GitHub:\n"
+    GITHUB_REPO: str = _metadata.get("Project-URL", failobj="").replace(
+        "Repository, https://github.com/", ""
     )
-    # Exit and tell error
-    sys.exit(e)
+except PackageNotFoundError as package_error:
+    print(
+        "\n[?] Impossible d'accéder aux métadonnées\n\n"
+        + f"\t{package_error.msg} doit être installé pour l'utilisation des métadonnées\n\n"
+        + "\t[*] Essayez la commande suivante: poetry install\n"
+    )
+    __version__ = "0.0.0"
+    GITHUB_REPO = ""
+
+# Set Project Variables
+CONFIG_FILE: str = (
+    f"{__package__}.config"  # (format: JSON) généré avec le configurateur
+)
+
 
 ## Locale
 # Try to get into an UTF-8 locale
 # if it isn't currently
 try:
-    if not locale.getlocale()[1].lower() == "utf-8":
+    # Get the locale of the system
+    default_locale = locale.getdefaultlocale()[1]
+
+    if default_locale and default_locale.lower() == "utf-8":
+        # Bug fix: some versions of python (like on macOS)
+        #   don't apply UTF-8 sorting
+        #   even if the current locale is UTF-8,
+        #   it needs to be set or reset manually
+        locale.resetlocale(locale.LC_ALL)
+    else:
+        # en_US.UTF-8 is a common locale
+        # that should be installed on all devices
         locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-except:
-    assert EnvironmentError
-
-## Get Project Variables
-_metadata = metadata(__package__)
-
-__version__: str = _metadata.get("Version", failobj="0.0.0")
-
-GITHUB_REPO: str = _metadata.get("Project-URL", failobj="").replace(
-    "Repository, https://github.com/", ""
-)
-
-CONFIG_FILE: str = "damysos.config"  # (format: JSON) généré avec le configurateur
+except locale.Error as locale_error:
+    print(
+        "\n[?] Impossible d'utiliser une langue UTF-8\n\n"
+        + f"\tMessage: {locale_error}\n"
+        + f"\t{__package__} a besoin d'une langue UTF-8 disponible pour que les tris fonctionnent correctement\n\n"
+    )
