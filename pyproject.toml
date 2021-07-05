@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "damysos"
-version = "4.0.0-beta.35"
+version = "4.0.0-beta.36"
 description = "📝 Programme Python qui permet de créer des documents personalisés."
 authors = ["Laurent Bourgon <laurent.bourgon@outlook.com>"]
 license = "MIT"
