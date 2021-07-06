@@ -18,7 +18,7 @@ exclude = [
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.10"
-docxtpl = "0.11.5"
+docxtpl = "^0.11.5"
 PySide6 = "^6.1.2"
 
 [tool.poetry.dev-dependencies]
