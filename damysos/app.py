@@ -26,7 +26,7 @@ from .helpers.updater import check_updates
 from .ui.window import DamysosMainWindow
 
 # Default packages
-from typing import cast, List
+from typing import List
 
 # Externals packages
 from PySide6.QtCore import QFile, QIODevice, QTextStream
@@ -50,7 +50,7 @@ class DamysosApp(QApplication):
         # Load the stylesheet inside resources
         _stylesheet = QFile(self)
         _stylesheet.setFileName(":/assets/designer_styles.qss")
-        _stylesheet.open(cast(QIODevice.OpenMode, QIODevice.OpenModeFlag.ReadOnly))
+        _stylesheet.open(QIODevice.OpenModeFlag.ReadOnly)
         self.setStyleSheet(QTextStream(_stylesheet).readAll())
         _stylesheet.close()
 

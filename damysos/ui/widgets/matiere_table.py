@@ -236,7 +236,7 @@ class MatiereTableWidget(QTableWidget):
             Item that will have the path of the directory
         """
         if item.column() == 2:
-            item.setFlags(cast(Qt.ItemFlags, Qt.ItemIsEnabled))
+            item.setFlags(Qt.ItemIsEnabled)
 
             filename: str = QFileDialog.getExistingDirectory()
 
