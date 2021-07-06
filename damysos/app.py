@@ -42,13 +42,10 @@ class DamysosApp(QApplication):
 
         # Load fonts
         _fonts: List[str] = [
-            "Garamond_Regular",
-            "Garamond_Italic",
-            "Garamond_Bold",
-            "FiraMono_Regular",
+            "FiraMono_Regular.ttf",
         ]
         for font in _fonts:
-            QFontDatabase.addApplicationFont(f":/assets/fonts/{font}.ttf")
+            QFontDatabase.addApplicationFont(f":/assets/fonts/{font}")
 
         # Load the stylesheet inside resources
         _stylesheet = QFile(self)

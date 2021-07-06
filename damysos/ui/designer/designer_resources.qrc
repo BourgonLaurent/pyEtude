@@ -1,11 +1,8 @@
 <RCC>
   <qresource prefix="assets">
     <file>icons/damysos@1024.png</file>
-    <file>fonts/FiraMono_Regular.ttf</file>
-    <file>fonts/Garamond_Bold.ttf</file>
-    <file>fonts/Garamond_Italic.ttf</file>
-    <file>fonts/Garamond_Regular.ttf</file>
     <file>designer_styles.qss</file>
     <file>icons/damysos.icns</file>
+    <file>fonts/FiraMono-Regular.ttf</file>
   </qresource>
 </RCC>
